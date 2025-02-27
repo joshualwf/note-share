@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Image from "next/image";
 
 import { MainNav } from "@/components/main-nav";
 import { Search } from "@/components/search";
-import TeamSwitcher from "@/components/team-switcher";
 import { UserNav } from "@/components/user-nav";
 
 const geistSans = Geist({
