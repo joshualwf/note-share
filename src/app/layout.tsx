@@ -5,6 +5,8 @@ import "./globals.css";
 import { MainNav } from "@/components/main-nav";
 import { Search } from "@/components/search";
 import { UserNav } from "@/components/user-nav";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,26 +29,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <div className="flex-col md:flex">
-          <div className="border-b">
-            <div className="flex h-16 items-center px-4">
-              <img
-                src="https://media.tenor.com/mTz7WCbH92oAAAAj/book-transparent.gif"
-                alt="a drawing of an open book with a shadow on it"
-                className="h-full max-h-full"
-              />
-              <h2 className="text-lg font-semibold">NoteShare</h2>
-              <MainNav className="mx-6" />
-              <div className="ml-auto flex items-center space-x-4">
-                <Search />
-                <UserNav />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex-col md:flex">
+            <div className="border-b">
+              <div className="flex h-16 items-center px-4">
+                <img
+                  src="https://media.tenor.com/mTz7WCbH92oAAAAj/book-transparent.gif"
+                  alt="a drawing of an open book with a shadow on it"
+                  className="h-full max-h-full"
+                />
+                <h2 className="text-lg font-semibold">NoteShare</h2>
+                <MainNav className="mx-6" />
+                <div className="ml-auto flex items-center space-x-4">
+                  <Search />
+                  <ModeToggle />
+                  <UserNav />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {children}
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
