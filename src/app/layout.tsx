@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Image from "next/image";
+
+import { MainNav } from "@/components/main-nav";
+import { Search } from "@/components/search";
+import TeamSwitcher from "@/components/team-switcher";
+import { UserNav } from "@/components/user-nav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,9 +30,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body>
+        <div className="hidden flex-col md:flex">
+          <div className="border-b">
+            <div className="flex h-16 items-center px-4">
+              <img
+                src="https://media.tenor.com/mTz7WCbH92oAAAAj/book-transparent.gif"
+                alt="a drawing of an open book with a shadow on it"
+                className="h-full max-h-full"
+              />
+              <h2 className="text-lg font-semibold">NoteShare</h2>
+              <MainNav className="mx-6" />
+              <div className="ml-auto flex items-center space-x-4">
+                <Search />
+                <UserNav />
+              </div>
+            </div>
+          </div>
+        </div>
         {children}
       </body>
     </html>
