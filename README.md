@@ -1,4 +1,4 @@
-[https://findmypyp.vercel.app/](https://findmypyp.vercel.app/)
+[https://sharemynotes.vercel.app](https://sharemynotes.vercel.app)
 
 ## Getting Started
 
