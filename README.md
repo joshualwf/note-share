@@ -1,4 +1,4 @@
-[findmypyp.vercel.app](findmypyp.vercel.app)
+[findmypyp.vercel.app](https://findmypyp.vercel.app/)
 
 ## Getting Started
 
