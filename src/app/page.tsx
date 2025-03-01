@@ -5,6 +5,7 @@ import { SortSelect } from "@/components/SortSelect";
 import { useState } from "react";
 import { mockDocuments } from "@/mockData";
 import FilterSheet from "@/components/FilterSheet";
+import { TypeAnimation } from "react-type-animation";
 
 export default function Home() {
   const [sortBy, setSortBy] = useState("Popularity");
@@ -17,7 +18,28 @@ export default function Home() {
               Study Materials
             </h1>
             <div className="mt-4 text-center text-lg sm:text-2xl">
-              Resources shared by top students all around the world.
+              <TypeAnimation
+                // style={{ whiteSpace: "pre-line" }}
+                // wrapper="span"
+                className="mt-4 text-center text-lg sm:text-2xl text-green-500 font-bold"
+                speed={60}
+                sequence={[
+                  // Same substring at the start will only be typed once, initially
+                  "Free exam papers",
+                  1500,
+                  "Free notes",
+                  1500,
+                  "Free cheatsheets",
+                  1500,
+                  "Free tutorial solutions",
+                  1500,
+                  "Free exam solutions",
+                  1500,
+                  "Free discussions",
+                  1500,
+                ]}
+                repeat={Infinity}
+              />
             </div>
           </div>
 
