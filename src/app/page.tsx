@@ -13,10 +13,10 @@ export default function Home() {
       <div className="h-full w-full flex flex-col">
         <div className="h-full w-full flex flex-col pt-8 pb-5 bg-accent px-4">
           <div>
-            <h1 className="text-primary text-center text-4xl font-bold sm:text-5xl">
+            <h1 className="text-center text-4xl font-bold sm:text-5xl">
               Study Materials
             </h1>
-            <div className="mt-4 text-center text-lg text-priimary sm:text-2xl">
+            <div className="mt-4 text-center text-lg sm:text-2xl">
               Resources shared by top students all around the world.
             </div>
           </div>
