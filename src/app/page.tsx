@@ -1,6 +1,4 @@
 "use client";
-import { Search } from "@/components/Search";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
