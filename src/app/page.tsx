@@ -1,28 +1,18 @@
+"use client";
 import { Search } from "@/components/search";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { DocumentCard } from "@/components/document-card";
+import { SortSelect } from "@/components/sort-select";
+import { useState } from "react";
+import { mockDocuments } from "@/mockData";
 
 export default function Home() {
+  const [sortBy, setSortBy] = useState("Popularity");
   return (
     <>
       <div className="h-full w-full flex flex-col">
-        <div className="h-full w-full flex flex-col pt-8 pb-5 bg-secondary px-4">
+        <div className="h-full w-full flex flex-col pt-8 pb-5 bg-accent px-4">
           <div>
             <h1 className="text-primary text-center text-4xl font-bold sm:text-5xl">
               Study Materials
@@ -32,7 +22,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-secondary h-full py-3 px-5 flex justify-center gap-2">
+          <div className="bg-accent h-full py-3 px-5 flex justify-center gap-2">
             <Input
               type="search"
               placeholder="Search..."
@@ -46,111 +36,21 @@ export default function Home() {
       <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pb-20 pt-10">
         <div className="relative w-full flex flex-col gap-y-3">
           <div className="flex items-center justify-between p-4 text-xs sm:grid-cols-4 sm:text-sm md:text-base">
-            <h3 className="text-primary text-center text-l font-bold">
-              2290 Results
+            <h3 className="text-muted-foreground text-center text-l ">
+              2290 results
             </h3>
-            <Select>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sort By" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Popularity">Popularity</SelectItem>
-                <SelectItem value="Latest">Latest</SelectItem>
-                <SelectItem value="Relevance">Relevance</SelectItem>
-              </SelectContent>
-            </Select>
+            <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
           </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
+          {mockDocuments.map((doc) => (
+            <DocumentCard
+              key={doc.id}
+              title={doc.title}
+              description={doc.description}
+              likes={doc.likes}
+              uploadTime={doc.uploadTime}
+            />
+          ))}
         </div>
       </div>
     </>

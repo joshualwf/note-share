@@ -1,0 +1,58 @@
+export const mockDocuments = [
+  {
+    id: 1,
+    title: "Tutorial 10 Notes",
+    description: "NUS | CS1010S",
+    likes: 47,
+    uploadTime: "Uploaded 3mo ago",
+  },
+  {
+    id: 2,
+    title: "Midterm Revision Guide",
+    description: "NTU | CZ1005",
+    likes: 32,
+    uploadTime: "Uploaded 1mo ago",
+  },
+  {
+    id: 3,
+    title: "Final Exam Cheatsheet",
+    description: "Harvard | CS50",
+    likes: 120,
+    uploadTime: "Uploaded 5d ago",
+  },
+  {
+    id: 4,
+    title: "AI and Machine Learning Notes",
+    description: "Stanford | CS229",
+    likes: 90,
+    uploadTime: "Uploaded 2w ago",
+  },
+  {
+    id: 5,
+    title: "Mathematical Foundations for CS",
+    description: "MIT | 6.042J",
+    likes: 75,
+    uploadTime: "Uploaded 1w ago",
+  },
+  {
+    id: 6,
+    title: "Data Structures and Algorithms",
+    description: "UC Berkeley | CS61B",
+    likes: 88,
+    uploadTime: "Uploaded 2mo ago",
+  },
+  {
+    id: 7,
+    title: "Operating Systems Lecture Notes",
+    description: "CMU | 15-410",
+    likes: 110,
+    uploadTime: "Uploaded 6mo ago",
+  },
+  {
+    id: 8,
+    title: "Computer Networks Guide",
+    description: "UCLA | CS118",
+    likes: 53,
+    uploadTime: "Uploaded 3mo ago",
+  },
+];
