@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { MainNav } from "@/components/MainNav";
-import { Search } from "@/components/Search";
 import { UserNav } from "@/components/UserNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ModeToggle } from "@/components/ModeToggle";
