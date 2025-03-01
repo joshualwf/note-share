@@ -1,11 +1,12 @@
 "use client";
-import { Search } from "@/components/search";
+import { Search } from "@/components/Search";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DocumentCard } from "@/components/document-card";
-import { SortSelect } from "@/components/sort-select";
+import { DocumentCard } from "@/components/DocumentCard";
+import { SortSelect } from "@/components/SortSelect";
 import { useState } from "react";
 import { mockDocuments } from "@/mockData";
+import FilterSheet from "@/components/FilterSheet";
 
 export default function Home() {
   const [sortBy, setSortBy] = useState("Popularity");
@@ -28,7 +29,7 @@ export default function Home() {
               placeholder="Search..."
               className="max-w-2xl"
             />
-            <Button variant="outline">Filters</Button>
+            <FilterSheet />
           </div>
         </div>
       </div>
