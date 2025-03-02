@@ -19,36 +19,28 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const frameworks = [
-  {
-    value: "NUS",
-    label: "NUS",
-  },
-  {
-    value: "NTU",
-    label: "NTU",
-  },
-  {
-    value: "SMU",
-    label: "SMU",
-  },
-  {
-    value: "SIM",
-    label: "SIM",
-  },
-  {
-    value: "SUSS",
-    label: "SUSS",
-  },
-  {
-    value: "SUTD",
-    label: "SUTD",
-  },
+interface ComboboxProps {
+  selectedValue: string | null;
+  setSelectedValue: (value: string | null) => void;
+}
+
+const schools = [
+  { value: "NUS", label: "NUS" },
+  { value: "NTU", label: "NTU" },
+  { value: "SMU", label: "SMU" },
+  { value: "SIM", label: "SIM" },
+  { value: "SUSS", label: "SUSS" },
+  { value: "SUTD", label: "SUTD" },
+  { value: "Harvard", label: "Harvard" },
+  { value: "Stanford", label: "Stanford" },
+  { value: "MIT", label: "MIT" },
+  { value: "UC Berkeley", label: "UC Berkeley" },
+  { value: "CMU", label: "CMU" },
+  { value: "UCLA", label: "UCLA" },
 ];
 
-export function Combobox() {
+export function Combobox({ selectedValue, setSelectedValue }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -59,34 +51,38 @@ export function Combobox() {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
+          {selectedValue
+            ? schools.find((school) => school.value === selectedValue)?.label
             : "Select school..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
+          <CommandInput placeholder="Search school..." />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No school found.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {schools.map((school) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={school.value}
+                  value={school.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    setSelectedValue(
+                      currentValue === selectedValue ? null : currentValue
+                    );
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
+                      selectedValue === school.value
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
-                  {framework.label}
+                  {school.label}
                 </CommandItem>
               ))}
             </CommandGroup>

@@ -2,24 +2,47 @@
 import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { mockDocuments } from "@/mockData";
 import FilterSheet from "@/components/FilterSheet";
 import { TypeAnimation } from "react-type-animation";
 
 export default function Home() {
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
+  const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
+  const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
 
-  // Sort documents dynamically based on the selected option
-  const sortedDocuments = [...mockDocuments].sort((a, b) => {
-    if (sortBy === "Popularity") {
-      return b.likes - a.likes; // Higher likes first
-    } else {
-      return (
-        new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime()
-      ); // Newest first
+  // Filter and sort documents dynamically
+  const filteredAndSortedDocuments = useMemo(() => {
+    let filteredDocs = [...mockDocuments];
+
+    // Apply resource type filter
+    if (resourceTypesFilter.length > 0) {
+      filteredDocs = filteredDocs.filter((doc) =>
+        resourceTypesFilter.some((type) =>
+          doc.title.toLowerCase().includes(type.toLowerCase())
+        )
+      );
     }
-  });
+
+    // Apply school filter
+    if (schoolFilter) {
+      filteredDocs = filteredDocs.filter((doc) =>
+        doc.description.toLowerCase().includes(schoolFilter.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    return filteredDocs.sort((a, b) => {
+      if (sortBy === "Popularity") {
+        return b.likes - a.likes; // Higher likes first
+      } else {
+        return (
+          new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime()
+        ); // Newest first
+      }
+    });
+  }, [sortBy, resourceTypesFilter, schoolFilter]);
   return (
     <>
       <div className="h-full w-full flex flex-col">
@@ -60,7 +83,12 @@ export default function Home() {
               placeholder="Search..."
               className="max-w-2xl"
             />
-            <FilterSheet />
+            <FilterSheet
+              resourceTypesFilter={resourceTypesFilter}
+              setResourceTypesFilter={setResourceTypesFilter}
+              schoolFilter={schoolFilter}
+              setSchoolFilter={setSchoolFilter}
+            />
           </div>
         </div>
       </div>
@@ -75,7 +103,7 @@ export default function Home() {
             <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
           </div>
 
-          {sortedDocuments.map((doc) => (
+          {filteredAndSortedDocuments.map((doc) => (
             <DocumentCard
               key={doc.id}
               title={doc.title}
