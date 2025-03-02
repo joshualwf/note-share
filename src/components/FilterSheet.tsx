@@ -57,14 +57,28 @@ function FilterSheet({
     setIsSheetOpen(open);
   };
 
+  const handleClearAllFilters = () => {
+    setResourceTypesFilter([]);
+    setSchoolFilter(null);
+    setModCodeFilter(null);
+  };
+
   return (
     <Sheet open={isSheetOpen} onOpenChange={handleOpen} modal={false}>
+      {isSheetOpen && (
+        <div
+          className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-9000 ${
+            isSheetOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+          onClick={() => setIsSheetOpen(false)}
+        ></div>
+      )}
       <SheetTrigger className="text-sm font-medium px-4 rounded-md border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground">
         Filters
       </SheetTrigger>
-      <SheetContent side={sheetSide}>
-        <SheetHeader>
-          <SheetTitle>Filters</SheetTitle>
+      <SheetContent side={sheetSide} className="flex flex-col justify-between">
+        <div>
+          <SheetTitle className="text-center">Filters</SheetTitle>
           <Accordion type="single" collapsible defaultValue="item-1">
             <AccordionItem value="item-1">
               <AccordionTrigger>Resource Type</AccordionTrigger>
@@ -118,7 +132,21 @@ function FilterSheet({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        </SheetHeader>
+        </div>
+        <div className="flex justify-between">
+          <Button onClick={() => setIsSheetOpen(false)}>Show results</Button>
+          <Button
+            variant="outline"
+            onClick={handleClearAllFilters}
+            disabled={
+              resourceTypesFilter.length === 0 &&
+              !schoolFilter &&
+              !modCodeFilter
+            }
+          >
+            Clear all filters
+          </Button>
+        </div>
       </SheetContent>
     </Sheet>
   );
