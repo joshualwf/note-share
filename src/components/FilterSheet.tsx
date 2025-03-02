@@ -89,7 +89,7 @@ function FilterSheet({
                       onClick={() => toggleResourceType(type)}
                       className={
                         resourceTypesFilter.includes(type)
-                          ? "border-primary bg-slate-100 data"
+                          ? "border-primary bg-slate-100"
                           : ""
                       }
                     >
