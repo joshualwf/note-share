@@ -17,7 +17,7 @@ export const mockDocuments = [
     id: 3,
     title: "Final Exam Cheatsheet",
     description: "Harvard | CS50",
-    likes: 120,
+    likes: 60,
     uploadTime: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
   },
   {

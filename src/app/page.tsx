@@ -8,7 +8,18 @@ import FilterSheet from "@/components/FilterSheet";
 import { TypeAnimation } from "react-type-animation";
 
 export default function Home() {
-  const [sortBy, setSortBy] = useState("Popularity");
+  const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
+
+  // Sort documents dynamically based on the selected option
+  const sortedDocuments = [...mockDocuments].sort((a, b) => {
+    if (sortBy === "Popularity") {
+      return b.likes - a.likes; // Higher likes first
+    } else {
+      return (
+        new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime()
+      ); // Newest first
+    }
+  });
   return (
     <>
       <div className="h-full w-full flex flex-col">
@@ -60,10 +71,11 @@ export default function Home() {
             <h3 className="text-muted-foreground text-center text-l ">
               2290 results
             </h3>
+            {/* <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} /> */}
             <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
           </div>
 
-          {mockDocuments.map((doc) => (
+          {sortedDocuments.map((doc) => (
             <DocumentCard
               key={doc.id}
               title={doc.title}
