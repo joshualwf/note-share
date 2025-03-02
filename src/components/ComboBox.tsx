@@ -18,26 +18,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { SCHOOLS } from "@/app/constants/constants";
 
 interface ComboboxProps {
   selectedValue: string | null;
   setSelectedValue: (value: string | null) => void;
 }
 
-const schools = [
-  { value: "NUS", label: "NUS" },
-  { value: "NTU", label: "NTU" },
-  { value: "SMU", label: "SMU" },
-  { value: "SIM", label: "SIM" },
-  { value: "SUSS", label: "SUSS" },
-  { value: "SUTD", label: "SUTD" },
-  { value: "Harvard", label: "Harvard" },
-  { value: "Stanford", label: "Stanford" },
-  { value: "MIT", label: "MIT" },
-  { value: "UC Berkeley", label: "UC Berkeley" },
-  { value: "CMU", label: "CMU" },
-  { value: "UCLA", label: "UCLA" },
-];
+const schools = SCHOOLS;
 
 export function Combobox({ selectedValue, setSelectedValue }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);

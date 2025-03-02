@@ -3,7 +3,7 @@ import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
 import { useMemo, useState } from "react";
-import { mockDocuments } from "@/mockData";
+import { mockDocuments } from "./constants/mockData";
 import FilterSheet from "@/components/FilterSheet";
 import { TypeAnimation } from "react-type-animation";
 
@@ -19,9 +19,7 @@ export default function Home() {
     // Apply resource type filter
     if (resourceTypesFilter.length > 0) {
       filteredDocs = filteredDocs.filter((doc) =>
-        resourceTypesFilter.some((type) =>
-          doc.title.toLowerCase().includes(type.toLowerCase())
-        )
+        resourceTypesFilter.some((type) => doc.resourceType.includes(type))
       );
     }
 
@@ -97,7 +95,8 @@ export default function Home() {
         <div className="relative w-full flex flex-col gap-y-3">
           <div className="flex items-center justify-between p-4 text-xs sm:grid-cols-4 sm:text-sm md:text-base">
             <h3 className="text-muted-foreground text-center text-l ">
-              2290 results
+              {filteredAndSortedDocuments.length}{" "}
+              {filteredAndSortedDocuments.length == 1 ? "result" : "results"}
             </h3>
             {/* <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} /> */}
             <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />

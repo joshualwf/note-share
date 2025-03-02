@@ -17,6 +17,7 @@ import {
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Combobox } from "./ComboBox";
+import { RESOURCE_TYPES } from "@/app/constants/constants";
 
 interface FilterSheetProps {
   resourceTypesFilter: string[];
@@ -30,16 +31,22 @@ function FilterSheet({
   schoolFilter,
   setSchoolFilter,
 }: FilterSheetProps) {
-  const resourceTypes = ["Notes", "Exam Papers", "Solutions"];
+  const resourceTypes = RESOURCE_TYPES;
+
+  const getUpdatedResourceTypes = (prev: string[], type: string): string[] => {
+    if (!Array.isArray(prev)) return [];
+
+    return prev.includes(type)
+      ? prev.filter((item) => item !== type)
+      : [...prev, type];
+  };
 
   const toggleResourceType = (type: string) => {
-    setResourceTypesFilter((prev: string[]) => {
-      if (!Array.isArray(prev)) return []; // Ensure prev is an array
-
-      return prev.includes(type)
-        ? prev.filter((item) => item !== type)
-        : [...prev, type];
-    });
+    const updatedResourceTypesFilter = getUpdatedResourceTypes(
+      resourceTypesFilter,
+      type
+    );
+    setResourceTypesFilter(updatedResourceTypesFilter);
   };
 
   return (

@@ -48,7 +48,8 @@ const ToggleGroupItem = React.forwardRef<
           size: context.size || size,
         }),
         className,
-        (className = "data-[state=on]:border-primary") //edited
+        "data-[state=on]:border-primary"
+        // (className = "data-[state=on]:border-primary") //edited
       )}
       {...props}
     >
