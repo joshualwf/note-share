@@ -1,3 +1,4 @@
+🚧 Work in Progress – This project is actively being developed and improved.
 # NoteShare
 
 🔗 **Live Demo:** [NoteShare](https://sharemynotes.vercel.app)
