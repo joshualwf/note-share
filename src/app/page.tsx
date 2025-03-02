@@ -12,10 +12,22 @@ export default function Home() {
   const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
   const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
   const [modCodeFilter, setModCodeFilter] = useState<string | null>(null);
+  const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
 
   // Filter and sort documents dynamically
   const filteredAndSortedDocuments = useMemo(() => {
     let filteredDocs = [...mockDocuments];
+
+    // Apply search query filter (title, school, modCode)
+    if (mainSearchQuery.trim() !== "") {
+      const query = mainSearchQuery.toLowerCase();
+      filteredDocs = filteredDocs.filter(
+        (doc) =>
+          doc.title.toLowerCase().includes(query) ||
+          doc.school.toLowerCase().includes(query) ||
+          doc.modCode.toLowerCase().includes(query)
+      );
+    }
 
     // Apply resource type filter
     if (resourceTypesFilter.length > 0) {
@@ -48,7 +60,13 @@ export default function Home() {
         );
       }
     });
-  }, [sortBy, resourceTypesFilter, schoolFilter, modCodeFilter]);
+  }, [
+    sortBy,
+    resourceTypesFilter,
+    schoolFilter,
+    modCodeFilter,
+    mainSearchQuery,
+  ]);
 
   return (
     <>
@@ -86,6 +104,8 @@ export default function Home() {
               type="search"
               placeholder="Search..."
               className="max-w-2xl"
+              value={mainSearchQuery}
+              onChange={(e) => setMainSearchQuery(e.target.value)} // ✅ Update search state
             />
             <FilterSheet
               resourceTypesFilter={resourceTypesFilter}
