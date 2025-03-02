@@ -1,5 +1,5 @@
 "use client";
-import { Input } from "@/components/ui/input";
+import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
 import { useState } from "react";
@@ -44,7 +44,7 @@ export default function Home() {
           </div>
 
           <div className="bg-accent h-full py-3 px-5 flex justify-center gap-2">
-            <Input
+            <InputMainSearch
               type="search"
               placeholder="Search..."
               className="max-w-2xl"
