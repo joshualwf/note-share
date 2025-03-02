@@ -11,6 +11,7 @@ export default function Home() {
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
   const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
   const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
+  const [modCodeFilter, setModCodeFilter] = useState<string | null>(null);
 
   // Filter and sort documents dynamically
   const filteredAndSortedDocuments = useMemo(() => {
@@ -19,28 +20,36 @@ export default function Home() {
     // Apply resource type filter
     if (resourceTypesFilter.length > 0) {
       filteredDocs = filteredDocs.filter((doc) =>
-        resourceTypesFilter.some((type) => doc.resourceType.includes(type))
+        resourceTypesFilter.includes(doc.resourceType)
       );
     }
 
     // Apply school filter
     if (schoolFilter) {
       filteredDocs = filteredDocs.filter((doc) =>
-        doc.description.toLowerCase().includes(schoolFilter.toLowerCase())
+        doc.school.toLowerCase().includes(schoolFilter.toLowerCase())
+      );
+    }
+
+    // Apply module code filter
+    if (modCodeFilter) {
+      filteredDocs = filteredDocs.filter((doc) =>
+        doc.modCode.toLowerCase().includes(modCodeFilter.toLowerCase())
       );
     }
 
     // Apply sorting
     return filteredDocs.sort((a, b) => {
       if (sortBy === "Popularity") {
-        return b.likes - a.likes; // Higher likes first
+        return b.likes - a.likes;
       } else {
         return (
           new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime()
-        ); // Newest first
+        );
       }
     });
-  }, [sortBy, resourceTypesFilter, schoolFilter]);
+  }, [sortBy, resourceTypesFilter, schoolFilter, modCodeFilter]);
+
   return (
     <>
       <div className="h-full w-full flex flex-col">
@@ -51,12 +60,9 @@ export default function Home() {
             </h1>
             <div className="mt-4 text-center text-lg sm:text-2xl">
               <TypeAnimation
-                // style={{ whiteSpace: "pre-line" }}
-                // wrapper="span"
                 className="mt-4 text-center text-lg sm:text-2xl text-green-500 font-bold"
                 speed={60}
                 sequence={[
-                  // Same substring at the start will only be typed once, initially
                   "Free exam papers",
                   1500,
                   "Free notes",
@@ -86,6 +92,8 @@ export default function Home() {
               setResourceTypesFilter={setResourceTypesFilter}
               schoolFilter={schoolFilter}
               setSchoolFilter={setSchoolFilter}
+              modCodeFilter={modCodeFilter}
+              setModCodeFilter={setModCodeFilter}
             />
           </div>
         </div>
@@ -93,12 +101,11 @@ export default function Home() {
 
       <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pb-20 pt-10">
         <div className="relative w-full flex flex-col gap-y-3">
-          <div className="flex items-center justify-between p-4 text-xs sm:grid-cols-4 sm:text-sm md:text-base">
-            <h3 className="text-muted-foreground text-center text-l ">
+          <div className="flex items-center justify-between p-4 text-xs sm:text-sm md:text-base">
+            <h3 className="text-muted-foreground text-center text-l">
               {filteredAndSortedDocuments.length}{" "}
-              {filteredAndSortedDocuments.length == 1 ? "result" : "results"}
+              {filteredAndSortedDocuments.length === 1 ? "result" : "results"}
             </h3>
-            {/* <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} /> */}
             <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
           </div>
 
@@ -106,7 +113,8 @@ export default function Home() {
             <DocumentCard
               key={doc.id}
               title={doc.title}
-              description={doc.description}
+              school={doc.school}
+              modCode={doc.modCode}
               likes={doc.likes}
               uploadTime={doc.uploadTime}
             />

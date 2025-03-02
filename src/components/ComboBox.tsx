@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,16 +17,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { SCHOOLS } from "@/app/constants/constants";
 
 interface ComboboxProps {
   selectedValue: string | null;
   setSelectedValue: (value: string | null) => void;
+  data: { value: string; label: string }[]; // Accepts both schools and modules
+  placeholder?: string;
 }
 
-const schools = SCHOOLS;
-
-export function Combobox({ selectedValue, setSelectedValue }: ComboboxProps) {
+export function Combobox({
+  selectedValue,
+  setSelectedValue,
+  data,
+  placeholder = "Select...",
+}: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -37,11 +40,11 @@ export function Combobox({ selectedValue, setSelectedValue }: ComboboxProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[310px] justify-between"
         >
           {selectedValue
-            ? schools.find((school) => school.value === selectedValue)?.label
-            : "Select school..."}
+            ? data.find((item) => item.value === selectedValue)?.value
+            : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -49,17 +52,17 @@ export function Combobox({ selectedValue, setSelectedValue }: ComboboxProps) {
         side="bottom"
         avoidCollisions={false}
         align="center"
-        className="w-[200px] p-0"
+        className="w-[310px] p-0"
       >
         <Command>
-          <CommandInput placeholder="Search school..." />
+          <CommandInput placeholder={placeholder} />
           <CommandList>
-            <CommandEmpty>No school found.</CommandEmpty>
+            <CommandEmpty>Not found...</CommandEmpty>
             <CommandGroup>
-              {schools.map((school) => (
+              {data.map((item) => (
                 <CommandItem
-                  key={school.value}
-                  value={school.value}
+                  key={item.value}
+                  value={item.value}
                   onSelect={(currentValue) => {
                     setSelectedValue(
                       currentValue === selectedValue ? null : currentValue
@@ -70,12 +73,10 @@ export function Combobox({ selectedValue, setSelectedValue }: ComboboxProps) {
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      selectedValue === school.value
-                        ? "opacity-100"
-                        : "opacity-0"
+                      selectedValue === item.value ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {school.label}
+                  {item.value}
                 </CommandItem>
               ))}
             </CommandGroup>

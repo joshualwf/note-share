@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -16,7 +15,7 @@ import {
 } from "@/components/ui/accordion";
 
 import { Combobox } from "./ComboBox";
-import { RESOURCE_TYPES } from "@/app/constants/constants";
+import { MODCODES, RESOURCE_TYPES, SCHOOLS } from "@/app/constants/constants";
 import { Button } from "./ui/button";
 
 interface FilterSheetProps {
@@ -24,36 +23,35 @@ interface FilterSheetProps {
   setResourceTypesFilter: (value: string[]) => void;
   schoolFilter: string | null;
   setSchoolFilter: (value: string | null) => void;
+  modCodeFilter: string | null;
+  setModCodeFilter: (value: string | null) => void;
 }
+
 function FilterSheet({
   resourceTypesFilter,
   setResourceTypesFilter,
   schoolFilter,
   setSchoolFilter,
+  modCodeFilter,
+  setModCodeFilter,
 }: FilterSheetProps) {
-  const [isSheetOpen, setIsSheetOpen] = useState(false); // Track sheet open state
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [sheetSide, setSheetSide] = useState<"top" | "right">("right");
   const resourceTypes = RESOURCE_TYPES;
 
   const getUpdatedResourceTypes = (prev: string[], type: string): string[] => {
     if (!Array.isArray(prev)) return [];
-
     return prev.includes(type)
       ? prev.filter((item) => item !== type)
       : [...prev, type];
   };
 
   const toggleResourceType = (type: string) => {
-    const updatedResourceTypesFilter = getUpdatedResourceTypes(
-      resourceTypesFilter,
-      type
-    );
-    setResourceTypesFilter(updatedResourceTypesFilter);
+    setResourceTypesFilter(getUpdatedResourceTypes(resourceTypesFilter, type));
   };
 
   const handleOpen = (open: boolean) => {
     if (open) {
-      // Determine the sheet side only when the sheet is about to open
       setSheetSide(window.innerWidth >= 768 ? "right" : "top");
     }
     setIsSheetOpen(open);
@@ -61,15 +59,7 @@ function FilterSheet({
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={handleOpen} modal={false}>
-      {isSheetOpen && (
-        <div
-          className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-9000 ${
-            isSheetOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
-          onClick={() => setIsSheetOpen(false)}
-        ></div>
-      )}
-      <SheetTrigger className=" text-sm font-medium px-4 rounded-md border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground">
+      <SheetTrigger className="text-sm font-medium px-4 rounded-md border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground">
         Filters
       </SheetTrigger>
       <SheetContent side={sheetSide}>
@@ -100,23 +90,31 @@ function FilterSheet({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-          <Accordion type="single" collapsible defaultValue="item-1">
-            <AccordionItem value="item-1">
+
+          <Accordion type="single" collapsible defaultValue="item-2">
+            <AccordionItem value="item-2">
               <AccordionTrigger>School</AccordionTrigger>
               <AccordionContent className="flex-start flex">
                 <Combobox
                   selectedValue={schoolFilter}
                   setSelectedValue={setSchoolFilter}
+                  data={SCHOOLS}
+                  placeholder="Select school..."
                 />
               </AccordionContent>
             </AccordionItem>
           </Accordion>
 
-          <Accordion type="single" collapsible defaultValue="item-1">
-            <AccordionItem value="item-1">
+          <Accordion type="single" collapsible defaultValue="item-3">
+            <AccordionItem value="item-3">
               <AccordionTrigger>Module</AccordionTrigger>
               <AccordionContent className="flex-start flex">
-                {/* <Combobox /> */}coming soon!
+                <Combobox
+                  selectedValue={modCodeFilter}
+                  setSelectedValue={setModCodeFilter}
+                  data={MODCODES}
+                  placeholder="Select module..."
+                />
               </AccordionContent>
             </AccordionItem>
           </Accordion>
