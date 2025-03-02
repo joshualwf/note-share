@@ -15,9 +15,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Combobox } from "./ComboBox";
 import { RESOURCE_TYPES } from "@/app/constants/constants";
+import { Button } from "./ui/button";
 
 interface FilterSheetProps {
   resourceTypesFilter: string[];
@@ -80,23 +80,22 @@ function FilterSheet({
               <AccordionTrigger>Resource Type</AccordionTrigger>
               <AccordionContent>
                 <div className="flex flex-row gap-2">
-                  <ToggleGroup type="multiple" variant="outline">
-                    {resourceTypes.map((type) => (
-                      <ToggleGroupItem
-                        key={type}
-                        value={type}
-                        aria-label={`Toggle ${type}`}
-                        onClick={() => toggleResourceType(type)}
-                        className={
-                          resourceTypesFilter.includes(type)
-                            ? "bg-primary text-white"
-                            : ""
-                        }
-                      >
-                        {type}
-                      </ToggleGroupItem>
-                    ))}
-                  </ToggleGroup>
+                  {resourceTypes.map((type) => (
+                    <Button
+                      variant={"outline"}
+                      key={type}
+                      value={type}
+                      aria-label={`Toggle ${type}`}
+                      onClick={() => toggleResourceType(type)}
+                      className={
+                        resourceTypesFilter.includes(type)
+                          ? "border-primary bg-slate-100 data"
+                          : ""
+                      }
+                    >
+                      {type}
+                    </Button>
+                  ))}
                 </div>
               </AccordionContent>
             </AccordionItem>
