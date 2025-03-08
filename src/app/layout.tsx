@@ -54,7 +54,7 @@ export default function RootLayout({
                   <ModeToggle />
                   {/* <UserNav /> */}
                   <Link href="/login">
-                    <Button variant="outline">Log In</Button>
+                    <Button variant="outline">Login</Button>
                   </Link>
                   <Link href="/signup">
                     <Button>Sign up</Button>

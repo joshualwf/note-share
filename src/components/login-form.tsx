@@ -27,8 +27,8 @@ const LoginForm = ({
     src: "https://www.shadcnblocks.com/images/block/block-1.svg",
     alt: "logo",
   },
-  loginText = "Log in",
-  googleText = "Log in with Google",
+  loginText = "Login",
+  googleText = "Login with Google",
   signupText = "Don't have an account?",
   signupUrl = "/signup",
 }: LoginFormProps) => {
