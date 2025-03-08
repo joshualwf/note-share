@@ -24,6 +24,7 @@ export default function Home() {
   const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
   const [modCodeFilter, setModCodeFilter] = useState<string | null>(null);
   const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Filter and sort documents dynamically
   const filteredAndSortedDocuments = useMemo(() => {
@@ -78,6 +79,24 @@ export default function Home() {
     modCodeFilter,
     mainSearchQuery,
   ]);
+
+  // pagination
+  const itemsPerPage = 5;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedDocuments = filteredAndSortedDocuments.slice(
+    startIndex,
+    endIndex
+  );
+  const totalPages = Math.ceil(
+    filteredAndSortedDocuments.length / itemsPerPage
+  );
+
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <>
@@ -145,8 +164,7 @@ export default function Home() {
               <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
             </div>
           </div>
-
-          {filteredAndSortedDocuments.map((doc) => (
+          {paginatedDocuments.map((doc) => (
             <DocumentCard
               key={doc.id}
               title={doc.title}
@@ -159,16 +177,43 @@ export default function Home() {
           <Pagination className="justify-end">
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious href="#" />
+                <PaginationPrevious
+                  href="#"
+                  onClick={() => goToPage(currentPage - 1)}
+                  className={
+                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                  }
+                  aria-disabled={currentPage === 1}
+                />
               </PaginationItem>
+
+              {Array.from({ length: totalPages }, (_, i) => (
+                <PaginationItem key={i}>
+                  <PaginationLink
+                    href="#"
+                    onClick={() => goToPage(i + 1)}
+                    className={
+                      currentPage === i + 1
+                        ? "font-bold text-primary bg-accent"
+                        : ""
+                    }
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
               <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
+                <PaginationNext
+                  href="#"
+                  onClick={() => goToPage(currentPage + 1)}
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }
+                  aria-disabled={currentPage === totalPages}
+                />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
