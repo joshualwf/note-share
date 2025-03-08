@@ -54,7 +54,7 @@ export function SortSelect({
         setSelectedValue(value as "Popularity" | "Latest")
       }
     >
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-[110px]">
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
       <SelectContent>
