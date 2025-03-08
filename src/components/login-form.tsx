@@ -20,8 +20,8 @@ interface LoginFormProps {
 }
 
 const LoginForm = ({
-  heading = "NoteShare",
-  subheading = "Welcome back",
+  heading = "Login",
+  subheading = "Welcome back!",
   logo = {
     url: "https://www.shadcnblocks.com",
     src: "https://www.shadcnblocks.com/images/block/block-1.svg",

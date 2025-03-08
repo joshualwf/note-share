@@ -19,8 +19,8 @@ interface SignupFormProps {
 }
 
 const SignupForm = ({
-  heading = "NoteShare",
-  subheading = "Sign up",
+  heading = "Sign up",
+  subheading = "Welcome to NoteShare!",
   logo = {
     url: "https://www.shadcnblocks.com",
     src: "https://shadcnblocks.com/images/block/block-1.svg",
@@ -69,7 +69,7 @@ const SignupForm = ({
               <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
                 <p>{loginText}</p>
                 <a href={loginUrl} className="font-medium text-primary">
-                  Log in
+                  Login
                 </a>
               </div>
             </div>
