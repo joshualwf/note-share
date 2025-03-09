@@ -6,8 +6,6 @@ import { useMemo, useState } from "react";
 import { mockDocuments } from "./constants/mockData";
 import FilterSheet from "@/components/FilterSheet";
 import { TypeAnimation } from "react-type-animation";
-import { Button } from "@/components/ui/button";
-import { FolderPlus } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -17,6 +15,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ContributeDrawerDialog } from "@/components/ContributeDrawerDialog";
 
 export default function Home() {
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
@@ -157,10 +156,7 @@ export default function Home() {
               {filteredAndSortedDocuments.length === 1 ? "result" : "results"}
             </h3>
             <div className="flex gap-2">
-              <Button>
-                <FolderPlus />
-                <span className="hidden sm:inline">Contribute</span>
-              </Button>
+              <ContributeDrawerDialog />
               <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
             </div>
           </div>
