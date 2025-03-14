@@ -107,7 +107,7 @@ export default function Home() {
             </h1>
             <div className="mt-4 text-center text-lg sm:text-2xl">
               <TypeAnimation
-                className="mt-4 text-center text-lg sm:text-2xl text-green-500 font-bold"
+                className="mt-4 text-center text-lg sm:text-2xl text-muted-foreground font-bold"
                 speed={60}
                 sequence={[
                   "Free exam papers",

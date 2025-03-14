@@ -51,7 +51,7 @@ export function DocumentCard({
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <CardDescription className="text-primary">
+        <CardDescription>
           {school} | {modCode}
         </CardDescription>
         <div className="flex flex-row flex-start text-muted-foreground text-sm gap-1 items-center">
