@@ -3,11 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { MainNav } from "@/components/MainNav";
-import { UserNav } from "@/components/UserNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ModeToggle } from "@/components/ModeToggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { getUserSession } from "@/lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,11 +24,11 @@ export const metadata: Metadata = {
   description: "A platform for students to share resources",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
+  const user = await getUserSession(); // Fetch user from cookies
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
@@ -52,13 +52,20 @@ export default function RootLayout({
                 <MainNav className="mx-6" />
                 <div className="ml-auto flex items-center space-x-2">
                   <ModeToggle />
-                  {/* <UserNav /> */}
-                  <Link href="/login">
-                    <Button variant="outline">Login</Button>
-                  </Link>
-                  <Link href="/signup">
-                    <Button>Sign up</Button>
-                  </Link>
+                  {user ? (
+                    <form action="/api/logout" method="POST">
+                      <Button type="submit" variant="outline">Logout</Button>
+                    </form>
+                  ) : (
+                    <>
+                      <Link href="/login">
+                        <Button variant="outline">Login</Button>
+                      </Link>
+                      <Link href="/signup">
+                        <Button>Sign up</Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

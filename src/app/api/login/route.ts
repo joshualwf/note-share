@@ -19,20 +19,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Invalid email or password." }, { status: 401 });
     }
 
-    // Compare the provided password with the hashed password stored in the database
+    // Compare hashed password
     const isPasswordValid = await bcrypt.compare(password, user[0].password_hash);
     if (!isPasswordValid) {
       return NextResponse.json({ message: "Invalid email or password." }, { status: 401 });
     }
 
-    // Generate JWT Token
+    // Generate JWT token
     const token = sign(
       { id: user[0].id, email: user[0].email, username: user[0].username },
       process.env.JWT_SECRET!,
       { expiresIn: "7d" }
     );
 
-    // Create the response object
+    // Set cookie in response
     const response = NextResponse.json({
       message: "Login successful",
       user: {

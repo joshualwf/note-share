@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +35,7 @@ const LoginForm = ({
   signupText = "Don't have an account?",
   signupUrl = "/signup",
 }: LoginFormProps) => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -43,12 +45,12 @@ const LoginForm = ({
     e.preventDefault();
     setLoading(true);
     setMessage("");
-
     try {
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
+        credentials: "include", // Ensures cookies are included
       });
 
       const result = await res.json();
@@ -56,7 +58,7 @@ const LoginForm = ({
 
       if (res.ok) {
         setMessage("Login successful!");
-        localStorage.setItem("token", result.token); // Save token for future API requests
+        router.push("/homepage"); // Redirect to homepage (cookies handle authentication)
       } else {
         setMessage(result.message || "Login failed.");
       }
