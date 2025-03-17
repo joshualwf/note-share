@@ -8,6 +8,7 @@ import { ModeToggle } from "@/components/ModeToggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getUserSession } from "@/lib/auth";
+import { UserNav } from "@/components/UserNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,9 +54,7 @@ export default async function RootLayout({
                 <div className="ml-auto flex items-center space-x-2">
                   <ModeToggle />
                   {user ? (
-                    <form action="/api/logout" method="POST">
-                      <Button type="submit" variant="outline">Logout</Button>
-                    </form>
+                    <UserNav />
                   ) : (
                     <>
                       <Link href="/login">

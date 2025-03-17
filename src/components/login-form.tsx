@@ -59,6 +59,7 @@ const LoginForm = ({
       if (res.ok) {
         setMessage("Login successful!");
         router.push("/homepage"); // Redirect to homepage (cookies handle authentication)
+        router.refresh();
       } else {
         setMessage(result.message || "Login failed.");
       }

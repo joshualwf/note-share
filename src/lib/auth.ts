@@ -1,16 +1,20 @@
 import { cookies } from "next/headers";
-import { verify } from "jsonwebtoken";
+import redis from "./redis";
 
 export async function getUserSession() {
   const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
+  const sessionId = cookieStore.get("sessionId")?.value;
 
-  if (!token) return null;
+  if (!sessionId) return null;
 
-  try {
-    const decoded = verify(token, process.env.JWT_SECRET!);
-    return decoded; // Returns user data from the token
-  } catch (error) {
-    return null;
-  }
+  const userSession = await redis.get(`session:${sessionId}`);
+  return userSession ? JSON.parse(userSession) : null;
+}
+
+export async function createSession(sessionId: string, userData: object) {
+  await redis.set(`session:${sessionId}`, JSON.stringify(userData), "EX", 60 * 60 * 24 * 7); // 7 days expiration
+}
+
+export async function deleteSession(sessionId: string) {
+  await redis.del(`session:${sessionId}`);
 }

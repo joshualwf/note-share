@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "./ui/card";
@@ -33,6 +34,7 @@ const SignupForm = ({
   loginText = "Already have an account?",
   loginUrl = "/login",
 }: SignupFormProps) => {
+  const router = useRouter();
   // State to manage user input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,7 +56,12 @@ const SignupForm = ({
 
       const result = await res.json();
       setLoading(false);
-      setMessage(result.message || "Signup successful!");
+      if (res.ok) {
+        router.push("/login");
+      } else {
+        setMessage(result.message || "Signup successful!");
+      }
+
 
     } catch (error) {
       setLoading(false);
