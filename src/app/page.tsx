@@ -163,6 +163,7 @@ export default function Home() {
           {paginatedDocuments.map((doc) => (
             <DocumentCard
               key={doc.id}
+              id={doc.id}
               title={doc.title}
               school={doc.school}
               modCode={doc.modCode}
