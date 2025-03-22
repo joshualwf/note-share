@@ -31,9 +31,23 @@ function AddModDialog() {
       return;
     }
 
+    const modCodeUpper = addModCode.toUpperCase();
+
+    const modExists = MODCODES.some(
+      (mod) => mod.value.toUpperCase() === modCodeUpper
+    );
+
+    if (modExists) {
+      toast({
+        title: "Module already exists",
+        description: `${modCodeUpper} is already in the list!`,
+      });
+      return;
+    }
+
     const newMod = {
       school: addModSchool,
-      modCode: addModCode.toUpperCase(),
+      modCode: modCodeUpper,
     };
 
     console.log("Submitted new mod:", newMod);
