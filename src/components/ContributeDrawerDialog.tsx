@@ -29,6 +29,7 @@ import { MODCODES, RESOURCE_TYPES, SCHOOLS } from "@/app/constants/constants";
 import { FormEvent, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import AddModDialog from "./AddModDialog";
 
 export function ContributeDrawerDialog() {
   const [open, setOpen] = React.useState(false);
@@ -51,7 +52,7 @@ export function ContributeDrawerDialog() {
             <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
-          <ProfileForm setOpen={setOpen} />
+          <ContributeModForm setOpen={setOpen} />
         </DialogContent>
       </Dialog>
     );
@@ -70,7 +71,7 @@ export function ContributeDrawerDialog() {
           <DrawerTitle>{dialogTitle}</DrawerTitle>
           <DrawerDescription>{dialogDescription}</DrawerDescription>
         </DrawerHeader>
-        <ProfileForm className="px-4" setOpen={setOpen} />
+        <ContributeModForm className="px-4" setOpen={setOpen} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -81,7 +82,7 @@ export function ContributeDrawerDialog() {
   );
 }
 
-function ProfileForm({
+function ContributeModForm({
   className,
   setOpen,
 }: React.ComponentProps<"form"> & {
@@ -174,6 +175,12 @@ function ProfileForm({
           setSelectedValue={setContributeModCode}
           data={MODCODES}
           placeholder="Select module code..."
+          emptyState={
+            <div className="p-2 text-center">
+              <p className="text-sm mb-2">Not found...</p>
+              <AddModDialog />
+            </div>
+          }
         />
       </div>
       <div className="grid gap-2">
