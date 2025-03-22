@@ -11,20 +11,22 @@ function page() {
   ];
 
   return (
-    <div className="h-full w-full flex flex-col">
-      <DocViewer
-        documents={docs}
-        pluginRenderers={DocViewerRenderers}
-        theme={{
-          primary: "#f1f5f9",
-          // secondary: "#ffffff",
-          // tertiary: "#5296d899",
-          // textPrimary: "#ffffff",
-          // textSecondary: "#5296d8",
-          // textTertiary: "#00000099",
-          // disableThemeScrollbar: false,
-        }}
-      />
+    <div className="h-full w-full flex flex-col items-center">
+      <div className="max-w-[900] w-full border-2 rounded-md overflow-hidden">
+        <DocViewer
+          documents={docs}
+          pluginRenderers={DocViewerRenderers}
+          theme={{
+            primary: "#f1f5f9",
+            // secondary: "#ffffff",
+            // tertiary: "#5296d899",
+            // textPrimary: "#ffffff",
+            // textSecondary: "#5296d8",
+            // textTertiary: "#00000099",
+            // disableThemeScrollbar: false,
+          }}
+        />
+      </div>
     </div>
   );
 }
