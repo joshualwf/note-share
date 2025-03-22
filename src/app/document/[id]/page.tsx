@@ -12,7 +12,7 @@ function page() {
 
   return (
     <div className="h-full w-full flex flex-col items-center">
-      <div className="max-w-[900] w-full border-2 rounded-lg overflow-hidden">
+      <div className="max-w-[900px] w-full border-2 rounded-lg overflow-hidden">
         <DocViewer
           documents={docs}
           pluginRenderers={DocViewerRenderers}
