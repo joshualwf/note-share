@@ -19,7 +19,7 @@ const InputMainSearch = React.forwardRef<
         <input
           type={type}
           className={cn(
-            "h-9 w-full border-input text-muted-foreground px-3 py-1 text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+            "bg-background h-9 w-full border-input text-muted-foreground px-3 py-1 text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
           )}
           ref={ref}
           {...props}
