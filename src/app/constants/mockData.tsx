@@ -158,7 +158,7 @@ export const mockComments: CommentProps[] = [
       {
         username: "tea_debugger",
         time: new Date("2023-12-31"),
-        text: "kekekekek hehexd yeet",
+        text: "kekekeke hehexd yeet",
         likeCount: 4,
         profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Tea",
       },
