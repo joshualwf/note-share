@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className="h-screen flex flex-col">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
