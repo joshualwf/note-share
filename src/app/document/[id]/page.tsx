@@ -47,9 +47,9 @@ function page() {
         </div>
         <div className="flex flex-col flex-grow w-full px-4">
           <div className="flex flex-col flex-grow w-full"></div>
-          <div className="flex w-full mb-6 gap-2 border border-accent rounded-lg p-4 shadow-lg">
+          <div className="flex w-full mb-6 gap-2 border border-color-accent rounded-lg p-4 shadow-lg">
             <Input className="" placeholder="Ask anything..."></Input>
-            <Button>send</Button>
+            <Button>Send</Button>
           </div>
         </div>
       </ResizablePanel>
