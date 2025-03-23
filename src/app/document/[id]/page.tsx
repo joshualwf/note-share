@@ -17,10 +17,7 @@ function page() {
 
   return (
     <div className="flex-grow w-full flex flex-col items-center">
-      <ResizablePanelGroup
-        direction="horizontal"
-        className="rounded-lg border "
-      >
+      <ResizablePanelGroup direction="horizontal">
         <ResizablePanel defaultSize={75}>
           <div className="flex items-center justify-center px-6 pb-6">
             <div className=" w-full border-2 rounded-lg overflow-hidden">
