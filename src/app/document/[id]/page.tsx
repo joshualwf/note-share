@@ -10,6 +10,9 @@ import {
 import styles from "./document.module.css";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { SendHorizontal } from "lucide-react";
+import Comment from "@/components/Comment";
+import { mockComments } from "@/app/constants/mockData";
 
 function page() {
   const docs = [
@@ -40,16 +43,23 @@ function page() {
       <ResizableHandle withHandle className="shadow-2xl" />
       <ResizablePanel
         defaultSize={25}
-        className="h-full w-full bg-muted flex flex-col"
+        minSize={20}
+        className="h-full w-full  flex flex-col"
       >
         <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px]">
           <span className="font-semibold">Comments</span>
         </div>
-        <div className="flex flex-col flex-grow w-full px-4">
-          <div className="flex flex-col flex-grow w-full"></div>
-          <div className="flex w-full mb-6 gap-2 border border-accent rounded-lg p-4 shadow-lg">
-            <Input className="" placeholder="Ask anything..."></Input>
-            <Button>send</Button>
+        <div className="flex flex-col flex-grow w-full px-4 py-6 h-full">
+          <div className="flex flex-col h-[700px] w-full overflow-y-auto flex-grow min-h-0">
+            {mockComments.map((comment, index) => (
+              <Comment key={index} {...comment} />
+            ))}
+          </div>
+          <div className="flex w-full gap-2 border border-color-accent rounded-2xl p-4 shadow-lg">
+            <Input placeholder="Ask anything"></Input>
+            <Button>
+              <SendHorizontal />
+            </Button>
           </div>
         </div>
       </ResizablePanel>
