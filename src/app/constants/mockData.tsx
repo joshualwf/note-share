@@ -1,3 +1,4 @@
+import { CommentProps } from "../types/comment";
 import { RESOURCE_TYPES } from "./constants";
 
 // MOCK RESPONSES FROM BACKEND APIs
@@ -84,4 +85,132 @@ export const mockDocuments: Document[] = [
     uploadTime: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
     resourceType: "Solutions",
   },
+];
+
+export const mockComments: CommentProps[] = [
+  {
+    username: "code_wizard",
+    time: new Date("2025-03-15"),
+    text: "Super useful notes for revision, thanks a ton!",
+    likeCount: 22,
+    profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Wizard",
+    replies: [
+      {
+        username: "data_nerd",
+        time: new Date("2000-01-16"),
+        text: "Saved me during finals 🙌",
+        likeCount: 6,
+        profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Nerd",
+      },
+    ],
+  },
+  {
+    username: "quiet_fox",
+    time: new Date("2000-12-10"),
+    text: "I wish I found this site earlier!",
+    likeCount: 11,
+    profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Fox",
+  },
+  {
+    username: "astro_girl",
+    time: new Date("2024-01-08"),
+    text: "The CS229 notes were 🔥. Respect!",
+    likeCount: 19,
+    profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Galaxy",
+    replies: [
+      {
+        username: "rocket_man",
+        time: new Date("2025-03-23"),
+        text: "100% agree 🚀",
+        likeCount: 3,
+        profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Rocket",
+      },
+    ],
+  },
+  {
+    username: "green_penguin",
+    time: new Date("2025-03-23"),
+    text: "Cheatsheet was solid. Minimal but thorough.",
+    likeCount: 15,
+    profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Penguin",
+  },
+  {
+    username: "coffee_dev",
+    time: new Date("2023-12-30"),
+    text: "Now I finally understand recursion 😭☕",
+    likeCount: 28,
+    profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Coffee",
+    replies: [
+      {
+        username: "tea_debugger",
+        time: new Date("2023-12-31"),
+        text: "Haha same, CS2040 was a trip.",
+        likeCount: 4,
+        profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Tea",
+      },
+      {
+        username: "tea_debugger",
+        time: new Date("2023-12-31"),
+        text: "blablabla i like spamming hehehehe.",
+        likeCount: 4,
+        profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Tea",
+      },
+      {
+        username: "tea_debugger",
+        time: new Date("2023-12-31"),
+        text: "kekekekek hehexd yeet",
+        likeCount: 4,
+        profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Tea",
+      },
+    ],
+  },
+  {
+    username: "puzzle_head",
+    time: new Date("2024-01-10"),
+    text: "Appreciate whoever uploaded the midterm guide ❤️",
+    likeCount: 34,
+    profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Puzzle",
+  },
+  // {
+  //   username: "puzzle_head",
+  //   time: new Date("2024-01-10"),
+  //   text: "Appreciate whoever uploaded the midterm guide ❤️",
+  //   likeCount: 34,
+  //   profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Puzzle",
+  // },
+  // {
+  //   username: "puzzle_head",
+  //   time: new Date("2024-01-10"),
+  //   text: "Appreciate whoever uploaded the midterm guide ❤️",
+  //   likeCount: 34,
+  //   profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Puzzle",
+  // },
+  // {
+  //   username: "puzzle_head",
+  //   time: new Date("2024-01-10"),
+  //   text: "Appreciate whoever uploaded the midterm guide ❤️",
+  //   likeCount: 34,
+  //   profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Puzzle",
+  // },
+  // {
+  //   username: "puzzle_head",
+  //   time: new Date("2024-01-10"),
+  //   text: "Appreciate whoever uploaded the midterm guide ❤️",
+  //   likeCount: 34,
+  //   profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Puzzle",
+  // },
+  // {
+  //   username: "puzzle_head",
+  //   time: new Date("2024-01-10"),
+  //   text: "Appreciate whoever uploaded the midterm guide ❤️",
+  //   likeCount: 34,
+  //   profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Puzzle",
+  // },
+  // {
+  //   username: "puzzle_head",
+  //   time: new Date("2024-01-10"),
+  //   text: "Appreciate whoever uploaded the midterm guide ❤️",
+  //   likeCount: 34,
+  //   profilePic: "https://api.dicebear.com/7.x/adventurer/svg?seed=Puzzle",
+  // },
 ];

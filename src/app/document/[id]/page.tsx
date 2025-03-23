@@ -10,9 +10,9 @@ import {
 import styles from "./document.module.css";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SendHorizontal, ThumbsUp } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SendHorizontal } from "lucide-react";
 import Comment from "@/components/Comment";
+import { mockComments } from "@/app/constants/mockData";
 
 function page() {
   const docs = [
@@ -49,9 +49,11 @@ function page() {
         <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px]">
           <span className="font-semibold">Comments</span>
         </div>
-        <div className="flex flex-col flex-grow w-full px-4 py-6">
-          <div className="flex flex-col flex-grow w-full">
-            <Comment />
+        <div className="flex flex-col flex-grow w-full px-4 py-6 h-full">
+          <div className="flex flex-col flex-grow w-full overflow-y-auto">
+            {mockComments.map((comment, index) => (
+              <Comment key={index} {...comment} />
+            ))}
           </div>
           <div className="flex w-full gap-2 border border-color-accent rounded-2xl p-4 shadow-lg">
             <Input placeholder="Ask anything"></Input>
