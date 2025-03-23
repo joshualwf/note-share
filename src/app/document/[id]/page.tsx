@@ -50,7 +50,7 @@ function DocumentPage() {
           <span className="font-semibold">Comments</span>
         </div>
         <div className="flex flex-col flex-grow w-full px-4 py-6 h-full">
-          <div className="flex flex-col w-full overflow-y-auto flex-grow min-h-0">
+          <div className="flex flex-col w-full overflow-y-auto flex-grow">
             {mockComments.map((comment, index) => (
               <Comment key={index} {...comment} />
             ))}
