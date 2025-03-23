@@ -14,7 +14,7 @@ import { SendHorizontal } from "lucide-react";
 import Comment from "@/components/Comment";
 import { mockComments } from "@/app/constants/mockData";
 
-function page() {
+function DocumentPage() {
   const docs = [
     // { uri: "https://url-to-my-pdf.pdf" }, // Remote file
     { uri: "/example-documents/dsa2101-pyp.pdf" },
@@ -67,4 +67,4 @@ function page() {
   );
 }
 
-export default page;
+export default DocumentPage;
