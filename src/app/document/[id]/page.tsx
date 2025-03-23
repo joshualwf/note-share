@@ -7,6 +7,9 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import styles from "./document.module.css";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 function page() {
   const docs = [
@@ -14,11 +17,12 @@ function page() {
     { uri: "/example-documents/dsa2101-pyp.pdf" },
     { uri: "/example-documents/cs2040-slides.pdf" }, // Local File
   ];
-
   return (
-    // <div className="w-full h-full flex flex-col items-center">
     <ResizablePanelGroup direction="horizontal" className="h-full w-full">
-      <ResizablePanel defaultSize={75} className="h-full w-full !overflow-auto">
+      <ResizablePanel
+        defaultSize={75}
+        className={`h-full w-full !overflow-auto ${styles.scrollTransparent}`}
+      >
         <DocViewer
           documents={docs}
           pluginRenderers={DocViewerRenderers}
@@ -33,15 +37,23 @@ function page() {
           }}
         />
       </ResizablePanel>
-      <ResizableHandle withHandle />
+      <ResizableHandle withHandle className="shadow-2xl" />
       <ResizablePanel
         defaultSize={25}
-        className="h-full w-full !overflow-auto bg-muted"
+        className="h-full w-full bg-muted flex flex-col"
       >
-        <span className="font-semibold p-2">Comments</span>
+        <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px]">
+          <span className="font-semibold">Comments</span>
+        </div>
+        <div className="flex flex-col flex-grow w-full px-4">
+          <div className="flex flex-col flex-grow w-full"></div>
+          <div className="flex w-full mb-6 gap-2 border border-accent rounded-lg p-4 shadow-lg">
+            <Input className="" placeholder="Ask anything..."></Input>
+            <Button>send</Button>
+          </div>
+        </div>
       </ResizablePanel>
     </ResizablePanelGroup>
-    // </div>
   );
 }
 
