@@ -31,8 +31,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="h-screen flex flex-col">
+    <html lang="en" suppressHydrationWarning className="h-full">
+      <body className="flex flex-col h-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -64,7 +64,9 @@ export default function RootLayout({
               </div>
             </div>
           </div>
-          {children}
+          <div className="flex-grow flex flex-col h-0 min-h-0 overflow-auto">
+            {children}
+          </div>
         </ThemeProvider>
         <Toaster />
       </body>
