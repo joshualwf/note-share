@@ -99,8 +99,8 @@ export default function Home() {
 
   return (
     <>
-      <div className="h-full w-full flex flex-col">
-        <div className="h-full w-full flex flex-col pt-8 pb-5 bg-accent px-4">
+      <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col pt-8 pb-5 bg-accent px-4">
           <div>
             <h1 className="text-center text-4xl font-bold sm:text-5xl">
               Study Materials
@@ -148,7 +148,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pb-20 pt-10">
+      <div className="px-4 sm:px-6 lg:px-8 max-w-7xl py-10 self-center w-full">
         <div className="relative w-full flex flex-col gap-y-3">
           <div className="flex items-center justify-between p-4 text-xs sm:text-sm md:text-base">
             <h3 className="text-muted-foreground text-center text-l">
@@ -163,6 +163,7 @@ export default function Home() {
           {paginatedDocuments.map((doc) => (
             <DocumentCard
               key={doc.id}
+              id={doc.id}
               title={doc.title}
               school={doc.school}
               modCode={doc.modCode}

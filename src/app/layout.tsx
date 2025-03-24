@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getUserSession } from "@/lib/auth";
 import { UserNav } from "@/components/UserNav";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,8 +32,8 @@ export default async function RootLayout({
   const user = await getUserSession(); // Fetch user from cookies
 
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
+    <html lang="en" suppressHydrationWarning className="h-full">
+      <body className="flex flex-col h-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -69,8 +70,11 @@ export default async function RootLayout({
               </div>
             </div>
           </div>
-          {children}
+          <div className="flex-grow flex flex-col h-0 min-h-0 overflow-auto">
+            {children}
+          </div>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );
