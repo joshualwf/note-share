@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { ModeToggle } from "@/components/ModeToggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getUserSession } from "@/lib/auth";
+import { getUserFromCookie } from "@/lib/auth";
 import { UserNav } from "@/components/UserNav";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const user = await getUserSession(); // Fetch user from cookies
+  const user = await getUserFromCookie(); // Fetch user from cookies
 
   return (
     <html lang="en" suppressHydrationWarning className="h-full">

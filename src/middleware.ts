@@ -1,34 +1,26 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import redis from "@/lib/redis";
+import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
+import { decrypt } from "@/lib/auth";
 
-export async function middleware(req: NextRequest) {
-  const sessionId = req.cookies.get("sessionId")?.value;
+const protectedRoutes = ["/homepage"];
+const publicRoutes = ["/login", "/"];
 
-  // If no session cookie, redirect to root page
-  if (!sessionId) {
-    return NextResponse.redirect(new URL("/", req.url));
+export default async function middleware(req: NextRequest) {
+  const path = req.nextUrl.pathname;
+  const isProtectedRoute = protectedRoutes.includes(path);
+  const isPublicRoute = publicRoutes.includes(path);
+
+  const cookieStore = await cookies();
+  const cookie = cookieStore.get("session")?.value;
+  const session = await decrypt(cookie);
+
+  if (isProtectedRoute && !session?.userId) {
+    return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-  // Verify session in Redis
-  const userSession = await redis.get(`session:${sessionId}`);
-
-  // If session is invalid or expired, redirect to root page
-  if (!userSession) {
-    const response = NextResponse.redirect(new URL("/", req.url));
-    response.cookies.set("sessionId", "", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      expires: new Date(0), // Clear cookie immediately
-    });
-    return response;
+  if (isPublicRoute && session?.userId) {
+    return NextResponse.redirect(new URL("/homepage", req.nextUrl));
   }
 
-  // Continue normally if session is valid
   return NextResponse.next();
 }
-
-export const config = {
-  matcher: [],
-};

@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { query } from "@/lib/db";
 import bcrypt from "bcryptjs";
-import { v4 as uuidv4 } from "uuid";
-import { createSession } from "@/lib/auth";
+import { createSessionToken } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
@@ -24,21 +23,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Invalid email or password." }, { status: 401 });
     }
 
-    const sessionId = uuidv4();
-    const userData = { id: user[0].id, email: user[0].email, username: user[0].username };
-    await createSession(sessionId, userData);
+    const { token, expiresAt } = await createSessionToken(user[0].id);
 
-    const response = NextResponse.json({ message: "Login successful", user: userData });
-
-    response.cookies.set("sessionId", sessionId, {
+    const cookieStore = await cookies();
+    cookieStore.set("session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      expires: expiresAt,
       path: "/",
-      maxAge: 7 * 24 * 60 * 60, // 7 days
     });
 
-    return response;
+    return NextResponse.json({ message: "Login successful" });
   } catch (error) {
+    console.error("Login error:", error);
     return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }
