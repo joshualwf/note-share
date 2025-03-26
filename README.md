@@ -15,6 +15,25 @@ First, install the dependencies:
 npm install
 ```
 
+### Setting Up Local DB (Postgres) - For Development Only
+
+```bash
+docker-compose up --build
+```
+
+To access the database:
+```bash
+docker exec -it postgres-db psql -U myuser -d mydatabase
+```
+To view tables:
+```bash
+\dt
+```
+To exit:
+```bash
+\q
+```
+
 ### Running the Development Server
 
 Start the development server:
