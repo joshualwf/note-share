@@ -10,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface DocumentCardProps {
-  id: number;
+  id: string;
   title: string;
   school: string;
   modCode: string;

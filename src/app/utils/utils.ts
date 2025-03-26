@@ -1,6 +1,7 @@
-export function getRelativeTime(date: Date): string {
+export function getRelativeTime(date: Date | string): string {
   const now = new Date();
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const targetDate = date instanceof Date ? date : new Date(date);
+  const diffInSeconds = Math.floor((now.getTime() - targetDate.getTime()) / 1000);
 
   const intervals: { unit: string; seconds: number }[] = [
     { unit: "y", seconds: 31536000 },
@@ -9,14 +10,15 @@ export function getRelativeTime(date: Date): string {
     { unit: "d", seconds: 86400 },
     { unit: "h", seconds: 3600 },
     { unit: "m", seconds: 60 },
+    { unit: "s", seconds: 1 },
   ];
 
-  for (const { unit, seconds } of intervals) {
-    const value = Math.floor(diffInSeconds / seconds);
-    if (value >= 1) {
-      return `Uploaded ${value}${unit} ago`;
+  for (const interval of intervals) {
+    const count = Math.floor(diffInSeconds / interval.seconds);
+    if (count > 0) {
+      return `${count}${interval.unit}`;
     }
   }
 
-  return "Uploaded just now";
+  return "now";
 }

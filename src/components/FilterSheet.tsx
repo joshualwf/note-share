@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/accordion";
 
 import { Combobox } from "./ComboBox";
-import { MODCODES, RESOURCE_TYPES, SCHOOLS } from "@/app/constants/constants";
+import { COURSECODES, RESOURCE_TYPES, SCHOOLS } from "@/app/constants/constants";
 import { Button } from "./ui/button";
 
 interface FilterSheetProps {
@@ -126,7 +126,7 @@ function FilterSheet({
                 <Combobox
                   selectedValue={modCodeFilter}
                   setSelectedValue={setModCodeFilter}
-                  data={MODCODES}
+                  data={COURSECODES}
                   placeholder="Select module..."
                 />
               </AccordionContent>

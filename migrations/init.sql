@@ -1,4 +1,4 @@
--- Users Table (Stores authentication & profile data)
+-- Users Table
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT UNIQUE NOT NULL,
@@ -9,23 +9,16 @@ CREATE TABLE users (
     admin INT DEFAULT 0
 );
 
--- Schools Table (Stores university/school names)
-CREATE TABLE schools (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT UNIQUE NOT NULL
-);
-
--- Courses Table (Stores courses offered by schools)
+-- Courses Table (No foreign key to schools)
 CREATE TABLE courses (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    school_id UUID NOT NULL,
+    school_name TEXT NOT NULL,
     course_code TEXT NOT NULL,
     course_name TEXT NOT NULL,
-    UNIQUE (school_id, course_code),  -- Ensures course codes are unique within a school
-    FOREIGN KEY (school_id) REFERENCES schools(id) ON DELETE CASCADE
+    UNIQUE (school_name, course_code)
 );
 
--- Saved Courses Table (Users can save courses for quick access)
+-- Saved Courses Table
 CREATE TABLE saved_courses (
     user_id UUID NOT NULL,
     course_id UUID NOT NULL,
@@ -34,36 +27,36 @@ CREATE TABLE saved_courses (
     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
 );
 
--- Posts Table (Stores text-based, file-based, or mixed posts linked to courses)
+-- Posts Table
 CREATE TABLE posts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
-    course_id UUID NOT NULL,  -- Each post belongs to a course
+    school_name TEXT NOT NULL,
+    course_code TEXT NOT NULL,
     title TEXT NOT NULL,
-    content TEXT,  -- Used for text-based posts
-    file_url TEXT,  -- Used for file-based posts (points to S3 or another storage)
+    content TEXT,
+    file_url TEXT,
     post_type TEXT CHECK (post_type IN ('text', 'file', 'both')),
-    upvote_count INT DEFAULT 0,  -- Stores the number of upvotes
+    upvote_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT now(),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Comments Table (Stores comments on posts)
+-- Comments Table
 CREATE TABLE comments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
     post_id UUID NOT NULL,
-    parent_comment_id UUID,  -- For nested comments
+    parent_comment_id UUID,
     comment_text TEXT NOT NULL,
-    upvote_count INT DEFAULT 0,  -- Stores the number of upvotes
+    upvote_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT now(),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
     FOREIGN KEY (parent_comment_id) REFERENCES comments(id) ON DELETE CASCADE
 );
 
--- Post Upvotes Table (Tracks post upvotes)
+-- Post Upvotes Table
 CREATE TABLE post_upvotes (
     user_id UUID NOT NULL,
     post_id UUID NOT NULL,
@@ -73,7 +66,7 @@ CREATE TABLE post_upvotes (
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 );
 
--- Comment Upvotes Table (Tracks comment upvotes)
+-- Comment Upvotes Table
 CREATE TABLE comment_upvotes (
     user_id UUID NOT NULL,
     comment_id UUID NOT NULL,
