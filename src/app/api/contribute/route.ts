@@ -9,13 +9,13 @@ export async function POST(req: NextRequest) {
     const title = formData.get("title") as string;
     const school = formData.get("school") as string;
     const courseCode = formData.get("courseCode") as string;
-    const content = formData.get("content") as string;
+    const description = formData.get("description") as string;
     const fileUrl = formData.get("file_url") as string;
     const resourceTypes = JSON.parse(
       formData.get("resourceTypes") as string
     ) as string[];
 
-    if (!title || !school || !courseCode || (content.length == 0 && !fileUrl) || resourceTypes.length === 0) {
+    if (!title || !school || !courseCode || (description.length == 0 && !fileUrl) || resourceTypes.length === 0) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
@@ -55,14 +55,14 @@ export async function POST(req: NextRequest) {
     const userId = user.id;
 
     await query(
-      `INSERT INTO posts (user_id, school_name, course_code, title, content, file_url, post_type)
+      `INSERT INTO posts (user_id, school_name, course_code, title, description, file_url, post_type)
        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [
         userId,
         school,
         courseCode,
         title,
-        content,
+        description,
         fileUrl,
         postType,
       ]

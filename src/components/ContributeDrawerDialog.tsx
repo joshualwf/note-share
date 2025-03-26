@@ -94,7 +94,7 @@ function ContributeModForm({
   const [title, setTitle] = useState<string>("");
   const [school, setSchool] = useState<string | null>(null);
   const [courseCode, setCourseCode] = useState<string>("");
-  const [content, setContent] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [resourceTypes, setResourceTypes] = useState<string[]>([]);
 
@@ -111,7 +111,7 @@ function ContributeModForm({
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!title || !school || !courseCode || (content.length == 0 && !uploadedFile) || resourceTypes.length === 0) {
+    if (!title || !school || !courseCode || (description.length == 0 && !uploadedFile) || resourceTypes.length === 0) {
       toast({
         title: "Missing fields",
         description: "Please complete all fields before submitting.",
@@ -123,7 +123,7 @@ function ContributeModForm({
     formData.append("title", title);
     formData.append("school", school);
     formData.append("courseCode", courseCode);
-    formData.append("content", content);
+    formData.append("description", description);
     if (uploadedFile) {
       formData.append("file_url", uploadedFile);
     }
@@ -180,11 +180,11 @@ function ContributeModForm({
       </div>
 
       <div className="grid gap-2">
-        <Label>Content</Label>
+        <Label>Description</Label>
         <Input
           placeholder="eg: An operating system is system software that manages computer hardware and software resources, and provides common services for computer programs."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
       </div>
 

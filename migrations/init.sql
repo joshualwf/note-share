@@ -20,9 +20,11 @@ CREATE TABLE courses (
 
 -- Saved Courses Table
 CREATE TABLE saved_courses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
     course_id UUID NOT NULL,
-    PRIMARY KEY (user_id, course_id),
+    saved_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(user_id, course_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
 );
@@ -34,7 +36,7 @@ CREATE TABLE posts (
     school_name TEXT NOT NULL,
     course_code TEXT NOT NULL,
     title TEXT NOT NULL,
-    content TEXT,
+    description TEXT,
     file_url TEXT,
     post_type TEXT CHECK (post_type IN ('text', 'file', 'both')),
     upvote_count INT DEFAULT 0,
@@ -58,20 +60,23 @@ CREATE TABLE comments (
 
 -- Post Upvotes Table
 CREATE TABLE post_upvotes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
     post_id UUID NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
-    PRIMARY KEY (user_id, post_id),
+    UNIQUE(user_id, post_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 );
 
 -- Comment Upvotes Table
 CREATE TABLE comment_upvotes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
     comment_id UUID NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
-    PRIMARY KEY (user_id, comment_id),
+    UNIQUE(user_id, comment_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE
 );
+

@@ -4,21 +4,22 @@ export function getRelativeTime(date: Date | string): string {
   const diffInSeconds = Math.floor((now.getTime() - targetDate.getTime()) / 1000);
 
   const intervals: { unit: string; seconds: number }[] = [
-    { unit: "y", seconds: 31536000 },
-    { unit: "mo", seconds: 2592000 },
-    { unit: "w", seconds: 604800 },
-    { unit: "d", seconds: 86400 },
-    { unit: "h", seconds: 3600 },
-    { unit: "m", seconds: 60 },
-    { unit: "s", seconds: 1 },
+    { unit: "year", seconds: 31536000 },
+    { unit: "month", seconds: 2592000 },
+    { unit: "week", seconds: 604800 },
+    { unit: "day", seconds: 86400 },
+    { unit: "hour", seconds: 3600 },
+    { unit: "minute", seconds: 60 },
+    { unit: "second", seconds: 1 },
   ];
 
   for (const interval of intervals) {
     const count = Math.floor(diffInSeconds / interval.seconds);
     if (count > 0) {
-      return `${count}${interval.unit}`;
+      const plural = count === 1 ? "" : "s";
+      return `${count} ${interval.unit}${plural} ago`;
     }
   }
 
-  return "now";
+  return "just now";
 }
