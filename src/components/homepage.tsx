@@ -16,7 +16,7 @@ import {
 import { ContributeDrawerDialog } from "@/components/ContributeDrawerDialog";
 
 type Post = {
-  id: string;
+  id: number;
   user_id: string;
   school_name: string;
   course_code: string;
@@ -93,7 +93,9 @@ export function HomePage() {
       if (sortBy === "Popularity") {
         return b.upvote_count - a.upvote_count;
       } else {
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
       }
     });
   }, [
@@ -108,8 +110,13 @@ export function HomePage() {
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedDocuments = filteredAndSortedDocuments.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(filteredAndSortedDocuments.length / itemsPerPage);
+  const paginatedDocuments = filteredAndSortedDocuments.slice(
+    startIndex,
+    endIndex
+  );
+  const totalPages = Math.ceil(
+    filteredAndSortedDocuments.length / itemsPerPage
+  );
 
   const goToPage = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -205,7 +212,9 @@ export function HomePage() {
                 <PaginationPrevious
                   href="#"
                   onClick={() => goToPage(currentPage - 1)}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                  className={
+                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                  }
                   aria-disabled={currentPage === 1}
                 />
               </PaginationItem>

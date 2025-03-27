@@ -1,6 +1,6 @@
 -- Users Table
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id SERIAL PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE users (
 
 -- Courses Table (No foreign key to schools)
 CREATE TABLE courses (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id SERIAL PRIMARY KEY,
     school_name TEXT NOT NULL,
     course_code TEXT NOT NULL,
     course_name TEXT NOT NULL,
@@ -20,9 +20,9 @@ CREATE TABLE courses (
 
 -- Saved Courses Table
 CREATE TABLE saved_courses (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
-    course_id UUID NOT NULL,
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    course_id INT NOT NULL,
     saved_at TIMESTAMP DEFAULT NOW(),
     UNIQUE(user_id, course_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -31,8 +31,8 @@ CREATE TABLE saved_courses (
 
 -- Posts Table
 CREATE TABLE posts (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
     school_name TEXT NOT NULL,
     course_code TEXT NOT NULL,
     title TEXT NOT NULL,
@@ -46,10 +46,10 @@ CREATE TABLE posts (
 
 -- Comments Table
 CREATE TABLE comments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
-    post_id UUID NOT NULL,
-    parent_comment_id UUID,
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    parent_comment_id INT,
     comment_text TEXT NOT NULL,
     upvote_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT now(),
@@ -60,9 +60,9 @@ CREATE TABLE comments (
 
 -- Post Upvotes Table
 CREATE TABLE post_upvotes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
-    post_id UUID NOT NULL,
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
     UNIQUE(user_id, post_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -71,9 +71,9 @@ CREATE TABLE post_upvotes (
 
 -- Comment Upvotes Table
 CREATE TABLE comment_upvotes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
-    comment_id UUID NOT NULL,
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    comment_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
     UNIQUE(user_id, comment_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,

@@ -3,7 +3,7 @@ import { RESOURCE_TYPES } from "./constants";
 
 // MOCK RESPONSES FROM BACKEND APIs
 export interface Document {
-  id: string;
+  id: number;
   title: string;
   school: string;
   modCode: string;
@@ -14,7 +14,7 @@ export interface Document {
 export type ResourceType = (typeof RESOURCE_TYPES)[number];
 export const mockDocuments: Document[] = [
   {
-    id: "1",
+    id: 1,
     title: "Tutorial 10 Notes",
     school: "National University of Singapore",
     modCode: "CS1010S",
@@ -23,7 +23,7 @@ export const mockDocuments: Document[] = [
     resourceType: "Notes",
   },
   {
-    id: "2",
+    id: 2,
     title: "Midterm Revision Guide",
     school: "Nanyang Technological University",
     modCode: "CZ1005",
@@ -32,7 +32,7 @@ export const mockDocuments: Document[] = [
     resourceType: "Exam Papers",
   },
   {
-    id: "3",
+    id: 3,
     title: "Final Exam Cheatsheet",
     school: "Harvard University",
     modCode: "CS50",
@@ -41,7 +41,7 @@ export const mockDocuments: Document[] = [
     resourceType: "Solutions",
   },
   {
-    id: "4",
+    id: 4,
     title: "AI and Machine Learning Notes",
     school: "Stanford University",
     modCode: "CS229",
@@ -50,7 +50,7 @@ export const mockDocuments: Document[] = [
     resourceType: "Notes",
   },
   {
-    id: "5",
+    id: 5,
     title: "Mathematical Foundations for CS",
     school: "Massachusetts Institute of Technology",
     modCode: "6.042J",
@@ -59,7 +59,7 @@ export const mockDocuments: Document[] = [
     resourceType: "Notes",
   },
   {
-    id: "6",
+    id: 6,
     title: "Data Structures and Algorithms",
     school: "University of California, Berkeley",
     modCode: "CS61B",
@@ -68,7 +68,7 @@ export const mockDocuments: Document[] = [
     resourceType: "Exam Papers",
   },
   {
-    id: "7",
+    id: 7,
     title: "Operating Systems Lecture Notes",
     school: "Carnegie Mellon University",
     modCode: "15-410",
@@ -77,7 +77,7 @@ export const mockDocuments: Document[] = [
     resourceType: "Notes",
   },
   {
-    id: "8",
+    id: 8,
     title: "Computer Networks Guide",
     school: "University of California, Los Angeles",
     modCode: "CS118",
