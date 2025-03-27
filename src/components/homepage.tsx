@@ -22,7 +22,7 @@ type Post = {
   course_code: string;
   title: string;
   content: string;
-  file_url: string;
+  file_key: string;
   post_type: string;
   upvote_count: number;
   created_at: Date;
@@ -201,6 +201,7 @@ export function HomePage() {
                 school={doc.school_name}
                 modCode={doc.course_code}
                 likes={doc.upvote_count}
+                file_key={doc.file_key}
                 uploadTime={doc.created_at}
               />
             ))

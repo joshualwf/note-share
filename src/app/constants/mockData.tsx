@@ -8,6 +8,7 @@ export interface Document {
   school: string;
   modCode: string;
   likes: number;
+  file_key: string;
   uploadTime: Date;
   resourceType: ResourceType;
 }
@@ -19,6 +20,7 @@ export const mockDocuments: Document[] = [
     school: "National University of Singapore",
     modCode: "CS1010S",
     likes: 47,
+    file_key: "TEST",
     uploadTime: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
     resourceType: "Notes",
   },
@@ -28,6 +30,7 @@ export const mockDocuments: Document[] = [
     school: "Nanyang Technological University",
     modCode: "CZ1005",
     likes: 32,
+    file_key: "TEST",
     uploadTime: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 1 month ago
     resourceType: "Exam Papers",
   },
@@ -37,6 +40,7 @@ export const mockDocuments: Document[] = [
     school: "Harvard University",
     modCode: "CS50",
     likes: 60,
+    file_key: "TEST",
     uploadTime: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
     resourceType: "Solutions",
   },
@@ -46,6 +50,7 @@ export const mockDocuments: Document[] = [
     school: "Stanford University",
     modCode: "CS229",
     likes: 90,
+    file_key: "TEST",
     uploadTime: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 2 weeks ago
     resourceType: "Notes",
   },
@@ -55,6 +60,7 @@ export const mockDocuments: Document[] = [
     school: "Massachusetts Institute of Technology",
     modCode: "6.042J",
     likes: 75,
+    file_key: "TEST",
     uploadTime: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 week ago
     resourceType: "Notes",
   },
@@ -64,6 +70,7 @@ export const mockDocuments: Document[] = [
     school: "University of California, Berkeley",
     modCode: "CS61B",
     likes: 88,
+    file_key: "TEST",
     uploadTime: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 2 months ago
     resourceType: "Exam Papers",
   },
@@ -73,6 +80,7 @@ export const mockDocuments: Document[] = [
     school: "Carnegie Mellon University",
     modCode: "15-410",
     likes: 110,
+    file_key: "TEST",
     uploadTime: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months ago
     resourceType: "Notes",
   },
@@ -82,6 +90,7 @@ export const mockDocuments: Document[] = [
     school: "University of California, Los Angeles",
     modCode: "CS118",
     likes: 53,
+    file_key: "TEST",
     uploadTime: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
     resourceType: "Solutions",
   },

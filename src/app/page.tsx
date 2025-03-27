@@ -168,6 +168,7 @@ export default function Home() {
               school={doc.school}
               modCode={doc.modCode}
               likes={doc.likes}
+              file_key={doc.file_key}
               uploadTime={doc.uploadTime}
             />
           ))}

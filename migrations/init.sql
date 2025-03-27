@@ -37,7 +37,7 @@ CREATE TABLE posts (
     course_code TEXT NOT NULL,
     title TEXT NOT NULL,
     description TEXT,
-    file_url TEXT,
+    file_key TEXT,
     post_type TEXT[] NOT NULL,
     upvote_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT now(),

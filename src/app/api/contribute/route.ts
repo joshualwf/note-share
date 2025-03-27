@@ -12,16 +12,17 @@ export async function POST(req: NextRequest) {
     const courseCode = formData.get("courseCode") as string;
     const description = formData.get("description") as string;
     const file = formData.get("file") as File;
-    let fileUrl: string | null = null;
+    let fileKey: string | null = null;
     if (file && file.size > 0) {
-      fileUrl = await uploadFileToS3(file);
+      fileKey = await uploadFileToS3(file); // now returns the key
     }
+    
 
     const resourceTypes = JSON.parse(
       formData.get("resourceTypes") as string
     ) as string[];
 
-    if (!title || !school || !courseCode || (description.length == 0 && !fileUrl) || resourceTypes.length === 0) {
+    if (!title || !school || !courseCode || (description.length == 0 && !fileKey) || resourceTypes.length === 0) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
     const userId = user.id;
 
     await query(
-      `INSERT INTO posts (user_id, school_name, course_code, title, description, file_url, post_type)
+      `INSERT INTO posts (user_id, school_name, course_code, title, description, file_key, post_type)
        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [
         userId,
@@ -63,10 +64,10 @@ export async function POST(req: NextRequest) {
         courseCode,
         title,
         description,
-        fileUrl || null,
+        fileKey || null,
         resourceTypes,
       ]
-    );    
+    );       
 
     return NextResponse.json({ message: "Success" });
   } catch (error) {
