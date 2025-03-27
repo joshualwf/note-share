@@ -2,7 +2,7 @@
 import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { mockDocuments } from "./constants/mockData";
 import FilterSheet from "@/components/FilterSheet";
 import { TypeAnimation } from "react-type-animation";
@@ -17,7 +17,21 @@ import {
 } from "@/components/ui/pagination";
 import { ContributeDrawerDialog } from "@/components/ContributeDrawerDialog";
 
+type Post = {
+  id: number;
+  user_id: string;
+  school_name: string;
+  course_code: string;
+  title: string;
+  content: string;
+  file_key: string;
+  post_type: string;
+  upvote_count: number;
+  created_at: Date;
+};
+
 export default function Home() {
+  const [documents, setDocuments] = useState<Post[]>([]);
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
   const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
   const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
@@ -25,9 +39,34 @@ export default function Home() {
   const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
 
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const res = await fetch("/api/getPosts");
+        const data = await res.json();
+
+        if (!Array.isArray(data)) {
+          console.log("Invalid response: not an array", data);
+          setDocuments([]);
+          return;
+        }
+
+        setDocuments(data);
+      } catch (err) {
+        console.error("Failed to fetch documents:", err);
+        setDocuments([]);
+      }
+    };
+
+    fetchDocuments();
+  }, []);
+
+
+
   // Filter and sort documents dynamically
   const filteredAndSortedDocuments = useMemo(() => {
-    let filteredDocs = [...mockDocuments];
+    let filteredDocs = [...documents];
 
     // Apply search query filter (title, school, modCode)
     if (mainSearchQuery.trim() !== "") {
@@ -35,43 +74,44 @@ export default function Home() {
       filteredDocs = filteredDocs.filter(
         (doc) =>
           doc.title.toLowerCase().includes(query) ||
-          doc.school.toLowerCase().includes(query) ||
-          doc.modCode.toLowerCase().includes(query)
+          doc.school_name.toLowerCase().includes(query) ||
+          doc.course_code.toLowerCase().includes(query)
       );
     }
 
     // Apply resource type filter
     if (resourceTypesFilter.length > 0) {
       filteredDocs = filteredDocs.filter((doc) =>
-        resourceTypesFilter.includes(doc.resourceType)
+        resourceTypesFilter.includes(doc.post_type)
       );
     }
 
     // Apply school filter
     if (schoolFilter) {
       filteredDocs = filteredDocs.filter((doc) =>
-        doc.school.toLowerCase().includes(schoolFilter.toLowerCase())
+        doc.school_name.toLowerCase().includes(schoolFilter.toLowerCase())
       );
     }
 
     // Apply module code filter
     if (modCodeFilter) {
       filteredDocs = filteredDocs.filter((doc) =>
-        doc.modCode.toLowerCase().includes(modCodeFilter.toLowerCase())
+        doc.course_code.toLowerCase().includes(modCodeFilter.toLowerCase())
       );
     }
 
     // Apply sorting
     return filteredDocs.sort((a, b) => {
       if (sortBy === "Popularity") {
-        return b.likes - a.likes;
+        return b.upvote_count - a.upvote_count;
       } else {
         return (
-          new Date(b.uploadTime).getTime() - new Date(a.uploadTime).getTime()
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
       }
     });
   }, [
+    documents,
     sortBy,
     resourceTypesFilter,
     schoolFilter,
@@ -134,7 +174,7 @@ export default function Home() {
               placeholder="Search..."
               className="max-w-2xl"
               value={mainSearchQuery}
-              onChange={(e) => setMainSearchQuery(e.target.value)} // ✅ Update search state
+              onChange={(e) => setMainSearchQuery(e.target.value)}
             />
             <FilterSheet
               resourceTypesFilter={resourceTypesFilter}
@@ -161,15 +201,15 @@ export default function Home() {
             </div>
           </div>
           {paginatedDocuments.map((doc) => (
-            <DocumentCard
+              <DocumentCard
               key={doc.id}
               id={doc.id}
               title={doc.title}
-              school={doc.school}
-              modCode={doc.modCode}
-              likes={doc.likes}
+              school={doc.school_name}
+              modCode={doc.course_code}
+              likes={doc.upvote_count}
               file_key={doc.file_key}
-              uploadTime={doc.uploadTime}
+              uploadTime={doc.created_at}
             />
           ))}
           <Pagination className="justify-end">
