@@ -41,10 +41,6 @@ export function ContributeDrawerDialog() {
   const dialogTitle = "Contribute";
   const dialogDescription = "Add your study material so that others can use";
 
-  const wrapper = (
-    <ContributeModForm className="px-4" setOpen={setOpen} />
-  );
-
   return isDesktop ? (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -58,7 +54,7 @@ export function ContributeDrawerDialog() {
           <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>{dialogDescription}</DialogDescription>
         </DialogHeader>
-        {wrapper}
+        <ContributeModForm setOpen={setOpen} />
       </DialogContent>
     </Dialog>
   ) : (
@@ -74,7 +70,7 @@ export function ContributeDrawerDialog() {
           <DrawerTitle>{dialogTitle}</DrawerTitle>
           <DrawerDescription>{dialogDescription}</DrawerDescription>
         </DrawerHeader>
-        {wrapper}
+        <ContributeModForm setOpen={setOpen} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -102,16 +98,20 @@ function ContributeModForm({
 
   const toggleResourceType = (type: string) => {
     setResourceTypes((prev) =>
-      prev.includes(type)
-        ? prev.filter((t) => t !== type)
-        : [...prev, type]
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!title || !school || !courseCode || (description.length == 0 && !uploadedFile) || resourceTypes.length === 0) {
+    if (
+      !title ||
+      !school ||
+      !courseCode ||
+      (description.length == 0 && !uploadedFile) ||
+      resourceTypes.length === 0
+    ) {
       toast({
         title: "Missing fields",
         description: "Please complete all fields before submitting.",
@@ -128,7 +128,6 @@ function ContributeModForm({
       formData.append("file", uploadedFile);
     }
     formData.append("resourceTypes", JSON.stringify(resourceTypes));
-    
 
     const res = await fetch("/api/contribute", {
       method: "POST",
@@ -154,7 +153,7 @@ function ContributeModForm({
       <div className="grid gap-2">
         <Label>Title</Label>
         <Input
-          placeholder="eg: Operating Systems Lecture Notes"
+          placeholder="eg: Programming Methodology Lecture Notes"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
@@ -173,7 +172,7 @@ function ContributeModForm({
       <div className="grid gap-2">
         <Label>Module Code</Label>
         <Input
-          placeholder="eg: SC2000"
+          placeholder="eg: CS1010S"
           value={courseCode}
           onChange={(e) => setCourseCode(e.target.value)}
         />
@@ -182,7 +181,7 @@ function ContributeModForm({
       <div className="grid gap-2">
         <Label>Description</Label>
         <Input
-          placeholder="eg: An operating system is system software that manages computer hardware and software resources, and provides common services for computer programs."
+          placeholder="Briefly describe what this document contains"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
@@ -212,9 +211,7 @@ function ContributeModForm({
                 toggleResourceType(type);
               }}
               className={
-                resourceTypes.includes(type)
-                  ? "border-primary bg-accent"
-                  : ""
+                resourceTypes.includes(type) ? "border-primary bg-accent" : ""
               }
             >
               {type}
