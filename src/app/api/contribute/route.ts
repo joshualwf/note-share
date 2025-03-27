@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { query } from "@/lib/db";
 import { getUserFromCookie } from "@/lib/auth";
+import { uploadFileToS3 } from "@/lib/s3";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,7 +11,12 @@ export async function POST(req: NextRequest) {
     const school = formData.get("school") as string;
     const courseCode = formData.get("courseCode") as string;
     const description = formData.get("description") as string;
-    const fileUrl = formData.get("file_url") as string;
+    const file = formData.get("file") as File;
+    let fileUrl: string | null = null;
+    if (file && file.size > 0) {
+      fileUrl = await uploadFileToS3(file);
+    }
+
     const resourceTypes = JSON.parse(
       formData.get("resourceTypes") as string
     ) as string[];
@@ -21,6 +27,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
 
     // Get or create the course
     let courseId: string;
@@ -41,13 +48,6 @@ export async function POST(req: NextRequest) {
       courseId = insertCourse[0].id;
     }
 
-    const postType =
-      resourceTypes.includes("text") && resourceTypes.includes("file")
-        ? "both"
-        : resourceTypes.includes("text")
-        ? "text"
-        : "file";
-
     const user = await getUserFromCookie();
     if (!user) {
         return new Response("Unauthorized", { status: 401 });
@@ -63,10 +63,10 @@ export async function POST(req: NextRequest) {
         courseCode,
         title,
         description,
-        fileUrl,
-        postType,
+        fileUrl || null,
+        resourceTypes,
       ]
-    );
+    );    
 
     return NextResponse.json({ message: "Success" });
   } catch (error) {

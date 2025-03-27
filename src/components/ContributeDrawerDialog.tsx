@@ -125,7 +125,7 @@ function ContributeModForm({
     formData.append("courseCode", courseCode);
     formData.append("description", description);
     if (uploadedFile) {
-      formData.append("file_url", uploadedFile);
+      formData.append("file", uploadedFile);
     }
     formData.append("resourceTypes", JSON.stringify(resourceTypes));
     

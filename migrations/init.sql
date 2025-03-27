@@ -38,7 +38,7 @@ CREATE TABLE posts (
     title TEXT NOT NULL,
     description TEXT,
     file_url TEXT,
-    post_type TEXT CHECK (post_type IN ('text', 'file', 'both')),
+    post_type TEXT[] NOT NULL,
     upvote_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT now(),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
