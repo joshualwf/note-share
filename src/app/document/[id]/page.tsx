@@ -49,8 +49,8 @@ function DocumentPage() {
         <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px]">
           <span className="font-semibold">Comments</span>
         </div>
-        <div className="flex flex-col flex-grow w-full px-4 py-6 h-full">
-          <div className="flex flex-col w-full overflow-y-auto flex-grow">
+        <div className="flex flex-col grow w-full px-4 py-6 justify-between overflow-hidden">
+          <div className="flex flex-col w-full overflow-y-auto">
             {mockComments.map((comment, index) => (
               <Comment key={index} {...comment} />
             ))}
