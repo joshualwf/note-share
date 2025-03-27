@@ -40,11 +40,10 @@ export async function POST(req: NextRequest) {
     if (courseResult.length > 0) {
       courseId = courseResult[0].id;
     } else {
-      const courseName = courseCode; // to do in the future
       const insertCourse = await query(
-        `INSERT INTO courses (school_name, course_code, course_name)
-         VALUES ($1, $2, $3) RETURNING id`,
-        [school, courseCode, courseName]
+        `INSERT INTO courses (school_name, course_code)
+         VALUES ($1, $2) RETURNING id`,
+        [school, courseCode]
       );
       courseId = insertCourse[0].id;
     }

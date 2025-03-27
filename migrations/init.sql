@@ -14,8 +14,14 @@ CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
     school_name TEXT NOT NULL,
     course_code TEXT NOT NULL,
-    course_name TEXT NOT NULL,
     UNIQUE (school_name, course_code)
+);
+
+-- Schools Table 
+CREATE TABLE schools (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    type TEXT NOT NULL
 );
 
 -- Saved Courses Table
