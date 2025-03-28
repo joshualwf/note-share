@@ -22,7 +22,7 @@ type Post = {
   userId: string;
   schoolName: string;
   courseCode: string;
-  title: string;
+  description: string;
   content: string;
   fileKey: string;
   postType: string;
@@ -50,7 +50,7 @@ export default function Home() {
         return;
       }
 
-      setDocuments([]);
+      setDocuments(data);
     } catch (err) {
       console.log("Failed to fetch documents:", err);
       setDocuments([]);
@@ -69,7 +69,7 @@ export default function Home() {
       const query = mainSearchQuery.toLowerCase();
       filteredDocs = filteredDocs.filter(
         (doc) =>
-          doc.title.toLowerCase().includes(query) ||
+          doc.description.toLowerCase().includes(query) ||
           doc.schoolName.toLowerCase().includes(query) ||
           doc.courseCode.toLowerCase().includes(query)
       );
@@ -200,7 +200,7 @@ export default function Home() {
             <DocumentCard
               key={doc.id}
               id={doc.id}
-              title={doc.title}
+              title={doc.description}
               school={doc.schoolName}
               courseCode={doc.courseCode}
               likes={doc.upvoteCount}

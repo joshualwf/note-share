@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
+  username        String    @unique
+  password_hash   String
+  profile_picture String?
+  created_at      DateTime  @default(now())
+  admin           Int       @default(0)
+
+  posts           Post[]
+  comments        Comment[]
+  savedCourses    SavedCourse[]
+  postUpvotes     PostUpvote[]
+  commentUpvotes  CommentUpvote[]
+}
+
+model Post {
+  id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id      Int
+  description  String
+  school_name  String
+  course_code  String
+  file_key     String
+  post_type    String
+  upvote_count Int      @default(0)
+  created_at   DateTime @default(now())
+
+  comments     Comment[]
+  upvotes      PostUpvote[]
+}
+
+model School {
+  id    Int    @id @default(autoincrement())
+  name  String
+  type  String
+}
+
+model Course {
+  id          Int    @id @default(autoincrement())
+  school_name String
+  course_code String
+
+  savedCourses SavedCourse[]
+
+  @@unique([school_name, course_code])
+}
+
+model SavedCourse {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id   Int
+  course    Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  course_id Int
+  saved_at  DateTime @default(now())
+
+  @@unique([user_id, course_id])
+}
+
+model Comment {
+  id                Int       @id @default(autoincrement())
+  user              User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id           Int
+  post              Post      @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id           Int
+  parent_comment_id Int?
+  parentComment     Comment?  @relation("CommentToComment", fields: [parent_comment_id], references: [id], onDelete: Cascade)
+  childComments     Comment[] @relation("CommentToComment")
+
+  comment_text      String
+  upvote_count      Int       @default(0)
+  created_at        DateTime  @default(now())
+
+  upvotes           CommentUpvote[]
+}
+
+model PostUpvote {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id   Int
+  post      Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id   Int
+  created_at DateTime @default(now())
+
+  @@unique([user_id, post_id])
+}
+
+model CommentUpvote {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id     Int
+  comment     Comment  @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+  comment_id  Int
+  created_at  DateTime @default(now())
+
+  @@unique([user_id, comment_id])
+}
