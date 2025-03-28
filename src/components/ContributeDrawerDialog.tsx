@@ -34,6 +34,13 @@ import { FormEvent, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import AddCourseDialog from "./AddCourseDialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function ContributeDrawerDialog() {
   const [open, setOpen] = React.useState(false);
@@ -97,28 +104,12 @@ function ContributeCourseForm({
     string | null
   >(null);
   const [contributeResourceType, setContributeResourceType] = useState<
-    string[]
-  >([]);
+    string | null
+  >(null);
   const [contributeDescription, setContributeDescription] =
     useState<string>("");
   const [contributeUploadedFile, setContributeUploadedFile] =
     useState<File | null>(null);
-
-  const getUpdatedContributeResourceType = (
-    prev: string[],
-    type: string
-  ): string[] => {
-    if (!Array.isArray(prev)) return [];
-    return prev.includes(type)
-      ? prev.filter((item) => item !== type)
-      : [...prev, type];
-  };
-
-  const toggleContributeResourceType = (type: string) => {
-    setContributeResourceType(
-      getUpdatedContributeResourceType(contributeResourceType, type)
-    );
-  };
 
   const { toast } = useToast();
 
@@ -129,7 +120,7 @@ function ContributeCourseForm({
       !contributeDescription ||
       !contributeSchool ||
       !contributeCourseCode ||
-      contributeResourceType.length === 0
+      !contributeResourceType
     ) {
       toast({
         title: "Uh oh! Something went wrong.",
@@ -190,25 +181,18 @@ function ContributeCourseForm({
       <div className="grid gap-2">
         <Label>Type of document</Label>
         <div className="flex flex-row gap-2 flex-wrap">
-          {RESOURCE_TYPES.map((type) => (
-            <Button
-              variant={"outline"}
-              key={type}
-              value={type}
-              aria-label={`Toggle ${type}`}
-              onClick={(e) => {
-                e.preventDefault();
-                toggleContributeResourceType(type);
-              }}
-              className={
-                contributeResourceType.includes(type)
-                  ? "border-primary bg-accent"
-                  : ""
-              }
-            >
-              {type}
-            </Button>
-          ))}
+          <Select onValueChange={(value) => setContributeResourceType(value)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select type..." />
+            </SelectTrigger>
+            <SelectContent>
+              {RESOURCE_TYPES.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className="grid gap-2">

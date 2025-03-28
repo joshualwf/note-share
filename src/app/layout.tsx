@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const user = await getUserFromCookie(); // Fetch user from cookies
+  const user = await getUserFromCookie();
 
   return (
     <html
@@ -45,11 +45,6 @@ export default async function RootLayout({
             <div className="border-b">
               <div className="flex h-16 items-center px-4">
                 <Link className="flex h-16 items-center" href="/">
-                  {/* <img
-                    src="https://media.tenor.com/mTz7WCbH92oAAAAj/book-transparent.gif"
-                    alt="a drawing of an open book with a shadow on it"
-                    className="h-full max-h-full block cursor-pointer"
-                  /> */}
                   <Image
                     src="/circle-nerd.svg"
                     alt="nerd icon"
