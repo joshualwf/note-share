@@ -15,7 +15,11 @@ import {
 } from "@/components/ui/accordion";
 
 import { Combobox } from "./ComboBox";
-import { COURSECODES, RESOURCE_TYPES, SCHOOLS } from "@/app/constants/constants";
+import {
+  COURSECODES,
+  RESOURCE_TYPES,
+  SCHOOLS,
+} from "@/app/constants/constants";
 import { Button } from "./ui/button";
 
 interface FilterSheetProps {
@@ -83,7 +87,7 @@ function FilterSheet({
             <AccordionItem value="item-1">
               <AccordionTrigger>Resource Type</AccordionTrigger>
               <AccordionContent>
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-row gap-2 flex-wrap">
                   {resourceTypes.map((type) => (
                     <Button
                       variant={"outline"}

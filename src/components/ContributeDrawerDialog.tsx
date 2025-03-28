@@ -1,12 +1,7 @@
-"use client";
-
 import * as React from "react";
-import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { useToast } from "@/hooks/use-toast";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -30,34 +25,44 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FolderPlus } from "lucide-react";
 import { Combobox } from "./ComboBox";
-import { RESOURCE_TYPES, SCHOOLS } from "@/app/constants/constants";
-import AddModDialog from "./AddModDialog";
+import {
+  COURSECODES,
+  RESOURCE_TYPES,
+  SCHOOLS,
+} from "@/app/constants/constants";
+import { FormEvent, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import AddModDialog from "./AddModDialog";
 
 export function ContributeDrawerDialog() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const triggerLabel = "Contribute";
   const dialogTitle = "Contribute";
   const dialogDescription = "Add your study material so that others can use";
 
-  return isDesktop ? (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <FolderPlus />
-          <span className="hidden sm:inline">{triggerLabel}</span>
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{dialogTitle}</DialogTitle>
-          <DialogDescription>{dialogDescription}</DialogDescription>
-        </DialogHeader>
-        <ContributeModForm setOpen={setOpen} />
-      </DialogContent>
-    </Dialog>
-  ) : (
+  if (isDesktop) {
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button>
+            <FolderPlus />
+            <span className="hidden sm:inline">{triggerLabel}</span>
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{dialogTitle}</DialogTitle>
+            <DialogDescription>{dialogDescription}</DialogDescription>
+          </DialogHeader>
+          <ContributeModForm setOpen={setOpen} />
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button>
@@ -87,131 +92,118 @@ function ContributeModForm({
 }: React.ComponentProps<"form"> & {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [title, setTitle] = useState<string>("");
-  const [school, setSchool] = useState<string | null>(null);
-  const [courseCode, setCourseCode] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [resourceTypes, setResourceTypes] = useState<string[]>([]);
+  const [contributeSchool, setContributeSchool] = useState<string | null>(null);
+  const [contributeModCode, setContributeModCode] = useState<string | null>(
+    null
+  );
+  const [contributeResourceType, setContributeResourceType] = useState<
+    string[]
+  >([]);
+  const [contributeDescription, setContributeDescription] =
+    useState<string>("");
+  const [contributeUploadedFile, setContributeUploadedFile] =
+    useState<File | null>(null);
 
-  const { toast } = useToast();
+  const getUpdatedContributeResourceType = (
+    prev: string[],
+    type: string
+  ): string[] => {
+    if (!Array.isArray(prev)) return [];
+    return prev.includes(type)
+      ? prev.filter((item) => item !== type)
+      : [...prev, type];
+  };
 
-  const toggleResourceType = (type: string) => {
-    setResourceTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+  const toggleContributeResourceType = (type: string) => {
+    setContributeResourceType(
+      getUpdatedContributeResourceType(contributeResourceType, type)
     );
   };
 
+  const { toast } = useToast();
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
     if (
-      !title ||
-      !school ||
-      !courseCode ||
-      (description.length == 0 && !uploadedFile) ||
-      resourceTypes.length === 0
+      !contributeUploadedFile ||
+      !contributeDescription ||
+      !contributeSchool ||
+      !contributeModCode ||
+      contributeResourceType.length === 0
     ) {
       toast({
-        title: "Missing fields",
-        description: "Please complete all fields before submitting.",
+        title: "Uh oh! Something went wrong.",
+        description: "Please fill out all fields before submitting.",
       });
       return;
     }
 
     const formData = new FormData();
-    formData.append("title", title);
-    formData.append("school", school);
-    formData.append("courseCode", courseCode);
-    formData.append("description", description);
-    if (uploadedFile) {
-      formData.append("file", uploadedFile);
-    }
-    formData.append("resourceTypes", JSON.stringify(resourceTypes));
+    formData.append("description", contributeDescription);
+    formData.append("school", contributeSchool);
+    formData.append("moduleCode", contributeModCode);
+    formData.append("resourceTypes", JSON.stringify(contributeResourceType));
+    formData.append("file", contributeUploadedFile);
 
-    const res = await fetch("/api/contribute", {
-      method: "POST",
-      body: formData,
+    console.log("formData", formData);
+    toast({
+      title: "Thank you!",
+      description: "File uploaded successfully :-)",
     });
-
-    if (res.ok) {
-      toast({
-        title: "Thank you!",
-        description: "Your contribution has been submitted.",
-      });
-      setOpen(false);
-    } else {
-      toast({
-        title: "Submission failed",
-        description: "Something went wrong. Please try again.",
-      });
-    }
+    setOpen(false);
   };
 
   return (
     <form className={cn("grid items-start gap-4", className)}>
       <div className="grid gap-2">
-        <Label>Title</Label>
+        <Label>Description of document</Label>
         <Input
-          placeholder="eg: Programming Methodology Lecture Notes"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          placeholder="eg: Operating Systems Lecture Notes"
+          value={contributeDescription}
+          onChange={(e) => setContributeDescription(e.target.value)}
         />
       </div>
-
       <div className="grid gap-2">
         <Label>School</Label>
         <Combobox
-          selectedValue={school}
-          setSelectedValue={setSchool}
+          selectedValue={contributeSchool}
+          setSelectedValue={setContributeSchool}
           data={SCHOOLS}
           placeholder="Select school..."
         />
       </div>
-
       <div className="grid gap-2">
-        <Label>Module Code</Label>
-        <Input
-          placeholder="eg: CS1010S"
-          value={courseCode}
-          onChange={(e) => setCourseCode(e.target.value)}
+        <Label>Module code</Label>
+        <Combobox
+          selectedValue={contributeModCode}
+          setSelectedValue={setContributeModCode}
+          data={COURSECODES}
+          placeholder="Select module code..."
+          emptyState={
+            <div className="p-2 text-center">
+              <p className="text-sm mb-2">Not found...</p>
+              <AddModDialog />
+            </div>
+          }
         />
       </div>
-
-      <div className="grid gap-2">
-        <Label>Description</Label>
-        <Input
-          placeholder="Briefly describe what this document contains"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
-
-      <div className="grid gap-2">
-        <Label>Upload document</Label>
-        <Input
-          type="file"
-          onChange={(e) => {
-            if (e.target.files?.[0]) {
-              setUploadedFile(e.target.files[0]);
-            }
-          }}
-        />
-      </div>
-
       <div className="grid gap-2">
         <Label>Type of document</Label>
         <div className="flex flex-row gap-2 flex-wrap">
           {RESOURCE_TYPES.map((type) => (
             <Button
-              variant="outline"
+              variant={"outline"}
               key={type}
+              value={type}
+              aria-label={`Toggle ${type}`}
               onClick={(e) => {
                 e.preventDefault();
-                toggleResourceType(type);
+                toggleContributeResourceType(type);
               }}
               className={
-                resourceTypes.includes(type) ? "border-primary bg-accent" : ""
+                contributeResourceType.includes(type)
+                  ? "border-primary bg-accent"
+                  : ""
               }
             >
               {type}
@@ -219,7 +211,17 @@ function ContributeModForm({
           ))}
         </div>
       </div>
-
+      <div className="grid gap-2">
+        <Label>Upload document</Label>
+        <Input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files?.[0]) {
+              setContributeUploadedFile(e.target.files[0]);
+            }
+          }}
+        />
+      </div>
       <Button onClick={handleSubmit}>Contribute</Button>
     </form>
   );

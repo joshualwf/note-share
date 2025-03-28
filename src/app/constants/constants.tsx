@@ -1,5 +1,15 @@
 // CONSTANTS DECLARED HERE
-export const RESOURCE_TYPES = ["Notes", "Exam Papers", "Solutions"] as const;
+export const RESOURCE_TYPES = [
+  "Notes",
+  "Practice materials",
+  "Practical",
+  "Summaries",
+  "Cheatsheets",
+  "Assignments",
+  "Tutorials",
+  "Essays",
+  "Others",
+];
 export const SCHOOLS = [
   {
     value: "National University of Singapore",
