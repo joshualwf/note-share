@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "./ui/card";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { CircleAlert } from "lucide-react";
 
 interface LoginFormProps {
   heading?: string;
@@ -39,12 +41,12 @@ const LoginForm = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
+    setError("");
     try {
       const res = await fetch("/api/login", {
         method: "POST",
@@ -57,15 +59,14 @@ const LoginForm = ({
       setLoading(false);
 
       if (res.ok) {
-        setMessage("Login successful!");
         router.push("/");
         router.refresh();
       } else {
-        setMessage(result.message || "Login failed.");
+        setError(result.error || "Invalid email or password.");
       }
     } catch (error) {
       setLoading(false);
-      setMessage("An error occurred.");
+      setError("An error occurred.");
     }
   };
 
@@ -88,7 +89,13 @@ const LoginForm = ({
             </div>
             <form onSubmit={handleSubmit}>
               <div className="grid gap-4">
-                <Input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
                 <div>
                   <Input
                     type="password"
@@ -115,13 +122,16 @@ const LoginForm = ({
                     Forgot password
                   </a>
                 </div>
-                {message && (
-                  <p className={`text-center text-sm ${message === "Login successful!" ? "" : "text-red-500"}`}>
-                    {message}
-                  </p>
+                {error && (
+                  <div className="flex items-center gap-1">
+                    <CircleAlert size="20px" color="#ef4444" />
+                    <span className="text-center text-sm text-red-500">
+                      {error}
+                    </span>
+                  </div>
                 )}
                 <Button type="submit" className="mt-2 w-full">
-                  {loading ? "Logging in..." : loginText}
+                  {loading ? <LoadingSpinner /> : loginText}
                 </Button>
                 <Button variant="outline" className="w-full">
                   <FcGoogle className="mr-2 size-5" />

@@ -47,7 +47,8 @@ export function ContributeDrawerDialog() {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const triggerLabel = "Contribute";
   const dialogTitle = "Contribute";
-  const dialogDescription = "Add your study material so that others can use";
+  const dialogDescription =
+    "Share your study materials to help others learn and succeed!";
 
   if (isDesktop) {
     return (
@@ -123,7 +124,7 @@ function ContributeCourseForm({
       !contributeResourceType
     ) {
       toast({
-        title: "Uh oh! Something went wrong.",
+        title: "Hold on!",
         description: "Please fill out all fields before submitting.",
       });
       return;
@@ -146,6 +147,17 @@ function ContributeCourseForm({
 
   return (
     <form className={cn("grid items-start gap-4", className)}>
+      <div className="grid gap-2">
+        <Label>Upload document</Label>
+        <Input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files?.[0]) {
+              setContributeUploadedFile(e.target.files[0]);
+            }
+          }}
+        />
+      </div>
       <div className="grid gap-2">
         <Label>Description of document</Label>
         <Input
@@ -194,17 +206,6 @@ function ContributeCourseForm({
             </SelectContent>
           </Select>
         </div>
-      </div>
-      <div className="grid gap-2">
-        <Label>Upload document</Label>
-        <Input
-          type="file"
-          onChange={(e) => {
-            if (e.target.files?.[0]) {
-              setContributeUploadedFile(e.target.files[0]);
-            }
-          }}
-        />
       </div>
       <Button onClick={handleSubmit}>Contribute</Button>
     </form>
