@@ -59,14 +59,16 @@ function DocumentPage() {
         <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px]">
           <span className="font-semibold">Comments</span>
         </div>
-        <div className="flex flex-col flex-grow w-full px-4 py-6 h-full">
-          <div className="flex flex-col w-full overflow-y-auto flex-grow">
+        <div className="flex flex-col grow w-full pb-6 justify-between overflow-hidden">
+          <div
+            className={`flex flex-col w-full overflow-y-auto px-4 pt-4 gap-2 ${styles.scrollTransparent}`}
+          >
             {mockComments.map((comment, index) => (
               <Comment key={index} {...comment} />
             ))}
           </div>
-          <div className="flex w-full gap-2 border border-color-accent rounded-2xl p-4 shadow-lg">
-            <Input placeholder="Ask anything" />
+          <div className="flex gap-2 border border-color-accent rounded-2xl p-4 shadow-lg mx-4">
+            <Input className="grow" placeholder="Ask anything"></Input>
             <Button>
               <SendHorizontal />
             </Button>

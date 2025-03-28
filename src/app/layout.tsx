@@ -70,7 +70,7 @@ export default async function RootLayout({
               </div>
             </div>
           </div>
-          <div className="flex-grow flex flex-col h-0 min-h-0 overflow-auto">
+          <div className="grow flex flex-col h-0 min-h-0 overflow-auto">
             {children}
           </div>
         </ThemeProvider>
