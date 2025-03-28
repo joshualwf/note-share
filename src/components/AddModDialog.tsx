@@ -11,7 +11,7 @@ import {
 import { SquarePlus } from "lucide-react";
 import { Label } from "./ui/label";
 import { Combobox } from "./ComboBox";
-import { MODCODES, SCHOOLS } from "@/app/constants/constants";
+import { COURSECODES, SCHOOLS } from "@/app/constants/constants";
 import { Input } from "./ui/input";
 import { useToast } from "@/hooks/use-toast";
 
@@ -33,7 +33,7 @@ function AddModDialog() {
 
     const modCodeUpper = addModCode.toUpperCase();
 
-    const modExists = MODCODES.some(
+    const modExists = COURSECODES.some(
       (mod) => mod.value.toUpperCase() === modCodeUpper
     );
 

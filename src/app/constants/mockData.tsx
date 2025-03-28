@@ -2,88 +2,115 @@ import { CommentProps } from "../types/comment";
 import { RESOURCE_TYPES } from "./constants";
 
 // MOCK RESPONSES FROM BACKEND APIs
-export interface Document {
+export interface Post {
   id: number;
+  userId: string;
+  schoolName: string;
+  courseCode: string;
   title: string;
-  school: string;
-  modCode: string;
-  likes: number;
-  uploadTime: Date;
-  resourceType: ResourceType;
+  content: string;
+  fileKey: string;
+  postType: string;
+  upvoteCount: number;
+  createdAt: Date;
 }
 export type ResourceType = (typeof RESOURCE_TYPES)[number];
-export const mockDocuments: Document[] = [
+export const mockDocuments: Post[] = [
   {
     id: 1,
+    userId: "TEST",
     title: "Tutorial 10 Notes",
-    school: "National University of Singapore",
-    modCode: "CS1010S",
-    likes: 47,
-    uploadTime: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
-    resourceType: "Notes",
+    schoolName: "National University of Singapore",
+    courseCode: "CS1010S",
+    content: "TEST",
+    upvoteCount: 47,
+    fileKey: "TEST",
+    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
+    postType: "Notes",
   },
   {
     id: 2,
+    userId: "TEST",
     title: "Midterm Revision Guide",
-    school: "Nanyang Technological University",
-    modCode: "CZ1005",
-    likes: 32,
-    uploadTime: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 1 month ago
-    resourceType: "Exam Papers",
+    schoolName: "Nanyang Technological University",
+    courseCode: "CZ1005",
+    content: "TEST",
+    upvoteCount: 32,
+    fileKey: "TEST",
+    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 1 month ago
+    postType: "Exam Papers",
   },
   {
     id: 3,
+    userId: "TEST",
     title: "Final Exam Cheatsheet",
-    school: "Harvard University",
-    modCode: "CS50",
-    likes: 60,
-    uploadTime: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
-    resourceType: "Solutions",
+    schoolName: "Harvard University",
+    courseCode: "CS50",
+    content: "TEST",
+    upvoteCount: 60,
+    fileKey: "TEST",
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+    postType: "Solutions",
   },
   {
     id: 4,
+    userId: "TEST",
     title: "AI and Machine Learning Notes",
-    school: "Stanford University",
-    modCode: "CS229",
-    likes: 90,
-    uploadTime: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 2 weeks ago
-    resourceType: "Notes",
+    schoolName: "Stanford University",
+    courseCode: "CS229",
+    content: "TEST",
+    upvoteCount: 90,
+    fileKey: "TEST",
+    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 2 weeks ago
+    postType: "Notes",
   },
   {
     id: 5,
+    userId: "TEST",
     title: "Mathematical Foundations for CS",
-    school: "Massachusetts Institute of Technology",
-    modCode: "6.042J",
-    likes: 75,
-    uploadTime: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 week ago
-    resourceType: "Notes",
+    schoolName: "Massachusetts Institute of Technology",
+    courseCode: "6.042J",
+    content: "TEST",
+    upvoteCount: 75,
+    fileKey: "TEST",
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 week ago
+    postType: "Notes",
   },
   {
     id: 6,
+    userId: "TEST",
     title: "Data Structures and Algorithms",
-    school: "University of California, Berkeley",
-    modCode: "CS61B",
-    likes: 88,
-    uploadTime: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 2 months ago
-    resourceType: "Exam Papers",
+    schoolName: "University of California, Berkeley",
+    courseCode: "CS61B",
+    content: "TEST",
+    upvoteCount: 88,
+    fileKey: "TEST",
+    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 2 months ago
+    postType: "Exam Papers",
   },
   {
     id: 7,
+    userId: "TEST",
     title: "Operating Systems Lecture Notes",
-    school: "Carnegie Mellon University",
-    modCode: "15-410",
-    likes: 110,
-    uploadTime: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months ago
-    resourceType: "Notes",
+    schoolName: "Carnegie Mellon University",
+    courseCode: "15-410",
+    content: "TEST",
+    upvoteCount: 110,
+    fileKey: "TEST",
+    createdAt: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months ago
+    postType: "Notes",
   },
   {
     id: 8,
+    userId: "TEST",
     title: "Computer Networks Guide",
-    school: "University of California, Los Angeles",
-    modCode: "CS118",
-    likes: 53,
-    uploadTime: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
-    resourceType: "Solutions",
+    schoolName: "University of California, Los Angeles",
+    courseCode: "CS118",
+    content: "TEST",
+    upvoteCount: 53,
+    fileKey: "TEST",
+    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
+    postType: "Solutions",
   },
 ];
 

@@ -15,6 +15,7 @@ interface DocumentCardProps {
   school: string;
   modCode: string;
   likes: number;
+  fileKey: string;
   uploadTime: Date;
 }
 
@@ -24,12 +25,21 @@ export function DocumentCard({
   school,
   modCode,
   likes,
+  fileKey,
   uploadTime,
 }: DocumentCardProps) {
   const formattedTime = getRelativeTime(uploadTime);
 
   return (
-    <Link href={`/document/${id}`}>
+    <Link
+      href={{
+        pathname: `/document/${id}`,
+        query: {
+          title,
+          fileKey,
+        },
+      }}
+    >
       <Card>
         <CardHeader>
           <CardTitle>{title}</CardTitle>

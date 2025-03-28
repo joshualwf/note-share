@@ -1,15 +1,13 @@
 "use client";
+import { useEffect, useMemo, useState } from "react";
 import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
-import { useMemo, useState, useEffect } from "react";
-import { mockDocuments } from "./constants/mockData";
 import FilterSheet from "@/components/FilterSheet";
 import { TypeAnimation } from "react-type-animation";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -30,7 +28,7 @@ type Post = {
   createdAt: Date;
 };
 
-export default function Home() {
+export function HomePage() {
   const [documents, setDocuments] = useState<Post[]>([]);
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
   const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
@@ -39,64 +37,58 @@ export default function Home() {
   const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchDocuments = async () => {
-    try {
-      const res = await fetch("/api/getPosts");
-      const data = await res.json();
-
-      if (!Array.isArray(data)) {
-        console.log("Invalid response: not an array", data);
-        setDocuments([]);
-        return;
-      }
-
-      setDocuments(data);
-    } catch (err) {
-      console.log("Failed to fetch documents:", err);
-      setDocuments([]);
-    }
-  };
   useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const res = await fetch("/api/getPosts");
+        const data = await res.json();
+
+        if (!Array.isArray(data)) {
+          console.log("Invalid response: not an array", data);
+          setDocuments([]);
+          return;
+        }
+
+        setDocuments(data);
+      } catch (err) {
+        console.error("Failed to fetch documents:", err);
+        setDocuments([]);
+      }
+    };
+
     fetchDocuments();
   }, []);
 
-  // Filter and sort documents dynamically
   const filteredAndSortedDocuments = useMemo(() => {
     let filteredDocs = [...documents];
 
-    // Apply search query filter (title, school, modCode)
     if (mainSearchQuery.trim() !== "") {
       const query = mainSearchQuery.toLowerCase();
       filteredDocs = filteredDocs.filter(
         (doc) =>
           doc.title.toLowerCase().includes(query) ||
-          doc.schoolName.toLowerCase().includes(query) ||
-          doc.courseCode.toLowerCase().includes(query)
+          doc.postType.toLowerCase().includes(query)
       );
     }
 
-    // Apply resource type filter
     if (resourceTypesFilter.length > 0) {
       filteredDocs = filteredDocs.filter((doc) =>
         resourceTypesFilter.includes(doc.postType)
       );
     }
 
-    // Apply school filter
     if (schoolFilter) {
       filteredDocs = filteredDocs.filter((doc) =>
         doc.schoolName.toLowerCase().includes(schoolFilter.toLowerCase())
       );
     }
 
-    // Apply module code filter
     if (modCodeFilter) {
       filteredDocs = filteredDocs.filter((doc) =>
         doc.courseCode.toLowerCase().includes(modCodeFilter.toLowerCase())
       );
     }
 
-    // Apply sorting
     return filteredDocs.sort((a, b) => {
       if (sortBy === "Popularity") {
         return b.upvoteCount - a.upvoteCount;
@@ -115,7 +107,6 @@ export default function Home() {
     mainSearchQuery,
   ]);
 
-  // pagination
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -135,8 +126,8 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-full flex flex-col">
-        <div className="w-full flex flex-col pt-8 pb-5 bg-accent px-4">
+      <div className="h-full w-full flex flex-col">
+        <div className="h-full w-full flex flex-col pt-8 pb-5 bg-accent px-4">
           <div>
             <h1 className="text-center text-4xl font-bold sm:text-5xl">
               Study Materials
@@ -184,7 +175,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8 max-w-7xl py-10 self-center w-full">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pb-20 pt-10">
         <div className="relative w-full flex flex-col gap-y-3">
           <div className="flex items-center justify-between p-4 text-xs sm:text-sm md:text-base">
             <h3 className="text-muted-foreground text-center text-l">
@@ -196,18 +187,26 @@ export default function Home() {
               <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
             </div>
           </div>
-          {paginatedDocuments.map((doc) => (
-            <DocumentCard
-              key={doc.id}
-              id={doc.id}
-              title={doc.title}
-              school={doc.schoolName}
-              modCode={doc.courseCode}
-              likes={doc.upvoteCount}
-              fileKey={doc.fileKey}
-              uploadTime={doc.createdAt}
-            />
-          ))}
+
+          {paginatedDocuments.length === 0 ? (
+            <div className="text-center text-muted-foreground py-10">
+              No study materials found.
+            </div>
+          ) : (
+            paginatedDocuments.map((doc) => (
+              <DocumentCard
+                key={doc.id}
+                id={doc.id}
+                title={doc.title}
+                school={doc.schoolName}
+                modCode={doc.courseCode}
+                likes={doc.upvoteCount}
+                fileKey={doc.fileKey}
+                uploadTime={doc.createdAt}
+              />
+            ))
+          )}
+
           <Pagination className="justify-end">
             <PaginationContent>
               <PaginationItem>

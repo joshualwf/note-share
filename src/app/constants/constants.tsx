@@ -26,7 +26,7 @@ export const SCHOOLS = [
   },
 ];
 
-export const MODCODES = [
+export const COURSECODES = [
   { value: "CS1010S", label: "CS1010S - Programming Methodology" },
   { value: "CZ1005", label: "CZ1005 - Digital Logic" },
   { value: "CS50", label: "CS50 - Introduction to Computer Science" },
