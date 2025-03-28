@@ -10,6 +10,7 @@ import Link from "next/link";
 import { getUserFromCookie } from "@/lib/auth";
 import { UserNav } from "@/components/UserNav";
 import { Toaster } from "@/components/ui/toaster";
+import Image from "next/image";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,12 +45,18 @@ export default async function RootLayout({
             <div className="border-b">
               <div className="flex h-16 items-center px-4">
                 <Link className="flex h-16 items-center" href="/">
-                  <img
+                  {/* <img
                     src="https://media.tenor.com/mTz7WCbH92oAAAAj/book-transparent.gif"
                     alt="a drawing of an open book with a shadow on it"
                     className="h-full max-h-full block cursor-pointer"
+                  /> */}
+                  <Image
+                    src="/circle-nerd.svg"
+                    alt="nerd icon"
+                    width={50}
+                    height={50}
                   />
-                  <h2 className="text-lg font-semibold">NoteShare</h2>
+                  <h2 className="ml-1 text-lg font-semibold">NoteShare</h2>
                 </Link>
                 <MainNav className="mx-6" />
                 <div className="ml-auto flex items-center space-x-2">
