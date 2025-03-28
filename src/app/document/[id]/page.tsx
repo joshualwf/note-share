@@ -1,5 +1,7 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "@cyntler/react-doc-viewer/dist/index.css";
 import {
@@ -15,36 +17,44 @@ import Comment from "@/components/Comment";
 import { mockComments } from "@/app/constants/mockData";
 
 function DocumentPage() {
-  const docs = [
-    // { uri: "https://url-to-my-pdf.pdf" }, // Remote file
-    { uri: "/example-documents/dsa2101-pyp.pdf" },
-    { uri: "/example-documents/cs2040-slides.pdf" }, // Local File
-  ];
+  const searchParams = useSearchParams();
+  const fileKey = searchParams.get("fileKey");
+  const title = searchParams.get("title");
+
+  const [docs, setDocs] = useState<{ uri: string }[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!fileKey) return;
+
+    const apiUrl = `/api/getPost?fileKey=${encodeURIComponent(fileKey)}`;
+    setDocs([{ uri: apiUrl }]);
+    setLoading(false);
+  }, [fileKey]);
+
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full w-full">
       <ResizablePanel
         defaultSize={75}
         className={`h-full w-full !overflow-auto ${styles.scrollTransparent}`}
       >
-        <DocViewer
-          documents={docs}
-          pluginRenderers={DocViewerRenderers}
-          theme={{
-            primary: "#f1f5f9",
-            // secondary: "#ffffff",
-            // tertiary: "#5296d899",
-            // textPrimary: "#ffffff",
-            // textSecondary: "#5296d8",
-            // textTertiary: "#00000099",
-            // disableThemeScrollbar: false,
-          }}
-        />
+        {loading ? (
+          <div className="p-4">Loading document...</div>
+        ) : docs.length > 0 ? (
+          <DocViewer
+            documents={docs}
+            pluginRenderers={DocViewerRenderers}
+            theme={{ primary: "#f1f5f9" }}
+          />
+        ) : (
+          <div className="p-4">No document found.</div>
+        )}
       </ResizablePanel>
       <ResizableHandle withHandle className="shadow-2xl" />
       <ResizablePanel
         defaultSize={25}
         minSize={20}
-        className="h-full w-full  flex flex-col"
+        className="h-full w-full flex flex-col"
       >
         <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px]">
           <span className="font-semibold">Comments</span>

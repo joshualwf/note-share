@@ -1,8 +1,11 @@
-import { FcGoogle } from "react-icons/fc";
+"use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "./ui/card";
 
 interface LoginFormProps {
@@ -32,6 +35,40 @@ const LoginForm = ({
   signupText = "Don't have an account?",
   signupUrl = "/signup",
 }: LoginFormProps) => {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include", // Ensures cookies are included
+      });
+
+      const result = await res.json();
+      setLoading(false);
+
+      if (res.ok) {
+        setMessage("Login successful!");
+        router.push("/");
+        router.refresh();
+      } else {
+        setMessage(result.message || "Login failed.");
+      }
+    } catch (error) {
+      setLoading(false);
+      setMessage("An error occurred.");
+    }
+  };
+
   return (
     <section className="pt-10 pb-32">
       <div className="container">
@@ -49,14 +86,16 @@ const LoginForm = ({
               <p className="mb-2 text-2xl font-bold">{heading}</p>
               <p className="text-muted-foreground">{subheading}</p>
             </div>
-            <div>
+            <form onSubmit={handleSubmit}>
               <div className="grid gap-4">
-                <Input type="email" placeholder="Enter your email" required />
+                <Input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
                 <div>
                   <Input
                     type="password"
                     placeholder="Enter your password"
                     required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <div className="flex justify-between">
@@ -76,8 +115,13 @@ const LoginForm = ({
                     Forgot password
                   </a>
                 </div>
+                {message && (
+                  <p className={`text-center text-sm ${message === "Login successful!" ? "" : "text-red-500"}`}>
+                    {message}
+                  </p>
+                )}
                 <Button type="submit" className="mt-2 w-full">
-                  {loginText}
+                  {loading ? "Logging in..." : loginText}
                 </Button>
                 <Button variant="outline" className="w-full">
                   <FcGoogle className="mr-2 size-5" />
@@ -90,7 +134,7 @@ const LoginForm = ({
                   Sign up
                 </a>
               </div>
-            </div>
+            </form>
           </Card>
           {/* </div> */}
         </div>

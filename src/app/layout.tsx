@@ -3,11 +3,12 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { MainNav } from "@/components/MainNav";
-import { UserNav } from "@/components/UserNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ModeToggle } from "@/components/ModeToggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { getUserFromCookie } from "@/lib/auth";
+import { UserNav } from "@/components/UserNav";
 import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
@@ -25,11 +26,11 @@ export const metadata: Metadata = {
   description: "A platform for students to share resources",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
+  const user = await getUserFromCookie(); // Fetch user from cookies
+
   return (
     <html lang="en" suppressHydrationWarning className="h-full">
       <body className="flex flex-col h-screen">
@@ -53,13 +54,18 @@ export default function RootLayout({
                 <MainNav className="mx-6" />
                 <div className="ml-auto flex items-center space-x-2">
                   <ModeToggle />
-                  {/* <UserNav /> */}
-                  <Link href="/login">
-                    <Button variant="outline">Login</Button>
-                  </Link>
-                  <Link href="/signup">
-                    <Button>Sign up</Button>
-                  </Link>
+                  {user ? (
+                    <UserNav />
+                  ) : (
+                    <>
+                      <Link href="/login">
+                        <Button variant="outline">Login</Button>
+                      </Link>
+                      <Link href="/signup">
+                        <Button>Sign up</Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
