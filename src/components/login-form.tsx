@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "./ui/card";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { CircleAlert } from "lucide-react";
+import Image from "next/image";
 
 interface LoginFormProps {
   heading?: string;
@@ -77,13 +78,12 @@ const LoginForm = ({
           {/* <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow "> */}
           <Card className="mx-auto w-full max-w-sm p-6">
             <div className="mb-6 flex flex-col items-center">
-              {/* <a href={logo.url}>
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  className="mb-7 h-10 w-auto"
-                />
-              </a> */}
+              <Image
+                src="/standing-nerd.svg"
+                width="80"
+                height="80"
+                alt="standing nerd"
+              />
               <p className="mb-2 text-2xl font-bold">{heading}</p>
               <p className="text-muted-foreground">{subheading}</p>
             </div>

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "./ui/card";
 import { CircleAlert } from "lucide-react";
 import { LoadingSpinner } from "./LoadingSpinner";
+import Image from "next/image";
 
 interface SignupFormProps {
   heading?: string;
@@ -79,6 +80,12 @@ const SignupForm = ({
         <div className="flex flex-col gap-4">
           <Card className="mx-auto w-full max-w-sm p-6">
             <div className="mb-6 flex flex-col items-center">
+              <Image
+                src="/standing-nerd.svg"
+                width="80"
+                height="80"
+                alt="standing nerd"
+              />
               <p className="mb-2 text-2xl font-bold">{heading}</p>
               <p className="text-muted-foreground">{subheading}</p>
             </div>
