@@ -26,7 +26,7 @@ function AddCourseDialog() {
     e.preventDefault();
     if (!addCourseSchool || !addCourseCode) {
       toast({
-        title: "Uh oh! Something went wrong.",
+        title: "Hold on!",
         description: "Please fill out all fields before submitting.",
       });
       return;

@@ -50,7 +50,7 @@ export default function Home() {
         return;
       }
 
-      setDocuments(data);
+      setDocuments([]);
     } catch (err) {
       console.log("Failed to fetch documents:", err);
       setDocuments([]);
