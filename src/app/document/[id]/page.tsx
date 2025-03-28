@@ -18,7 +18,7 @@ import { mockComments } from "@/app/constants/mockData";
 
 function DocumentPage() {
   const searchParams = useSearchParams();
-  const fileKey = searchParams.get("file_key");
+  const fileKey = searchParams.get("fileKey");
   const title = searchParams.get("title");
 
   const [docs, setDocs] = useState<{ uri: string }[]>([]);
@@ -26,12 +26,11 @@ function DocumentPage() {
 
   useEffect(() => {
     if (!fileKey) return;
-  
-    const apiUrl = `/api/getPost?file_key=${encodeURIComponent(fileKey)}`;
+
+    const apiUrl = `/api/getPost?fileKey=${encodeURIComponent(fileKey)}`;
     setDocs([{ uri: apiUrl }]);
     setLoading(false);
   }, [fileKey]);
-  
 
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full w-full">

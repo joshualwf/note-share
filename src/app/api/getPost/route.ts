@@ -4,10 +4,10 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 export async function GET(req: NextRequest) {
-  const fileKey = req.nextUrl.searchParams.get("file_key");
+  const fileKey = req.nextUrl.searchParams.get("fileKey");
 
   if (!fileKey) {
-    return new Response("Missing file_key", { status: 400 });
+    return new Response("Missing fileKey", { status: 400 });
   }
 
   try {

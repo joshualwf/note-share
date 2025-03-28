@@ -19,15 +19,15 @@ import { ContributeDrawerDialog } from "@/components/ContributeDrawerDialog";
 
 type Post = {
   id: number;
-  user_id: string;
-  school_name: string;
-  course_code: string;
+  userId: string;
+  schoolName: string;
+  courseCode: string;
   title: string;
   content: string;
-  file_key: string;
-  post_type: string;
-  upvote_count: number;
-  created_at: Date;
+  fileKey: string;
+  postType: string;
+  upvoteCount: number;
+  createdAt: Date;
 };
 
 export default function Home() {
@@ -39,30 +39,26 @@ export default function Home() {
   const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
 
+  const fetchDocuments = async () => {
+    try {
+      const res = await fetch("/api/getPosts");
+      const data = await res.json();
 
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        const res = await fetch("/api/getPosts");
-        const data = await res.json();
-
-        if (!Array.isArray(data)) {
-          console.log("Invalid response: not an array", data);
-          setDocuments([]);
-          return;
-        }
-
-        setDocuments(data);
-      } catch (err) {
-        console.error("Failed to fetch documents:", err);
+      if (!Array.isArray(data)) {
+        console.log("Invalid response: not an array", data);
         setDocuments([]);
+        return;
       }
-    };
 
+      setDocuments(data);
+    } catch (err) {
+      console.log("Failed to fetch documents:", err);
+      setDocuments([]);
+    }
+  };
+  useEffect(() => {
     fetchDocuments();
   }, []);
-
-
 
   // Filter and sort documents dynamically
   const filteredAndSortedDocuments = useMemo(() => {
@@ -74,39 +70,39 @@ export default function Home() {
       filteredDocs = filteredDocs.filter(
         (doc) =>
           doc.title.toLowerCase().includes(query) ||
-          doc.school_name.toLowerCase().includes(query) ||
-          doc.course_code.toLowerCase().includes(query)
+          doc.schoolName.toLowerCase().includes(query) ||
+          doc.courseCode.toLowerCase().includes(query)
       );
     }
 
     // Apply resource type filter
     if (resourceTypesFilter.length > 0) {
       filteredDocs = filteredDocs.filter((doc) =>
-        resourceTypesFilter.includes(doc.post_type)
+        resourceTypesFilter.includes(doc.postType)
       );
     }
 
     // Apply school filter
     if (schoolFilter) {
       filteredDocs = filteredDocs.filter((doc) =>
-        doc.school_name.toLowerCase().includes(schoolFilter.toLowerCase())
+        doc.schoolName.toLowerCase().includes(schoolFilter.toLowerCase())
       );
     }
 
     // Apply module code filter
     if (modCodeFilter) {
       filteredDocs = filteredDocs.filter((doc) =>
-        doc.course_code.toLowerCase().includes(modCodeFilter.toLowerCase())
+        doc.courseCode.toLowerCase().includes(modCodeFilter.toLowerCase())
       );
     }
 
     // Apply sorting
     return filteredDocs.sort((a, b) => {
       if (sortBy === "Popularity") {
-        return b.upvote_count - a.upvote_count;
+        return b.upvoteCount - a.upvoteCount;
       } else {
         return (
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
       }
     });
@@ -201,15 +197,15 @@ export default function Home() {
             </div>
           </div>
           {paginatedDocuments.map((doc) => (
-              <DocumentCard
+            <DocumentCard
               key={doc.id}
               id={doc.id}
               title={doc.title}
-              school={doc.school_name}
-              modCode={doc.course_code}
-              likes={doc.upvote_count}
-              file_key={doc.file_key}
-              uploadTime={doc.created_at}
+              school={doc.schoolName}
+              modCode={doc.courseCode}
+              likes={doc.upvoteCount}
+              fileKey={doc.fileKey}
+              uploadTime={doc.createdAt}
             />
           ))}
           <Pagination className="justify-end">

@@ -16,19 +16,23 @@ export async function POST(req: NextRequest) {
     if (file && file.size > 0) {
       fileKey = await uploadFileToS3(file); // now returns the key
     }
-    
 
     const resourceTypes = JSON.parse(
       formData.get("resourceTypes") as string
     ) as string[];
 
-    if (!title || !school || !courseCode || (description.length == 0 && !fileKey) || resourceTypes.length === 0) {
+    if (
+      !title ||
+      !school ||
+      !courseCode ||
+      (description.length == 0 && !fileKey) ||
+      resourceTypes.length === 0
+    ) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
       );
     }
-
 
     // Get or create the course
     let courseId: string;
@@ -50,12 +54,12 @@ export async function POST(req: NextRequest) {
 
     const user = await getUserFromCookie();
     if (!user) {
-        return new Response("Unauthorized", { status: 401 });
+      return new Response("Unauthorized", { status: 401 });
     }
     const userId = user.id;
 
     await query(
-      `INSERT INTO posts (user_id, school_name, course_code, title, description, file_key, post_type)
+      `INSERT INTO posts (userId, school_name, course_code, title, description, file_key, post_type)
        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [
         userId,
@@ -66,7 +70,7 @@ export async function POST(req: NextRequest) {
         fileKey || null,
         resourceTypes,
       ]
-    );       
+    );
 
     return NextResponse.json({ message: "Success" });
   } catch (error) {
