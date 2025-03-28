@@ -70,7 +70,7 @@ export function ContributeDrawerDialog() {
           <DrawerTitle>{dialogTitle}</DrawerTitle>
           <DrawerDescription>{dialogDescription}</DrawerDescription>
         </DrawerHeader>
-        <ContributeModForm setOpen={setOpen} />
+        <ContributeModForm className="px-4" setOpen={setOpen} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
