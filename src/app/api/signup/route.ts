@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { query } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
@@ -16,12 +16,22 @@ export async function POST(req: Request) {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Insert into PostgreSQL
-    const result = await query(
-      "INSERT INTO users (email, password_hash, username) VALUES ($1, $2, $3) RETURNING id, email, username, created_at, admin",
-      [email, hashedPassword, username]
-    );
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password_hash: hashedPassword,
+        username,
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        created_at: true,
+        admin: true,
+      },
+    });
 
-    return NextResponse.json({ message: "User created successfully", user: result[0] }, { status: 201 });
+    return NextResponse.json({ message: "User created successfully", user }, { status: 201 });
   } catch (error: any) {
     if (error.code === "23505") {
       return NextResponse.json({ message: "Email or username already exists" }, { status: 400 });

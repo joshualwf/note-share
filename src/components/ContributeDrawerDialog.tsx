@@ -138,10 +138,22 @@ function ContributeCourseForm({
     formData.append("file", contributeUploadedFile);
 
     console.log("formData", formData);
-    toast({
-      title: "Thank you!",
-      description: "File uploaded successfully :-)",
+    const res = await fetch("/api/contribute", {
+      method: "POST",
+      body: formData,
     });
+    if (res.ok) {
+      toast({
+        title: "Thank you!",
+        description: "File uploaded successfully :-)",
+      });
+      setOpen(false);
+    } else {
+      toast({
+        title: "Submission failed",
+        description: "Something went wrong. Please try again.",
+      });
+    }
     setOpen(false);
   };
 
