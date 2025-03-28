@@ -33,7 +33,7 @@ import {
 import { FormEvent, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import AddModDialog from "./AddModDialog";
+import AddCourseDialog from "./AddCourseDialog";
 
 export function ContributeDrawerDialog() {
   const [open, setOpen] = React.useState(false);
@@ -56,7 +56,7 @@ export function ContributeDrawerDialog() {
             <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
-          <ContributeModForm setOpen={setOpen} />
+          <ContributeCourseForm setOpen={setOpen} />
         </DialogContent>
       </Dialog>
     );
@@ -75,7 +75,7 @@ export function ContributeDrawerDialog() {
           <DrawerTitle>{dialogTitle}</DrawerTitle>
           <DrawerDescription>{dialogDescription}</DrawerDescription>
         </DrawerHeader>
-        <ContributeModForm className="px-4" setOpen={setOpen} />
+        <ContributeCourseForm className="px-4" setOpen={setOpen} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -86,16 +86,16 @@ export function ContributeDrawerDialog() {
   );
 }
 
-function ContributeModForm({
+function ContributeCourseForm({
   className,
   setOpen,
 }: React.ComponentProps<"form"> & {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [contributeSchool, setContributeSchool] = useState<string | null>(null);
-  const [contributeModCode, setContributeModCode] = useState<string | null>(
-    null
-  );
+  const [contributeCourseCode, setContributeCourseCode] = useState<
+    string | null
+  >(null);
   const [contributeResourceType, setContributeResourceType] = useState<
     string[]
   >([]);
@@ -128,7 +128,7 @@ function ContributeModForm({
       !contributeUploadedFile ||
       !contributeDescription ||
       !contributeSchool ||
-      !contributeModCode ||
+      !contributeCourseCode ||
       contributeResourceType.length === 0
     ) {
       toast({
@@ -141,7 +141,7 @@ function ContributeModForm({
     const formData = new FormData();
     formData.append("description", contributeDescription);
     formData.append("school", contributeSchool);
-    formData.append("moduleCode", contributeModCode);
+    formData.append("courseCode", contributeCourseCode);
     formData.append("resourceTypes", JSON.stringify(contributeResourceType));
     formData.append("file", contributeUploadedFile);
 
@@ -173,16 +173,16 @@ function ContributeModForm({
         />
       </div>
       <div className="grid gap-2">
-        <Label>Module code</Label>
+        <Label>Course</Label>
         <Combobox
-          selectedValue={contributeModCode}
-          setSelectedValue={setContributeModCode}
+          selectedValue={contributeCourseCode}
+          setSelectedValue={setContributeCourseCode}
           data={COURSECODES}
-          placeholder="Select module code..."
+          placeholder="Select course..."
           emptyState={
             <div className="p-2 text-center">
               <p className="text-sm mb-2">Not found...</p>
-              <AddModDialog />
+              <AddCourseDialog />
             </div>
           }
         />

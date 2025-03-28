@@ -27,8 +27,8 @@ interface FilterSheetProps {
   setResourceTypesFilter: (value: string[]) => void;
   schoolFilter: string | null;
   setSchoolFilter: (value: string | null) => void;
-  modCodeFilter: string | null;
-  setModCodeFilter: (value: string | null) => void;
+  courseCodeFilter: string | null;
+  setCourseCodeFilter: (value: string | null) => void;
 }
 
 function FilterSheet({
@@ -36,8 +36,8 @@ function FilterSheet({
   setResourceTypesFilter,
   schoolFilter,
   setSchoolFilter,
-  modCodeFilter,
-  setModCodeFilter,
+  courseCodeFilter,
+  setCourseCodeFilter,
 }: FilterSheetProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [sheetSide, setSheetSide] = useState<"top" | "right">("right");
@@ -64,7 +64,7 @@ function FilterSheet({
   const handleClearAllFilters = () => {
     setResourceTypesFilter([]);
     setSchoolFilter(null);
-    setModCodeFilter(null);
+    setCourseCodeFilter(null);
   };
 
   return (
@@ -125,13 +125,13 @@ function FilterSheet({
 
           <Accordion type="single" collapsible defaultValue="item-3">
             <AccordionItem value="item-3">
-              <AccordionTrigger>Module</AccordionTrigger>
+              <AccordionTrigger>Course</AccordionTrigger>
               <AccordionContent className="flex-start flex">
                 <Combobox
-                  selectedValue={modCodeFilter}
-                  setSelectedValue={setModCodeFilter}
+                  selectedValue={courseCodeFilter}
+                  setSelectedValue={setCourseCodeFilter}
                   data={COURSECODES}
-                  placeholder="Select module..."
+                  placeholder="Select course..."
                 />
               </AccordionContent>
             </AccordionItem>
@@ -145,7 +145,7 @@ function FilterSheet({
             disabled={
               resourceTypesFilter.length === 0 &&
               !schoolFilter &&
-              !modCodeFilter
+              !courseCodeFilter
             }
           >
             Clear all filters

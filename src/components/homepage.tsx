@@ -33,7 +33,7 @@ export function HomePage() {
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
   const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
   const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
-  const [modCodeFilter, setModCodeFilter] = useState<string | null>(null);
+  const [courseCodeFilter, setCourseCodeFilter] = useState<string | null>(null);
   const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -83,9 +83,9 @@ export function HomePage() {
       );
     }
 
-    if (modCodeFilter) {
+    if (courseCodeFilter) {
       filteredDocs = filteredDocs.filter((doc) =>
-        doc.courseCode.toLowerCase().includes(modCodeFilter.toLowerCase())
+        doc.courseCode.toLowerCase().includes(courseCodeFilter.toLowerCase())
       );
     }
 
@@ -103,7 +103,7 @@ export function HomePage() {
     sortBy,
     resourceTypesFilter,
     schoolFilter,
-    modCodeFilter,
+    courseCodeFilter,
     mainSearchQuery,
   ]);
 
@@ -168,8 +168,8 @@ export function HomePage() {
               setResourceTypesFilter={setResourceTypesFilter}
               schoolFilter={schoolFilter}
               setSchoolFilter={setSchoolFilter}
-              modCodeFilter={modCodeFilter}
-              setModCodeFilter={setModCodeFilter}
+              courseCodeFilter={courseCodeFilter}
+              setCourseCodeFilter={setCourseCodeFilter}
             />
           </div>
         </div>
@@ -199,7 +199,7 @@ export function HomePage() {
                 id={doc.id}
                 title={doc.title}
                 school={doc.schoolName}
-                modCode={doc.courseCode}
+                courseCode={doc.courseCode}
                 likes={doc.upvoteCount}
                 fileKey={doc.fileKey}
                 uploadTime={doc.createdAt}

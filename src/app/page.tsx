@@ -35,7 +35,7 @@ export default function Home() {
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
   const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
   const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
-  const [modCodeFilter, setModCodeFilter] = useState<string | null>(null);
+  const [courseCodeFilter, setCourseCodeFilter] = useState<string | null>(null);
   const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -64,7 +64,7 @@ export default function Home() {
   const filteredAndSortedDocuments = useMemo(() => {
     let filteredDocs = [...documents];
 
-    // Apply search query filter (title, school, modCode)
+    // Apply search query filter (title, school, courseCode)
     if (mainSearchQuery.trim() !== "") {
       const query = mainSearchQuery.toLowerCase();
       filteredDocs = filteredDocs.filter(
@@ -89,10 +89,10 @@ export default function Home() {
       );
     }
 
-    // Apply module code filter
-    if (modCodeFilter) {
+    // Apply course code filter
+    if (courseCodeFilter) {
       filteredDocs = filteredDocs.filter((doc) =>
-        doc.courseCode.toLowerCase().includes(modCodeFilter.toLowerCase())
+        doc.courseCode.toLowerCase().includes(courseCodeFilter.toLowerCase())
       );
     }
 
@@ -111,7 +111,7 @@ export default function Home() {
     sortBy,
     resourceTypesFilter,
     schoolFilter,
-    modCodeFilter,
+    courseCodeFilter,
     mainSearchQuery,
   ]);
 
@@ -177,8 +177,8 @@ export default function Home() {
               setResourceTypesFilter={setResourceTypesFilter}
               schoolFilter={schoolFilter}
               setSchoolFilter={setSchoolFilter}
-              modCodeFilter={modCodeFilter}
-              setModCodeFilter={setModCodeFilter}
+              courseCodeFilter={courseCodeFilter}
+              setCourseCodeFilter={setCourseCodeFilter}
             />
           </div>
         </div>
@@ -202,7 +202,7 @@ export default function Home() {
               id={doc.id}
               title={doc.title}
               school={doc.schoolName}
-              modCode={doc.courseCode}
+              courseCode={doc.courseCode}
               likes={doc.upvoteCount}
               fileKey={doc.fileKey}
               uploadTime={doc.createdAt}
