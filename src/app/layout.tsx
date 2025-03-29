@@ -46,7 +46,7 @@ export default async function RootLayout({
               <div className="flex h-16 items-center px-4">
                 <Link className="flex h-16 items-center" href="/">
                   <Image
-                    src="/circle-nerd.svg"
+                    src="/icon2.png"
                     alt="nerd icon"
                     width={50}
                     height={50}
