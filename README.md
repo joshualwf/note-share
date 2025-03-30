@@ -1,6 +1,5 @@
-🚧 Work in Progress – This project is actively being developed and improved.
+<img src="public/icon9.png" height="100"></img>
 # NoteShare
-
 🔗 **Live Demo:** [NoteShare](https://sharemynotes.vercel.app)
 
 If Reddit and Studocu had a baby, it would be **NoteShare** – a collaborative platform where students and professionals can easily share, discover, and discuss notes and study materials.
