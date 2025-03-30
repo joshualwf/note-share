@@ -43,15 +43,15 @@ export default async function RootLayout({
         >
           <div className="flex-col md:flex">
             <div className="border-b">
-              <div className="flex h-16 items-center px-4">
+              <div className="flex h-16 items-center pr-4 pl-2">
                 <Link className="flex h-16 items-center" href="/">
                   <Image
-                    src="/icon6.png"
+                    src="/icon9.png"
                     alt="nerd icon"
-                    width={50}
-                    height={50}
+                    width={40}
+                    height={40}
                   />
-                  <h2 className="ml-1 text-lg font-semibold">NoteShare</h2>
+                  <h2 className="text-lg font-semibold ml-1">NoteShare</h2>
                 </Link>
                 <MainNav className="mx-6" />
                 <div className="ml-auto flex items-center space-x-2">
