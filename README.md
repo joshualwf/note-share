@@ -1,4 +1,4 @@
-<img src="public/icon9.png" height="100"></img>
+<img src="public/icon9.png" height="100" width="100"></img>
 # NoteShare
 🔗 **Live Demo:** [NoteShare](https://sharemynotes.vercel.app)
 
