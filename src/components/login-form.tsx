@@ -79,7 +79,7 @@ const LoginForm = ({
           <Card className="mx-auto w-full max-w-sm p-6">
             <div className="mb-6 flex flex-col items-center">
               <Image
-                src="/icon2.png"
+                src="/icon6.png"
                 width="80"
                 height="80"
                 alt="standing nerd"
