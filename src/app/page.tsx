@@ -2,6 +2,7 @@
 import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo, useState, useEffect } from "react";
 import { mockDocuments } from "./constants/mockData";
 import FilterSheet from "@/components/FilterSheet";
@@ -32,33 +33,55 @@ type Post = {
 
 export default function Home() {
   const [documents, setDocuments] = useState<Post[]>([]);
+  const [documentCount, setDocumentCount] = useState(0);
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
   const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
   const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
   const [courseCodeFilter, setCourseCodeFilter] = useState<string | null>(null);
   const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
-  const [currentPage, setCurrentPage] = useState(1);
+  // used for pagination
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const currentPageFromUrl = pageParam ? parseInt(pageParam) : 1;
+  const [currentPage, setCurrentPage] = useState(currentPageFromUrl);
 
-  const fetchDocuments = async () => {
+  useEffect(() => {
+    if (currentPage === 1) {
+      router.push("/"); // no page=1 in URL
+    } else {
+      router.push(`/?page=${currentPage}`);
+    }
+  }, [currentPage]);
+
+  // Reset to page 1 when filters/search change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [resourceTypesFilter, schoolFilter, courseCodeFilter, mainSearchQuery, sortBy]);
+
+  const fetchDocuments = async (page = 1) => {
+    const params = new URLSearchParams({
+      page: page.toString(),
+      resourceTypes: JSON.stringify(resourceTypesFilter),
+      school: schoolFilter || "",
+      courseCode: courseCodeFilter || "",
+      search: mainSearchQuery || "",
+      sortBy,
+    });
+
     try {
-      const res = await fetch("/api/getPosts");
+      const res = await fetch(`/api/getPosts?${params.toString()}`);
       const data = await res.json();
-
-      if (!Array.isArray(data)) {
-        console.log("Invalid response: not an array", data);
-        setDocuments([]);
-        return;
-      }
-
-      setDocuments(data);
+      setDocuments(data.posts);
+      setDocumentCount(data.totalCount);
     } catch (err) {
-      console.log("Failed to fetch documents:", err);
+      console.error("Failed to fetch documents:", err);
       setDocuments([]);
     }
   };
   useEffect(() => {
-    fetchDocuments();
-  }, []);
+    fetchDocuments(currentPage);
+  }, [currentPage, resourceTypesFilter, schoolFilter, courseCodeFilter, mainSearchQuery, sortBy]);
 
   // Filter and sort documents dynamically
   const filteredAndSortedDocuments = useMemo(() => {
@@ -117,21 +140,10 @@ export default function Home() {
 
   // pagination
   const itemsPerPage = 5;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedDocuments = filteredAndSortedDocuments.slice(
-    startIndex,
-    endIndex
-  );
+  const paginatedDocuments = filteredAndSortedDocuments
   const totalPages = Math.ceil(
-    filteredAndSortedDocuments.length / itemsPerPage
+    documentCount / itemsPerPage
   );
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
 
   return (
     <>
@@ -213,7 +225,7 @@ export default function Home() {
               <PaginationItem>
                 <PaginationPrevious
                   href="#"
-                  onClick={() => goToPage(currentPage - 1)}
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   className={
                     currentPage === 1 ? "pointer-events-none opacity-50" : ""
                   }
@@ -225,7 +237,7 @@ export default function Home() {
                 <PaginationItem key={i}>
                   <PaginationLink
                     href="#"
-                    onClick={() => goToPage(i + 1)}
+                    onClick={() => setCurrentPage(i + 1)}
                     className={
                       currentPage === i + 1
                         ? "font-bold text-primary bg-accent"
@@ -240,7 +252,7 @@ export default function Home() {
               <PaginationItem>
                 <PaginationNext
                   href="#"
-                  onClick={() => goToPage(currentPage + 1)}
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                   className={
                     currentPage === totalPages
                       ? "pointer-events-none opacity-50"
