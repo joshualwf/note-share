@@ -44,15 +44,15 @@ export async function POST(req: NextRequest) {
     // Get or create course
     await prisma.course.upsert({
       where: {
-        school_name_course_code: {
-          school_name: school,
-          course_code: courseCode,
+        schoolName_courseCode: {
+          schoolName: school,
+          courseCode: courseCode,
         },
       },
       update: {},
       create: {
-        school_name: school,
-        course_code: courseCode,
+        schoolName: school,
+        courseCode: courseCode,
       },
     });
 
@@ -61,10 +61,10 @@ export async function POST(req: NextRequest) {
       data: {
         user: { connect: { id: userId } },
         description,
-        school_name: school,
-        course_code: courseCode,
-        file_key: fileKey,
-        post_type: JSON.parse(resourceTypes), // assuming it's sent as a JSON string array
+        schoolName: school,
+        courseCode: courseCode,
+        fileKey: fileKey,
+        postType: JSON.parse(resourceTypes), // assuming it's sent as a JSON string array
       },
     });
 

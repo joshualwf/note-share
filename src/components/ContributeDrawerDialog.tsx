@@ -100,6 +100,7 @@ function ContributeCourseForm({
 }: React.ComponentProps<"form"> & {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const [loading, setLoading] = useState(false);
   const [contributeSchool, setContributeSchool] = useState<string | null>(null);
   const [contributeCourseCode, setContributeCourseCode] = useState<
     string | null
@@ -129,7 +130,7 @@ function ContributeCourseForm({
       });
       return;
     }
-
+    setLoading(true);
     const formData = new FormData();
     formData.append("description", contributeDescription);
     formData.append("school", contributeSchool);
@@ -155,6 +156,7 @@ function ContributeCourseForm({
       });
     }
     setOpen(false);
+    setLoading(false);
   };
 
   return (
@@ -219,7 +221,9 @@ function ContributeCourseForm({
           </Select>
         </div>
       </div>
-      <Button onClick={handleSubmit}>Contribute</Button>
+      <Button onClick={handleSubmit} disabled={loading}>
+        {loading ? "Submitting..." : "Contribute"}
+      </Button>
     </form>
   );
 }

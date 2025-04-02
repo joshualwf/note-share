@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,99 +8,94 @@ datasource db {
 }
 
 model User {
-  id              Int       @id @default(autoincrement())
-  email           String    @unique
-  username        String    @unique
-  password_hash   String
-  profile_picture String?
-  created_at      DateTime  @default(now())
-  admin           Int       @default(0)
-
-  posts           Post[]
+  id              Int             @id @default(autoincrement())
+  email           String          @unique
+  username        String          @unique
+  passwordHash   String          @map("password_hash")
+  profilePicture String?         @map("profile_picture")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  admin           Int             @default(0)
   comments        Comment[]
-  savedCourses    SavedCourse[]
-  postUpvotes     PostUpvote[]
   commentUpvotes  CommentUpvote[]
+  posts           Post[]
+  postUpvotes     PostUpvote[]
+  savedCourses    SavedCourse[]
 }
 
 model Post {
-  id           Int      @id @default(autoincrement())
-  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id      Int
+  id           Int          @id @default(autoincrement())
+  userId      Int          @map("user_id")
   description  String
-  school_name  String
-  course_code  String
-  file_key     String
-  post_type    String
-  upvote_count Int      @default(0)
-  created_at   DateTime @default(now())
-
+  schoolName  String       @map("school_name")
+  courseCode  String       @map("course_code")
+  fileKey     String       @map("file_key")
+  postType    String       @map("post_type")
+  upvoteCount Int          @default(0) @map("upvote_count")
+  createdAt   DateTime     @default(now()) @map("created_at")
   comments     Comment[]
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   upvotes      PostUpvote[]
 }
 
 model School {
-  id    Int    @id @default(autoincrement())
-  name  String
-  type  String
+  id   Int    @id @default(autoincrement())
+  name String
+  type String
 }
 
 model Course {
-  id          Int    @id @default(autoincrement())
-  school_name String
-  course_code String
-
+  id           Int           @id @default(autoincrement())
+  schoolName  String        @map("school_name")
+  courseCode  String        @map("course_code")
   savedCourses SavedCourse[]
 
-  @@unique([school_name, course_code])
+  @@unique([schoolName, courseCode])
 }
 
 model SavedCourse {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id   Int
-  course    Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
-  course_id Int
-  saved_at  DateTime @default(now())
+  userId   Int      @map("user_id")
+  courseId Int      @map("course_id")
+  savedAt  DateTime @default(now()) @map("saved_at")
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([user_id, course_id])
+  @@unique([userId, courseId])
 }
 
 model Comment {
-  id                Int       @id @default(autoincrement())
-  user              User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id           Int
-  post              Post      @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  post_id           Int
-  parent_comment_id Int?
-  parentComment     Comment?  @relation("CommentToComment", fields: [parent_comment_id], references: [id], onDelete: Cascade)
-  childComments     Comment[] @relation("CommentToComment")
-
-  comment_text      String
-  upvote_count      Int       @default(0)
-  created_at        DateTime  @default(now())
-
+  id                Int             @id @default(autoincrement())
+  userId           Int             @map("user_id")
+  postId           Int             @map("postId")
+  parentCommentId Int?            @map("parent_comment_id")
+  commentText      String          @map("comment_text")
+  upvoteCount      Int             @default(0) @map("upvote_count")
+  createdAt        DateTime        @default(now()) @map("created_at")
+  parentComment     Comment?        @relation("CommentToComment", fields: [parentCommentId], references: [id], onDelete: Cascade)
+  childComments     Comment[]       @relation("CommentToComment")
+  post              Post            @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   upvotes           CommentUpvote[]
 }
 
 model PostUpvote {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id   Int
-  post      Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  post_id   Int
-  created_at DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  postId    Int      @map("post_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([user_id, post_id])
+  @@unique([userId, postId])
 }
 
 model CommentUpvote {
-  id          Int      @id @default(autoincrement())
-  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id     Int
-  comment     Comment  @relation(fields: [comment_id], references: [id], onDelete: Cascade)
-  comment_id  Int
-  created_at  DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  commentId Int      @map("comment_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  comment    Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([user_id, comment_id])
+  @@unique([userId, commentId])
 }

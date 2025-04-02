@@ -10,7 +10,6 @@ export function getRelativeTime(date: Date | string): string {
     { unit: "day", seconds: 86400 },
     { unit: "hour", seconds: 3600 },
     { unit: "minute", seconds: 60 },
-    { unit: "second", seconds: 1 },
   ];
 
   for (const interval of intervals) {
@@ -21,5 +20,5 @@ export function getRelativeTime(date: Date | string): string {
     }
   }
 
-  return "just now";
+  return "1 minute ago";
 }
