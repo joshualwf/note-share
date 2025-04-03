@@ -101,27 +101,56 @@ function ContributeCourseForm({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [loading, setLoading] = useState(false);
+  const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
+  const [course, setCourse] = useState<{ value: string; label: string }[]>([]);
   const [contributeSchool, setContributeSchool] = useState<string | null>(null);
-  const [contributeCourseCode, setContributeCourseCode] = useState<
-    string | null
-  >(null);
-  const [contributeResourceType, setContributeResourceType] = useState<
-    string | null
-  >(null);
-  const [contributeDescription, setContributeDescription] =
-    useState<string>("");
-  const [contributeUploadedFile, setContributeUploadedFile] =
-    useState<File | null>(null);
+  const [contributeCourseInfo, setContributeCourseInfo] = useState<string | null>(null);
+  const [contributeCourseCode, setContributeCourseCourse] = useState<string | null>(null);
+  const [contributeCourseName, setContributeCourseName] = useState<string | null>(null);
+  const [contributeResourceType, setContributeResourceType] = useState<string | null>(null);
+  const [contributeDescription, setContributeDescription] = useState<string>("");
+  const [contributeUploadedFile, setContributeUploadedFile] = useState<File | null>(null);
 
   const { toast } = useToast();
 
+  const fetchSchools = async () => {
+    try {
+      const res = await fetch('/api/getSchools');
+      const data = await res.json();
+      setSchools(data);
+    } catch (err) {
+      console.error("Failed to fetch documents:", err);
+      setSchools([]);
+    }
+  };
+  React.useEffect(() => {
+    fetchSchools();
+  }, []);
+
+  const fetchCourses = async (school: string) => {
+    try {
+      const res = await fetch(`/api/getCourses?school=${encodeURIComponent(school)}`);
+      const data = await res.json();
+      setCourse(data);
+    } catch (err) {
+      console.error("Failed to fetch documents:", err);
+      setCourse([]);
+    }
+  };
+  React.useEffect(() => {
+    if (contributeSchool) {
+      fetchCourses(contributeSchool);
+    }
+  }, [contributeSchool]);
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    
     if (
       !contributeUploadedFile ||
       !contributeDescription ||
       !contributeSchool ||
-      !contributeCourseCode ||
+      !contributeCourseInfo ||
       !contributeResourceType
     ) {
       toast({
@@ -134,7 +163,8 @@ function ContributeCourseForm({
     const formData = new FormData();
     formData.append("description", contributeDescription);
     formData.append("school", contributeSchool);
-    formData.append("courseCode", contributeCourseCode);
+    formData.append("courseCode", contributeCourseCode || "");
+    formData.append("courseName", contributeCourseName || "");
     formData.append("resourceTypes", JSON.stringify(contributeResourceType));
     formData.append("file", contributeUploadedFile);
 
@@ -185,16 +215,16 @@ function ContributeCourseForm({
         <Combobox
           selectedValue={contributeSchool}
           setSelectedValue={setContributeSchool}
-          data={SCHOOLS}
+          data={schools}
           placeholder="Select school..."
         />
       </div>
       <div className="grid gap-2">
         <Label>Course</Label>
         <Combobox
-          selectedValue={contributeCourseCode}
-          setSelectedValue={setContributeCourseCode}
-          data={COURSECODES}
+          selectedValue={contributeCourseInfo}
+          setSelectedValue={setContributeCourseInfo}
+          data={course}
           placeholder="Select course..."
           emptyState={
             <div className="p-2 text-center">
@@ -202,6 +232,8 @@ function ContributeCourseForm({
               <AddCourseDialog />
             </div>
           }
+          setCourseCode={setContributeCourseCourse}
+          setCourseName={setContributeCourseName}
         />
       </div>
       <div className="grid gap-2">

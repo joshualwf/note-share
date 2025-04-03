@@ -23,6 +23,7 @@ type Post = {
   userId: string;
   schoolName: string;
   courseCode: string;
+  courseName: string;
   description: string;
   content: string;
   fileKey: string;
@@ -37,7 +38,9 @@ export default function Home() {
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
   const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
   const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
+  const [courseFilter, setCourseFilter] = useState<string | null>(null);
   const [courseCodeFilter, setCourseCodeFilter] = useState<string | null>(null);
+  const [courseNameFilter, setCourseNameFilter] = useState<string | null>(null);
   const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
   // used for pagination
   const router = useRouter();
@@ -57,7 +60,7 @@ export default function Home() {
   // Reset to page 1 when filters/search change
   useEffect(() => {
     setCurrentPage(1);
-  }, [resourceTypesFilter, schoolFilter, courseCodeFilter, mainSearchQuery, sortBy]);
+  }, [resourceTypesFilter, schoolFilter, courseFilter, mainSearchQuery, sortBy]);
 
   const fetchDocuments = async (page = 1) => {
     const params = new URLSearchParams({
@@ -65,6 +68,7 @@ export default function Home() {
       resourceTypes: JSON.stringify(resourceTypesFilter),
       school: schoolFilter || "",
       courseCode: courseCodeFilter || "",
+      courseName: courseNameFilter || "",
       search: mainSearchQuery || "",
       sortBy,
     });
@@ -81,7 +85,7 @@ export default function Home() {
   };
   useEffect(() => {
     fetchDocuments(currentPage);
-  }, [currentPage, resourceTypesFilter, schoolFilter, courseCodeFilter, mainSearchQuery, sortBy]);
+  }, [currentPage, resourceTypesFilter, schoolFilter, courseFilter, mainSearchQuery, sortBy]);
 
   // Filter and sort documents dynamically
   const filteredAndSortedDocuments = useMemo(() => {
@@ -113,9 +117,9 @@ export default function Home() {
     }
 
     // Apply course code filter
-    if (courseCodeFilter) {
+    if (courseFilter) {
       filteredDocs = filteredDocs.filter((doc) =>
-        doc.courseCode.toLowerCase().includes(courseCodeFilter.toLowerCase())
+        doc.courseCode.toLowerCase().includes(courseFilter.toLowerCase())
       );
     }
 
@@ -134,7 +138,7 @@ export default function Home() {
     sortBy,
     resourceTypesFilter,
     schoolFilter,
-    courseCodeFilter,
+    courseFilter,
     mainSearchQuery,
   ]);
 
@@ -189,8 +193,10 @@ export default function Home() {
               setResourceTypesFilter={setResourceTypesFilter}
               schoolFilter={schoolFilter}
               setSchoolFilter={setSchoolFilter}
-              courseCodeFilter={courseCodeFilter}
+              courseFilter={courseFilter}
+              setCourseFilter={setCourseFilter}
               setCourseCodeFilter={setCourseCodeFilter}
+              setCourseNameFilter={setCourseNameFilter}
             />
           </div>
         </div>
@@ -215,6 +221,7 @@ export default function Home() {
               title={doc.description}
               school={doc.schoolName}
               courseCode={doc.courseCode}
+              courseName={doc.courseName}
               likes={doc.upvoteCount}
               fileKey={doc.fileKey}
               uploadTime={doc.createdAt}

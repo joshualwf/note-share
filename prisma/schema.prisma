@@ -8,33 +8,34 @@ datasource db {
 }
 
 model User {
-  id              Int             @id @default(autoincrement())
-  email           String          @unique
-  username        String          @unique
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
+  username       String          @unique
   passwordHash   String          @map("password_hash")
   profilePicture String?         @map("profile_picture")
   createdAt      DateTime        @default(now()) @map("created_at")
-  admin           Int             @default(0)
-  comments        Comment[]
-  commentUpvotes  CommentUpvote[]
-  posts           Post[]
-  postUpvotes     PostUpvote[]
-  savedCourses    SavedCourse[]
+  admin          Int             @default(0)
+  comments       Comment[]
+  commentUpvotes CommentUpvote[]
+  posts          Post[]
+  postUpvotes    PostUpvote[]
+  savedCourses   SavedCourse[]
 }
 
 model Post {
-  id           Int          @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   userId      Int          @map("user_id")
-  description  String
+  description String
   schoolName  String       @map("school_name")
-  courseCode  String       @map("course_code")
+  courseCode  String?      @map("course_code")
+  courseName  String?      @map("course_name")
   fileKey     String       @map("file_key")
   postType    String       @map("post_type")
   upvoteCount Int          @default(0) @map("upvote_count")
   createdAt   DateTime     @default(now()) @map("created_at")
-  comments     Comment[]
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  upvotes      PostUpvote[]
+  comments    Comment[]
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  upvotes     PostUpvote[]
 }
 
 model School {
@@ -45,57 +46,56 @@ model School {
 
 model Course {
   id           Int           @id @default(autoincrement())
-  schoolName  String        @map("school_name")
-  courseCode  String        @map("course_code")
+  schoolName   String        @map("school_name")
+  courseName   String?       @map("course_name")
+  courseCode   String?       @map("course_code")
   savedCourses SavedCourse[]
-
-  @@unique([schoolName, courseCode])
 }
 
 model SavedCourse {
-  id        Int      @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   userId   Int      @map("user_id")
   courseId Int      @map("course_id")
   savedAt  DateTime @default(now()) @map("saved_at")
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
 }
 
 model Comment {
-  id                Int             @id @default(autoincrement())
-  userId           Int             @map("user_id")
-  postId           Int             @map("postId")
+  id              Int             @id @default(autoincrement())
+  userId          Int             @map("user_id")
+  postId          Int             @map("postId")
   parentCommentId Int?            @map("parent_comment_id")
-  commentText      String          @map("comment_text")
-  upvoteCount      Int             @default(0) @map("upvote_count")
-  createdAt        DateTime        @default(now()) @map("created_at")
-  parentComment     Comment?        @relation("CommentToComment", fields: [parentCommentId], references: [id], onDelete: Cascade)
-  childComments     Comment[]       @relation("CommentToComment")
-  post              Post            @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  upvotes           CommentUpvote[]
+  commentText     String          @map("comment_text")
+  upvoteCount     Int             @default(0) @map("upvote_count")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  parentComment   Comment?        @relation("CommentToComment", fields: [parentCommentId], references: [id], onDelete: Cascade)
+  childComments   Comment[]       @relation("CommentToComment")
+  post            Post            @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  upvotes         CommentUpvote[]
 }
 
 model PostUpvote {
-  id         Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userId    Int      @map("user_id")
   postId    Int      @map("post_id")
   createdAt DateTime @default(now()) @map("created_at")
-  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
 }
 
 model CommentUpvote {
-  id         Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userId    Int      @map("user_id")
   commentId Int      @map("comment_id")
   createdAt DateTime @default(now()) @map("created_at")
-  comment    Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, commentId])
 }

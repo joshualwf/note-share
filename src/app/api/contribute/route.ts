@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
 
     const school = formData.get("school") as string;
     const courseCode = formData.get("courseCode") as string;
+    const courseName = formData.get("courseName") as string;
     const description = formData.get("description") as string;
     const file = formData.get("file") as File;
     const resourceTypes = formData.get("resourceTypes") as string;
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
     if (
       !description ||
       !school ||
-      !courseCode ||
+      !(courseCode || courseName) ||
       !resourceTypes ||
       !file ||
       file.size === 0
@@ -41,21 +42,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "File upload failed" }, { status: 500 });
     }
 
-    // Get or create course
-    await prisma.course.upsert({
-      where: {
-        schoolName_courseCode: {
-          schoolName: school,
-          courseCode: courseCode,
-        },
-      },
-      update: {},
-      create: {
-        schoolName: school,
-        courseCode: courseCode,
-      },
-    });
-
     // Create the post
     await prisma.post.create({
       data: {
@@ -63,6 +49,7 @@ export async function POST(req: NextRequest) {
         description,
         schoolName: school,
         courseCode: courseCode,
+        courseName: courseName,
         fileKey: fileKey,
         postType: JSON.parse(resourceTypes), // assuming it's sent as a JSON string array
       },

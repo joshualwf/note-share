@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Sheet,
   SheetContent,
@@ -27,21 +27,71 @@ interface FilterSheetProps {
   setResourceTypesFilter: (value: string[]) => void;
   schoolFilter: string | null;
   setSchoolFilter: (value: string | null) => void;
-  courseCodeFilter: string | null;
+  courseFilter: string | null;
+  setCourseFilter: (value: string | null) => void;
   setCourseCodeFilter: (value: string | null) => void;
+  setCourseNameFilter: (value: string | null) => void;
 }
+
+type School = {
+  id: number;
+  name: string;
+  type: string;
+};
+
+type Course = {
+  id: number;
+  courseCode: string;
+  courseName: string;
+  schoolName: string;
+};
 
 function FilterSheet({
   resourceTypesFilter,
   setResourceTypesFilter,
   schoolFilter,
   setSchoolFilter,
-  courseCodeFilter,
+  courseFilter,
+  setCourseFilter,
   setCourseCodeFilter,
+  setCourseNameFilter,
 }: FilterSheetProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [sheetSide, setSheetSide] = useState<"top" | "right">("right");
   const resourceTypes = RESOURCE_TYPES;
+  const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
+  const [course, setCourse] = useState<{ value: string; label: string }[]>([]);
+
+  const fetchSchools = async () => {
+    try {
+      const res = await fetch('/api/getSchools');
+      const data = await res.json();
+      setSchools(data);
+    } catch (err) {
+      console.error("Failed to fetch documents:", err);
+      setSchools([]);
+    }
+  };
+  useEffect(() => {
+    fetchSchools();
+  }, []);
+
+  const fetchCourses = async (school: string) => {
+    try {
+      const res = await fetch(`/api/getCourses?school=${encodeURIComponent(school)}`);
+      const data = await res.json();
+      setCourse(data);
+    } catch (err) {
+      console.error("Failed to fetch documents:", err);
+      setCourse([]);
+    }
+  };
+  useEffect(() => {
+    if (schoolFilter) {
+      fetchCourses(schoolFilter);
+    }
+  }, [schoolFilter]);
+  
 
   const getUpdatedResourceTypes = (prev: string[], type: string): string[] => {
     if (!Array.isArray(prev)) return [];
@@ -64,7 +114,9 @@ function FilterSheet({
   const handleClearAllFilters = () => {
     setResourceTypesFilter([]);
     setSchoolFilter(null);
+    setCourseFilter(null);
     setCourseCodeFilter(null);
+    setCourseNameFilter(null);
   };
 
   return (
@@ -116,7 +168,7 @@ function FilterSheet({
                 <Combobox
                   selectedValue={schoolFilter}
                   setSelectedValue={setSchoolFilter}
-                  data={SCHOOLS}
+                  data={schools}
                   placeholder="Select school..."
                 />
               </AccordionContent>
@@ -128,10 +180,12 @@ function FilterSheet({
               <AccordionTrigger>Course</AccordionTrigger>
               <AccordionContent className="flex-start flex">
                 <Combobox
-                  selectedValue={courseCodeFilter}
-                  setSelectedValue={setCourseCodeFilter}
-                  data={COURSECODES}
+                  selectedValue={courseFilter}
+                  setSelectedValue={setCourseFilter}
+                  data={course}
                   placeholder="Select course..."
+                  setCourseCode={setCourseCodeFilter}
+                  setCourseName={setCourseNameFilter}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -145,7 +199,7 @@ function FilterSheet({
             disabled={
               resourceTypesFilter.length === 0 &&
               !schoolFilter &&
-              !courseCodeFilter
+              !courseFilter
             }
           >
             Clear all filters
