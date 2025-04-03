@@ -34,6 +34,28 @@ To exit:
 \q
 ```
 
+### Resetting the Local DB (Postgres) - For Development Only
+To delete the docker volume:
+```bash
+docker-compose down -v
+```
+
+To build the docker container:
+```bash
+docker-compose up --build
+```
+
+To create the database:
+```bash
+npx prisma db push | npx prisma migrate deploy
+```
+Migrations: Applies all previously created migrations to the fresh DB, requires you’ve already done prisma migrate dev or prisma migrate reset in the past
+
+To seed the database:
+```bash
+npx prisma db seed
+```
+
 ### Running the Development Server
 
 Start the development server:
