@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { createSessionToken } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
@@ -29,6 +31,16 @@ export async function POST(req: Request) {
         createdAt: true,
         admin: true,
       },
+    });
+
+    const { token, expiresAt } = await createSessionToken(String(user.id));
+
+    const cookieStore = await cookies();
+    cookieStore.set("session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      expires: expiresAt,
+      path: "/",
     });
 
     return NextResponse.json({ message: "User created successfully", user }, { status: 201 });

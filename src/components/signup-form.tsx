@@ -65,6 +65,7 @@ const SignupForm = ({
       setLoading(false);
       if (res.ok) {
         router.push("/");
+        router.refresh();
       } else {
         setError(result.message || "Signup unsuccessful!");
       }
