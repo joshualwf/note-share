@@ -42,7 +42,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function ContributeDrawerDialog() {
+export function ContributeDrawerDialog({
+  fetchDocument,
+}: {
+  fetchDocument: () => void;
+}) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const triggerLabel = "Contribute";
@@ -64,7 +68,7 @@ export function ContributeDrawerDialog() {
             <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
-          <ContributeCourseForm setOpen={setOpen} />
+          <ContributeCourseForm setOpen={setOpen} fetchDocument={fetchDocument} />
         </DialogContent>
       </Dialog>
     );
@@ -83,7 +87,7 @@ export function ContributeDrawerDialog() {
           <DrawerTitle>{dialogTitle}</DrawerTitle>
           <DrawerDescription>{dialogDescription}</DrawerDescription>
         </DrawerHeader>
-        <ContributeCourseForm className="px-4" setOpen={setOpen} />
+        <ContributeCourseForm className="px-4" setOpen={setOpen} fetchDocument={fetchDocument}/>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -97,8 +101,10 @@ export function ContributeDrawerDialog() {
 function ContributeCourseForm({
   className,
   setOpen,
+  fetchDocument,
 }: React.ComponentProps<"form"> & {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchDocument: () => void;
 }) {
   const [loading, setLoading] = useState(false);
   const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
@@ -178,6 +184,7 @@ function ContributeCourseForm({
         title: "Thank you!",
         description: "File uploaded successfully :-)",
       });
+      fetchDocument();
       setOpen(false);
     } else {
       toast({
