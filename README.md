@@ -1,4 +1,5 @@
 🚧 Work in Progress – This project is actively being developed and improved.
+
 # NoteShare
 
 🔗 **Live Demo:** [NoteShare](https://sharemynotes.vercel.app)
@@ -15,45 +16,38 @@ First, install the dependencies:
 npm install
 ```
 
-### Setting Up Local DB (Postgres) - For Development Only
-
-```bash
-docker-compose up --build
-```
-
-To access the database:
-```bash
-docker exec -it postgres-db psql -U myuser -d mydatabase
-```
-To view tables:
-```bash
-\dt
-```
-To exit:
-```bash
-\q
-```
-
-### Resetting the Local DB (Postgres) - For Development Only
-To delete the docker volume:
-```bash
-docker-compose down -v
-```
+### Set up for database
 
 To build the docker container:
+
 ```bash
 docker-compose up --build
 ```
 
-To create the database:
-```bash
-npx prisma db push | npx prisma migrate deploy
-```
-Migrations: Applies all previously created migrations to the fresh DB, requires you’ve already done prisma migrate dev or prisma migrate reset in the past
+To create the database based on `prisma/schema.prisma`:
 
-To seed the database:
+- [**For local db**] This will create the new db directly according to `prisma/schema.prisma`
+
+  ```bash
+  npx prisma db push
+  ```
+
+- [**For production db**] This will create the new db according to the migration files at `prisma/migrations`.  
+  (In order to generate new migration files after editing `prisma/schema.prisma`, run `npx migrate dev`)
+  ```bash
+  npx prisma migrate deploy
+  ```
+
+To seed the database with dummy data according to `prisma/seed.js`:
+
 ```bash
 npx prisma db seed
+```
+
+To delete the docker volume:
+
+```bash
+docker-compose down -v
 ```
 
 ### Running the Development Server
