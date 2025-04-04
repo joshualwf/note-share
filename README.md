@@ -1,5 +1,7 @@
 <img src="public/icon9.png" height="100" width="100"></img>
+
 # NoteShare
+
 🔗 **Live Demo:** [NoteShare](https://sharemynotes.vercel.app)
 
 If Reddit and Studocu had a baby, it would be **NoteShare** – a collaborative platform where students and professionals can easily share, discover, and discuss notes and study materials.
@@ -8,34 +10,47 @@ If Reddit and Studocu had a baby, it would be **NoteShare** – a collaborative 
 
 ### Installation
 
-First, install the dependencies:
-
 ```bash
 npm install
 ```
 
-### Setting Up Local DB (Postgres) - For Development Only
+### Database Setup
+
+**Build docker container**:
 
 ```bash
 docker-compose up --build
 ```
 
-To access the database:
+**Initialize the database**:
+
+- **For local development** (quick setup, no migration tracking)  
+  This directly applies your current Prisma schema to the DB according to `prisma/schema.prisma`:
+
+  ```bash
+  npx prisma db push
+  ```
+
+- **For production** (with migration tracking)  
+  This applies the versioned migration files in `prisma/migrations`:
+  ```bash
+  npx prisma migrate deploy
+  ```
+  💡 Note: In order to generate new migration files after editing `prisma/schema.prisma`, run `npx migrate dev`
+
+**Seed the database with dummy data according to `prisma/seed.js`:**
+
 ```bash
-docker exec -it postgres-db psql -U myuser -d mydatabase
+npx prisma db seed
 ```
-To view tables:
+
+**Clean up Docker volumes (remove data):**
+
 ```bash
-\dt
-```
-To exit:
-```bash
-\q
+docker-compose down -v
 ```
 
 ### Running the Development Server
-
-Start the development server:
 
 ```bash
 npm run dev

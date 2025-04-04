@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { query } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { createSessionToken } from "@/lib/auth";
 
@@ -12,18 +12,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Email and password are required." }, { status: 400 });
     }
 
-    const user = await query("SELECT * FROM users WHERE email = $1", [email]);
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
 
-    if (user.length === 0) {
+    if (!user) {
       return NextResponse.json({ message: "Invalid email or password." }, { status: 401 });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user[0].password_hash);
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
       return NextResponse.json({ message: "Invalid email or password." }, { status: 401 });
     }
 
-    const { token, expiresAt } = await createSessionToken(user[0].id);
+    const { token, expiresAt } = await createSessionToken(String(user.id));
 
     const cookieStore = await cookies();
     cookieStore.set("session", token, {

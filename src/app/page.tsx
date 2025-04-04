@@ -2,6 +2,7 @@
 import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo, useState, useEffect } from "react";
 import { mockDocuments } from "./constants/mockData";
 import FilterSheet from "@/components/FilterSheet";
@@ -22,7 +23,8 @@ type Post = {
   userId: string;
   schoolName: string;
   courseCode: string;
-  title: string;
+  courseName: string;
+  description: string;
   content: string;
   fileKey: string;
   postType: string;
@@ -32,106 +34,64 @@ type Post = {
 
 export default function Home() {
   const [documents, setDocuments] = useState<Post[]>([]);
+  const [documentCount, setDocumentCount] = useState(0);
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
   const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
   const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
+  const [courseFilter, setCourseFilter] = useState<string | null>(null);
   const [courseCodeFilter, setCourseCodeFilter] = useState<string | null>(null);
+  const [courseNameFilter, setCourseNameFilter] = useState<string | null>(null);
   const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
-  const [currentPage, setCurrentPage] = useState(1);
+  // used for pagination
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const currentPageFromUrl = pageParam ? parseInt(pageParam) : 1;
+  const [currentPage, setCurrentPage] = useState(currentPageFromUrl);
 
-  const fetchDocuments = async () => {
+  useEffect(() => {
+    if (currentPage === 1) {
+      router.push("/"); // no page=1 in URL
+    } else {
+      router.push(`/?page=${currentPage}`);
+    }
+  }, [currentPage]);
+
+  // Reset to page 1 when filters/search change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [resourceTypesFilter, schoolFilter, courseFilter, mainSearchQuery, sortBy]);
+
+  const fetchDocuments = async (page = 1) => {
+    const params = new URLSearchParams({
+      page: page.toString(),
+      resourceTypes: JSON.stringify(resourceTypesFilter),
+      school: schoolFilter || "",
+      courseCode: courseCodeFilter || "",
+      courseName: courseNameFilter || "",
+      search: mainSearchQuery || "",
+      sortBy,
+    });
+
     try {
-      const res = await fetch("/api/getPosts");
+      const res = await fetch(`/api/getPosts?${params.toString()}`);
       const data = await res.json();
-
-      if (!Array.isArray(data)) {
-        console.log("Invalid response: not an array", data);
-        setDocuments([]);
-        return;
-      }
-
-      setDocuments([]);
+      setDocuments(data.posts);
+      setDocumentCount(data.totalCount);
     } catch (err) {
-      console.log("Failed to fetch documents:", err);
+      console.error("Failed to fetch documents:", err);
       setDocuments([]);
     }
   };
   useEffect(() => {
-    fetchDocuments();
-  }, []);
-
-  // Filter and sort documents dynamically
-  const filteredAndSortedDocuments = useMemo(() => {
-    let filteredDocs = [...documents];
-
-    // Apply search query filter (title, school, courseCode)
-    if (mainSearchQuery.trim() !== "") {
-      const query = mainSearchQuery.toLowerCase();
-      filteredDocs = filteredDocs.filter(
-        (doc) =>
-          doc.title.toLowerCase().includes(query) ||
-          doc.schoolName.toLowerCase().includes(query) ||
-          doc.courseCode.toLowerCase().includes(query)
-      );
-    }
-
-    // Apply resource type filter
-    if (resourceTypesFilter.length > 0) {
-      filteredDocs = filteredDocs.filter((doc) =>
-        resourceTypesFilter.includes(doc.postType)
-      );
-    }
-
-    // Apply school filter
-    if (schoolFilter) {
-      filteredDocs = filteredDocs.filter((doc) =>
-        doc.schoolName.toLowerCase().includes(schoolFilter.toLowerCase())
-      );
-    }
-
-    // Apply course code filter
-    if (courseCodeFilter) {
-      filteredDocs = filteredDocs.filter((doc) =>
-        doc.courseCode.toLowerCase().includes(courseCodeFilter.toLowerCase())
-      );
-    }
-
-    // Apply sorting
-    return filteredDocs.sort((a, b) => {
-      if (sortBy === "Popularity") {
-        return b.upvoteCount - a.upvoteCount;
-      } else {
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      }
-    });
-  }, [
-    documents,
-    sortBy,
-    resourceTypesFilter,
-    schoolFilter,
-    courseCodeFilter,
-    mainSearchQuery,
-  ]);
+    fetchDocuments(currentPage);
+  }, [currentPage, resourceTypesFilter, schoolFilter, courseFilter, mainSearchQuery, sortBy]);
 
   // pagination
   const itemsPerPage = 5;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedDocuments = filteredAndSortedDocuments.slice(
-    startIndex,
-    endIndex
-  );
   const totalPages = Math.ceil(
-    filteredAndSortedDocuments.length / itemsPerPage
+    documentCount / itemsPerPage
   );
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
 
   return (
     <>
@@ -177,8 +137,10 @@ export default function Home() {
               setResourceTypesFilter={setResourceTypesFilter}
               schoolFilter={schoolFilter}
               setSchoolFilter={setSchoolFilter}
-              courseCodeFilter={courseCodeFilter}
+              courseFilter={courseFilter}
+              setCourseFilter={setCourseFilter}
               setCourseCodeFilter={setCourseCodeFilter}
+              setCourseNameFilter={setCourseNameFilter}
             />
           </div>
         </div>
@@ -188,21 +150,22 @@ export default function Home() {
         <div className="relative w-full flex flex-col gap-y-3">
           <div className="flex items-center justify-between p-4 text-xs sm:text-sm md:text-base">
             <h3 className="text-muted-foreground text-center text-l">
-              {filteredAndSortedDocuments.length}{" "}
-              {filteredAndSortedDocuments.length === 1 ? "result" : "results"}
+              {documents.length}{" "}
+              {documents.length === 1 ? "result" : "results"}
             </h3>
             <div className="flex gap-2">
               <ContributeDrawerDialog />
               <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
             </div>
           </div>
-          {paginatedDocuments.map((doc) => (
+          {documents.map((doc) => (
             <DocumentCard
               key={doc.id}
               id={doc.id}
-              title={doc.title}
+              title={doc.description}
               school={doc.schoolName}
               courseCode={doc.courseCode}
+              courseName={doc.courseName}
               likes={doc.upvoteCount}
               fileKey={doc.fileKey}
               uploadTime={doc.createdAt}
@@ -213,7 +176,7 @@ export default function Home() {
               <PaginationItem>
                 <PaginationPrevious
                   href="#"
-                  onClick={() => goToPage(currentPage - 1)}
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   className={
                     currentPage === 1 ? "pointer-events-none opacity-50" : ""
                   }
@@ -225,7 +188,7 @@ export default function Home() {
                 <PaginationItem key={i}>
                   <PaginationLink
                     href="#"
-                    onClick={() => goToPage(i + 1)}
+                    onClick={() => setCurrentPage(i + 1)}
                     className={
                       currentPage === i + 1
                         ? "font-bold text-primary bg-accent"
@@ -240,7 +203,7 @@ export default function Home() {
               <PaginationItem>
                 <PaginationNext
                   href="#"
-                  onClick={() => goToPage(currentPage + 1)}
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                   className={
                     currentPage === totalPages
                       ? "pointer-events-none opacity-50"
