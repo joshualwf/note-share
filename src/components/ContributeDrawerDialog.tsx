@@ -187,10 +187,18 @@ function ContributeCourseForm({
       fetchDocument();
       setOpen(false);
     } else {
-      toast({
-        title: "Submission failed",
-        description: "Something went wrong. Please try again.",
-      });
+      const errorStatus = await res.status;
+      if (errorStatus == 401) {
+        toast({
+          title: "Unauthorized Access",
+          description: "Please log in before contributing!",
+        });
+      } else {
+        toast({
+          title: "Submission failed",
+          description: "Something went wrong. Please try again.",
+        });
+      }
     }
     setOpen(false);
     setLoading(false);
