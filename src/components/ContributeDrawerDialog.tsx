@@ -174,7 +174,6 @@ function ContributeCourseForm({
     formData.append("resourceTypes", JSON.stringify(contributeResourceType));
     formData.append("file", contributeUploadedFile);
 
-    console.log("formData", formData);
     const res = await fetch("/api/contribute", {
       method: "POST",
       body: formData,
@@ -185,7 +184,6 @@ function ContributeCourseForm({
         description: "File uploaded successfully :-)",
       });
       fetchDocument();
-      setOpen(false);
     } else {
       const errorStatus = await res.status;
       if (errorStatus == 401) {
@@ -246,7 +244,7 @@ function ContributeCourseForm({
           emptyState={
             <div className="p-2 text-center">
               <p className="text-sm mb-2">Not found...</p>
-              <AddCourseDialog />
+              <AddCourseDialog contributeSchool={contributeSchool} fetchCourses={fetchCourses}/>
             </div>
           }
           setCourseCode={setContributeCourseCourse}

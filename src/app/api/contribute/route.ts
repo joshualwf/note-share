@@ -22,20 +22,6 @@ export async function POST(req: NextRequest) {
     const file = formData.get("file") as File;
     const resourceTypes = formData.get("resourceTypes") as string;
 
-    if (
-      !description ||
-      !school ||
-      !(courseCode || courseName) ||
-      !resourceTypes ||
-      !file ||
-      file.size === 0
-    ) {
-      return NextResponse.json(
-        { message: "Missing required fields" },
-        { status: 400 }
-      );
-    }
-
     // Upload file to S3
     fileKey = await uploadFileToS3(file);
     if (!fileKey) {
