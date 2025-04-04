@@ -10,49 +10,47 @@ If Reddit and Studocu had a baby, it would be **NoteShare** – a collaborative 
 
 ### Installation
 
-First, install the dependencies:
-
 ```bash
 npm install
 ```
 
-### Set up for database
+### Database Setup
 
-To build the docker container:
+**Build docker container**:
 
 ```bash
 docker-compose up --build
 ```
 
-To create the database based on `prisma/schema.prisma`:
+**Initialize the database**:
 
-- [**For local db**] This will create the new db directly according to `prisma/schema.prisma`
+- **For local development** (quick setup, no migration tracking)  
+  This directly applies your current Prisma schema to the DB according to `prisma/schema.prisma`:
 
   ```bash
   npx prisma db push
   ```
 
-- [**For production db**] This will create the new db according to the migration files at `prisma/migrations`.  
-  (In order to generate new migration files after editing `prisma/schema.prisma`, run `npx migrate dev`)
+- **For production** (with migration tracking)  
+  This applies the versioned migration files in `prisma/migrations`:
   ```bash
   npx prisma migrate deploy
   ```
+  💡 Note: In order to generate new migration files after editing `prisma/schema.prisma`, run `npx migrate dev`
 
-To seed the database with dummy data according to `prisma/seed.js`:
+**Seed the database with dummy data according to `prisma/seed.js`:**
 
 ```bash
 npx prisma db seed
 ```
 
-To delete the docker volume:
+**Clean up Docker volumes (remove data):**
 
 ```bash
 docker-compose down -v
 ```
 
 ### Running the Development Server
-
-Start the development server:
 
 ```bash
 npm run dev
