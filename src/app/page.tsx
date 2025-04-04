@@ -95,7 +95,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-full flex flex-col">
+      <div className="w-full flex flex-col fade-in">
         <div className="w-full flex flex-col pt-8 pb-5 bg-accent px-4">
           <div>
             <h1 className="text-center text-4xl font-bold sm:text-5xl">

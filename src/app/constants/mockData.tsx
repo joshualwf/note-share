@@ -2,117 +2,129 @@ import { CommentProps } from "../types/comment";
 import { RESOURCE_TYPES } from "./constants";
 
 // MOCK RESPONSES FROM BACKEND APIs
-export interface Post {
+export type Post = {
   id: number;
   userId: string;
   schoolName: string;
   courseCode: string;
-  title: string;
+  courseName: string;
+  description: string;
   content: string;
   fileKey: string;
   postType: string;
   upvoteCount: number;
   createdAt: Date;
-}
+};
+
 export type ResourceType = (typeof RESOURCE_TYPES)[number];
 export const mockDocuments: Post[] = [
   {
     id: 1,
     userId: "TEST",
-    title: "Tutorial 10 Notes",
     schoolName: "National University of Singapore",
     courseCode: "CS1010S",
+    courseName: "Programming Methodology",
+    description: "Notes from Tutorial 10 covering recursion and list processing.",
     content: "TEST",
-    upvoteCount: 47,
     fileKey: "TEST",
-    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
     postType: "Notes",
+    upvoteCount: 47,
+    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
   },
   {
     id: 2,
     userId: "TEST",
-    title: "Midterm Revision Guide",
     schoolName: "Nanyang Technological University",
     courseCode: "CZ1005",
+    courseName: "Digital Logic",
+    description: "Condensed notes and key concepts for midterm revision.",
     content: "TEST",
-    upvoteCount: 32,
     fileKey: "TEST",
-    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 1 month ago
     postType: "Exam Papers",
+    upvoteCount: 32,
+    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
   },
   {
     id: 3,
     userId: "TEST",
-    title: "Final Exam Cheatsheet",
     schoolName: "Harvard University",
     courseCode: "CS50",
+    courseName: "Introduction to Computer Science",
+    description: "A one-page cheatsheet summarizing key exam topics.",
     content: "TEST",
-    upvoteCount: 60,
     fileKey: "TEST",
-    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
     postType: "Solutions",
+    upvoteCount: 60,
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
   },
   {
     id: 4,
     userId: "TEST",
-    title: "AI and Machine Learning Notes",
     schoolName: "Stanford University",
     courseCode: "CS229",
+    courseName: "Machine Learning",
+    description: "Detailed lecture notes on supervised and unsupervised learning.",
     content: "TEST",
-    upvoteCount: 90,
     fileKey: "TEST",
-    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 2 weeks ago
     postType: "Notes",
+    upvoteCount: 90,
+    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
   },
   {
     id: 5,
     userId: "TEST",
-    title: "Mathematical Foundations for CS",
     schoolName: "Massachusetts Institute of Technology",
     courseCode: "6.042J",
+    courseName: "Mathematics for Computer Science",
+    description: "Key concepts in logic, proofs, and combinatorics for CS students.",
     content: "TEST",
-    upvoteCount: 75,
     fileKey: "TEST",
-    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 week ago
     postType: "Notes",
+    upvoteCount: 75,
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
   },
   {
     id: 6,
     userId: "TEST",
-    title: "Data Structures and Algorithms",
     schoolName: "University of California, Berkeley",
     courseCode: "CS61B",
+    courseName: "Data Structures",
+    description: "Comprehensive notes and code examples for common data structures.",
     content: "TEST",
-    upvoteCount: 88,
     fileKey: "TEST",
-    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 2 months ago
     postType: "Exam Papers",
+    upvoteCount: 88,
+    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
   },
   {
     id: 7,
     userId: "TEST",
-    title: "Operating Systems Lecture Notes",
     schoolName: "Carnegie Mellon University",
     courseCode: "15-410",
+    courseName: "Operating System Design and Implementation",
+    description: "In-depth lecture notes covering concurrency and system design.",
     content: "TEST",
-    upvoteCount: 110,
     fileKey: "TEST",
-    createdAt: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months ago
     postType: "Notes",
+    upvoteCount: 110,
+    createdAt: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000),
   },
   {
     id: 8,
     userId: "TEST",
-    title: "Computer Networks Guide",
     schoolName: "University of California, Los Angeles",
     courseCode: "CS118",
+    courseName: "Computer Networks",
+    description: "Study guide with protocol explanations and practice questions.",
     content: "TEST",
-    upvoteCount: 53,
     fileKey: "TEST",
-    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 3 months ago
     postType: "Solutions",
+    upvoteCount: 53,
+    createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
   },
 ];
+
+
 
 export const mockComments: CommentProps[] = [
   {
