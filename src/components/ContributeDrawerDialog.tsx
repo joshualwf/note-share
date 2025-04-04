@@ -232,6 +232,7 @@ function ContributeCourseForm({
           setSelectedValue={setContributeSchool}
           data={schools}
           placeholder="Select school..."
+          disabled={false}
         />
       </div>
       <div className="grid gap-2">
@@ -240,7 +241,8 @@ function ContributeCourseForm({
           selectedValue={contributeCourseInfo}
           setSelectedValue={setContributeCourseInfo}
           data={course}
-          placeholder="Select course..."
+          placeholder={contributeSchool ? "Select course..." : "Select a school first..."}
+          disabled={!contributeSchool}
           emptyState={
             <div className="p-2 text-center">
               <p className="text-sm mb-2">Not found...</p>
