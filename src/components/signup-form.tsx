@@ -81,9 +81,9 @@ const SignupForm = ({
           <Card className="mx-auto w-full max-w-sm p-6">
             <div className="mb-6 flex flex-col items-center">
               <Image
-                src="/standing-nerd.svg"
-                width="80"
-                height="80"
+                src="/icon9.png"
+                width="60"
+                height="60"
                 alt="standing nerd"
               />
               <p className="mb-2 text-2xl font-bold">{heading}</p>

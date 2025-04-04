@@ -1,4 +1,4 @@
-🚧 Work in Progress – This project is actively being developed and improved.
+<img src="public/icon9.png" height="100" width="100"></img>
 
 # NoteShare
 
