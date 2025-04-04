@@ -44,11 +44,13 @@ export async function GET(req: NextRequest) {
       where,
       skip,
       take: limit,
-      orderBy: sortBy === "Popularity" ? { upvoteCount: "desc" } : { createdAt: "desc" },
+      orderBy:
+        sortBy === "Popularity"
+          ? { upvoteCount: "desc" }
+          : { createdAt: "desc" },
     }),
     prisma.post.count({ where }),
   ]);
 
   return NextResponse.json({ posts, totalCount });
 }
-

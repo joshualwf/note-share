@@ -87,64 +87,8 @@ export default function Home() {
     fetchDocuments(currentPage);
   }, [currentPage, resourceTypesFilter, schoolFilter, courseFilter, mainSearchQuery, sortBy]);
 
-  // Filter and sort documents dynamically
-  const filteredAndSortedDocuments = useMemo(() => {
-    let filteredDocs = [...documents];
-
-    // Apply search query filter (title, school, courseCode)
-    if (mainSearchQuery.trim() !== "") {
-      const query = mainSearchQuery.toLowerCase();
-      filteredDocs = filteredDocs.filter(
-        (doc) =>
-          doc.description.toLowerCase().includes(query) ||
-          doc.schoolName.toLowerCase().includes(query) ||
-          doc.courseCode.toLowerCase().includes(query)
-      );
-    }
-
-    // Apply resource type filter
-    if (resourceTypesFilter.length > 0) {
-      filteredDocs = filteredDocs.filter((doc) =>
-        resourceTypesFilter.includes(doc.postType)
-      );
-    }
-
-    // Apply school filter
-    if (schoolFilter) {
-      filteredDocs = filteredDocs.filter((doc) =>
-        doc.schoolName.toLowerCase().includes(schoolFilter.toLowerCase())
-      );
-    }
-
-    // Apply course code filter
-    if (courseFilter) {
-      filteredDocs = filteredDocs.filter((doc) =>
-        doc.courseCode.toLowerCase().includes(courseFilter.toLowerCase())
-      );
-    }
-
-    // Apply sorting
-    return filteredDocs.sort((a, b) => {
-      if (sortBy === "Popularity") {
-        return b.upvoteCount - a.upvoteCount;
-      } else {
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      }
-    });
-  }, [
-    documents,
-    sortBy,
-    resourceTypesFilter,
-    schoolFilter,
-    courseFilter,
-    mainSearchQuery,
-  ]);
-
   // pagination
   const itemsPerPage = 5;
-  const paginatedDocuments = filteredAndSortedDocuments
   const totalPages = Math.ceil(
     documentCount / itemsPerPage
   );
@@ -206,15 +150,15 @@ export default function Home() {
         <div className="relative w-full flex flex-col gap-y-3">
           <div className="flex items-center justify-between p-4 text-xs sm:text-sm md:text-base">
             <h3 className="text-muted-foreground text-center text-l">
-              {filteredAndSortedDocuments.length}{" "}
-              {filteredAndSortedDocuments.length === 1 ? "result" : "results"}
+              {documents.length}{" "}
+              {documents.length === 1 ? "result" : "results"}
             </h3>
             <div className="flex gap-2">
               <ContributeDrawerDialog />
               <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
             </div>
           </div>
-          {paginatedDocuments.map((doc) => (
+          {documents.map((doc) => (
             <DocumentCard
               key={doc.id}
               id={doc.id}
