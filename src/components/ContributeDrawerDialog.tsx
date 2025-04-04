@@ -26,14 +26,13 @@ import { Label } from "@/components/ui/label";
 import { FolderPlus } from "lucide-react";
 import { Combobox } from "./ComboBox";
 import {
-  COURSECODES,
   RESOURCE_TYPES,
-  SCHOOLS,
 } from "@/app/constants/constants";
 import { FormEvent, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import AddCourseDialog from "./AddCourseDialog";
+import AddSchoolDialog from "./AddSchoolDialog";
 import {
   Select,
   SelectContent,
@@ -231,6 +230,12 @@ function ContributeCourseForm({
           data={schools}
           placeholder="Select school..."
           disabled={false}
+          emptyState={
+            <div className="p-2 text-center">
+              <p className="text-sm mb-2">Not found...</p>
+              <AddSchoolDialog fetchSchools={fetchSchools}/>
+            </div>
+          }
         />
       </div>
       <div className="grid gap-2">

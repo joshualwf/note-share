@@ -11,7 +11,7 @@ import {
 import { SquarePlus } from "lucide-react";
 import { Label } from "./ui/label";
 import { Combobox } from "./ComboBox";
-import { COURSECODES, SCHOOLS } from "@/app/constants/constants";
+import { DUMMY } from "@/app/constants/constants";
 import { Input } from "./ui/input";
 import { useToast } from "@/hooks/use-toast";
 
@@ -70,7 +70,7 @@ function AddCourseDialog({
       const errorStatus = await res.status;
       if (errorStatus == 409) {
         toast({
-          title: "Exisiting Course",
+          title: "Existing Course",
           description: "This course already exists!",
         });
       } else {
@@ -103,7 +103,7 @@ function AddCourseDialog({
           <Combobox
             selectedValue={addCourseSchool}
             setSelectedValue={setAddCourseSchool}
-            data={SCHOOLS}
+            data={DUMMY}
             placeholder="Select school..."
             disabled={true}
           />
