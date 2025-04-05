@@ -42,7 +42,7 @@ export function DocumentCard({
         },
       }}
     >
-      <Card>
+      <Card className="fade-in">
         <CardHeader>
           <CardTitle>{title}</CardTitle>
           <CardDescription>
