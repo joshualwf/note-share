@@ -21,16 +21,10 @@ function DocumentPage() {
   const fileKey = searchParams.get("fileKey");
   const title = searchParams.get("title");
 
-  const [docs, setDocs] = useState<{ uri: string }[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!fileKey) return;
-
-    const apiUrl = `/api/getPost?fileKey=${encodeURIComponent(fileKey)}`;
-    setDocs([{ uri: apiUrl }]);
-    setLoading(false);
-  }, [fileKey]);
+  // insert api call to get the public url + file type here, dont need to use useEffect/have any loading state because the document viewer alr handles that
+  const docPublicUrl = `https://noteshare-uploads.s3.ap-southeast-2.amazonaws.com/uploads/b0266786-4d1b-426f-b540-8f3d7b3ac21c.pptx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVWABJOMECPLN7NP4%2F20250405%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20250405T152901Z&X-Amz-Expires=60&X-Amz-Signature=a7c8a3367d8e979c9c3f949a122187176c419ee7dd0f88a9e7fd8ad37a749036&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject`;
+  const docFileType = "pptx";
+  const docs = [{ uri: docPublicUrl, fileType: docFileType }];
 
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full w-full">
@@ -38,17 +32,11 @@ function DocumentPage() {
         defaultSize={75}
         className={`h-full w-full !overflow-auto ${styles.scrollTransparent}`}
       >
-        {loading ? (
-          <div className="p-4">Loading document...</div>
-        ) : docs.length > 0 ? (
-          <DocViewer
-            documents={docs}
-            pluginRenderers={DocViewerRenderers}
-            theme={{ primary: "#f1f5f9" }}
-          />
-        ) : (
-          <div className="p-4">No document found.</div>
-        )}
+        <DocViewer
+          documents={docs}
+          pluginRenderers={DocViewerRenderers}
+          theme={{ primary: "#f1f5f9" }}
+        />
       </ResizablePanel>
       <ResizableHandle withHandle className="shadow-2xl" />
       <ResizablePanel
