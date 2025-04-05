@@ -26,14 +26,13 @@ import { Label } from "@/components/ui/label";
 import { FolderPlus } from "lucide-react";
 import { Combobox } from "./ComboBox";
 import {
-  COURSECODES,
   RESOURCE_TYPES,
-  SCHOOLS,
 } from "@/app/constants/constants";
 import { FormEvent, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import AddCourseDialog from "./AddCourseDialog";
+import AddSchoolDialog from "./AddSchoolDialog";
 import {
   Select,
   SelectContent,
@@ -42,7 +41,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function ContributeDrawerDialog() {
+export function ContributeDrawerDialog({
+  fetchDocument,
+}: {
+  fetchDocument: () => void;
+}) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const triggerLabel = "Contribute";
@@ -64,7 +67,7 @@ export function ContributeDrawerDialog() {
             <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
-          <ContributeCourseForm setOpen={setOpen} />
+          <ContributeCourseForm setOpen={setOpen} fetchDocument={fetchDocument} />
         </DialogContent>
       </Dialog>
     );
@@ -83,7 +86,7 @@ export function ContributeDrawerDialog() {
           <DrawerTitle>{dialogTitle}</DrawerTitle>
           <DrawerDescription>{dialogDescription}</DrawerDescription>
         </DrawerHeader>
-        <ContributeCourseForm className="px-4" setOpen={setOpen} />
+        <ContributeCourseForm className="px-4" setOpen={setOpen} fetchDocument={fetchDocument}/>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -97,8 +100,10 @@ export function ContributeDrawerDialog() {
 function ContributeCourseForm({
   className,
   setOpen,
+  fetchDocument,
 }: React.ComponentProps<"form"> & {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchDocument: () => void;
 }) {
   const [loading, setLoading] = useState(false);
   const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
@@ -168,7 +173,6 @@ function ContributeCourseForm({
     formData.append("resourceTypes", JSON.stringify(contributeResourceType));
     formData.append("file", contributeUploadedFile);
 
-    console.log("formData", formData);
     const res = await fetch("/api/contribute", {
       method: "POST",
       body: formData,
@@ -178,12 +182,20 @@ function ContributeCourseForm({
         title: "Thank you!",
         description: "File uploaded successfully :-)",
       });
-      setOpen(false);
+      fetchDocument();
     } else {
-      toast({
-        title: "Submission failed",
-        description: "Something went wrong. Please try again.",
-      });
+      const errorStatus = await res.status;
+      if (errorStatus == 401) {
+        toast({
+          title: "Unauthorized Access",
+          description: "Please log in before contributing!",
+        });
+      } else {
+        toast({
+          title: "Submission failed",
+          description: "Something went wrong. Please try again.",
+        });
+      }
     }
     setOpen(false);
     setLoading(false);
@@ -217,6 +229,13 @@ function ContributeCourseForm({
           setSelectedValue={setContributeSchool}
           data={schools}
           placeholder="Select school..."
+          disabled={false}
+          emptyState={
+            <div className="p-2 text-center">
+              <p className="text-sm mb-2">Not found...</p>
+              <AddSchoolDialog fetchSchools={fetchSchools}/>
+            </div>
+          }
         />
       </div>
       <div className="grid gap-2">
@@ -225,11 +244,12 @@ function ContributeCourseForm({
           selectedValue={contributeCourseInfo}
           setSelectedValue={setContributeCourseInfo}
           data={course}
-          placeholder="Select course..."
+          placeholder={contributeSchool ? "Select course..." : "Select a school first..."}
+          disabled={!contributeSchool}
           emptyState={
             <div className="p-2 text-center">
               <p className="text-sm mb-2">Not found...</p>
-              <AddCourseDialog />
+              <AddCourseDialog contributeSchool={contributeSchool} fetchCourses={fetchCourses}/>
             </div>
           }
           setCourseCode={setContributeCourseCourse}

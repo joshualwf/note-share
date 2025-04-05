@@ -46,3 +46,12 @@ export const COURSECODES = [
   { value: "15-410", label: "15-410 - Operating Systems" },
   { value: "CS118", label: "CS118 - Computer Networks" },
 ];
+
+export const DUMMY = []
+
+export const SCHOOLTYPE = [
+  { value: "Primary", label: "" },
+  { value: "Secondary", label: "" },
+  { value: "Tertiary", label: "" },
+  { value: "University", label: "" },
+]

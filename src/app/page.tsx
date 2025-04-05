@@ -4,7 +4,6 @@ import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo, useState, useEffect } from "react";
-import { mockDocuments } from "./constants/mockData";
 import FilterSheet from "@/components/FilterSheet";
 import { TypeAnimation } from "react-type-animation";
 import {
@@ -154,7 +153,7 @@ export default function Home() {
               {documents.length === 1 ? "result" : "results"}
             </h3>
             <div className="flex gap-2">
-              <ContributeDrawerDialog />
+              <ContributeDrawerDialog fetchDocument={fetchDocuments} />
               <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
             </div>
           </div>

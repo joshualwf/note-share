@@ -23,6 +23,7 @@ interface ComboboxProps {
   setSelectedValue: (value: string | null) => void;
   data: { value: string; label: string }[];
   placeholder?: string;
+  disabled: boolean;
   emptyState?: React.ReactNode;
   setCourseCode?: (value: string | null) => void;
   setCourseName?: (value: string | null) => void;
@@ -33,6 +34,7 @@ export function Combobox({
   setSelectedValue,
   data,
   placeholder = "Select...",
+  disabled,
   emptyState, // 👈 here
   setCourseCode,
   setCourseName,
@@ -40,13 +42,22 @@ export function Combobox({
   const [open, setOpen] = React.useState(false);
 
   return (
-    <Popover open={open} onOpenChange={setOpen} modal={true}>
+    <Popover open={open} onOpenChange={(nextOpen) => {
+      if (!disabled) {
+        setOpen(nextOpen);
+      }}}
+      modal={true}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[310px] justify-between"
+          disabled={disabled}
+          className={cn(
+            "w-[310px] justify-between",
+            disabled && "opacity-50 cursor-not-allowed pointer-events-none"
+          )}
         >
           {selectedValue ?? placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

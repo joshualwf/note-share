@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "@/lib/auth";
 
-const protectedRoutes = ["/document/*"];
+const protectedRoutes = [""];
 const publicRoutes = ["/login"];
 
 function matchRoute(patterns: string[], pathname: string) {
