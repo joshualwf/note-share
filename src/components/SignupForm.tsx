@@ -45,8 +45,7 @@ const SignupForm = ({
         body: JSON.stringify({
           email,
           password,
-          username: email.split("@")[0],
-        }), // Auto-generate username from email
+        }),
       });
 
       const result = await res.json();
