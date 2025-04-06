@@ -26,12 +26,8 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-  // if user is logged in, get user to complete onboarding if not done
-  if (
-    session?.userId &&
-    path !== "/onboarding" &&
-    !path.startsWith("/api/onboarding")
-  ) {
+  // fetch onboarding completion status if session exists
+  if (session?.userId) {
     const res = await fetch(
       `${req.nextUrl.origin}/api/onboarding/completionStatus`,
       {
@@ -47,7 +43,22 @@ export default async function middleware(req: NextRequest) {
 
     const { isOnboardingCompleted } = await res.json();
 
-    if (!isOnboardingCompleted) {
+    // If accessing /login or /signup while logged in, redirect to home
+    if (path === "/login" || path === "/signup") {
+      return NextResponse.redirect(new URL("/", req.nextUrl));
+    }
+
+    // If accessing /onboarding but already completed onboarding, redirect to home
+    if (path === "/onboarding" && isOnboardingCompleted) {
+      return NextResponse.redirect(new URL("/", req.nextUrl));
+    }
+
+    // If accessing any other page (not onboarding/api) but not yet onboarded -> redirect to onboarding
+    if (
+      !isOnboardingCompleted &&
+      path !== "/onboarding" &&
+      !path.startsWith("/api/onboarding")
+    ) {
       return NextResponse.redirect(new URL("/onboarding", req.nextUrl));
     }
   }
