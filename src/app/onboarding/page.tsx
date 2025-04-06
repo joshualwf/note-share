@@ -7,11 +7,13 @@ import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CircleAlert } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { useUser } from "../UserContext";
 export default function Page() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const { fetchUser } = useUser();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -28,8 +30,8 @@ export default function Page() {
       const result = await res.json();
 
       if (res.ok) {
+        await fetchUser();
         router.push("/");
-        router.refresh();
       } else {
         setError(result.message || "Invalid username");
         setLoading(false);
