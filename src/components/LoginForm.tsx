@@ -1,77 +1,63 @@
 "use client";
 
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "./ui/card";
-import { CircleAlert } from "lucide-react";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { CircleAlert } from "lucide-react";
 import Image from "next/image";
 
-interface SignupFormProps {
+interface LoginFormProps {
   heading?: string;
   subheading?: string;
-  logo?: {
-    url: string;
-    src: string;
-    alt: string;
-  };
-  signupText?: string;
-  googleText?: string;
   loginText?: string;
-  loginUrl?: string;
+  googleText?: string;
+  signupText?: string;
+  signupUrl?: string;
 }
 
-const SignupForm = ({
-  heading = "Sign up",
-  subheading = "Welcome to NoteShare!",
-  logo = {
-    url: "https://www.shadcnblocks.com",
-    src: "https://shadcnblocks.com/images/block/block-1.svg",
-    alt: "logo",
-  },
-  googleText = "Sign up with Google",
-  signupText = "Create an account",
-  loginText = "Already have an account?",
-  loginUrl = "/login",
-}: SignupFormProps) => {
+const LoginForm = ({
+  heading = "Login",
+  subheading = "Welcome back!",
+  loginText = "Login",
+  googleText = "Login with Google",
+  signupText = "Don't have an account?",
+  signupUrl = "/signup",
+}: LoginFormProps) => {
   const router = useRouter();
-  // State to manage user input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     try {
-      const res = await fetch("/api/signup", {
+      const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password,
-          username: email.split("@")[0],
-        }), // Auto-generate username from email
+        body: JSON.stringify({ email, password }),
+        credentials: "include", // Ensures cookies are included
       });
 
       const result = await res.json();
-      setLoading(false);
+
       if (res.ok) {
         router.push("/");
         router.refresh();
       } else {
-        setError(result.message || "Signup unsuccessful!");
+        setError(result.message || "Invalid email or password.");
+        setLoading(false);
       }
     } catch (error) {
-      setLoading(false);
       setError("An error occurred. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -94,7 +80,7 @@ const SignupForm = ({
               <div className="grid gap-4">
                 <Input
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -107,6 +93,23 @@ const SignupForm = ({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                </div>
+                <div className="flex justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="remember"
+                      className="border-muted-foreground"
+                    />
+                    <label
+                      htmlFor="remember"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Remember me
+                    </label>
+                  </div>
+                  <a href="#" className="text-sm text-primary hover:underline">
+                    Forgot password
+                  </a>
                 </div>
                 {error && (
                   <div className="flex items-center gap-1">
@@ -121,20 +124,20 @@ const SignupForm = ({
                   className="mt-2 w-full"
                   disabled={loading}
                 >
-                  {loading ? <LoadingSpinner /> : signupText}
+                  {loading ? <LoadingSpinner /> : loginText}
                 </Button>
                 <Button variant="outline" className="w-full">
                   <FcGoogle className="mr-2 size-5" />
                   {googleText}
                 </Button>
               </div>
+              <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
+                <p>{signupText}</p>
+                <a href={signupUrl} className="font-medium text-primary">
+                  Sign up
+                </a>
+              </div>
             </form>
-            <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
-              <p>{loginText}</p>
-              <a href={loginUrl} className="font-medium text-primary">
-                Login
-              </a>
-            </div>
           </Card>
         </div>
       </div>
@@ -142,4 +145,4 @@ const SignupForm = ({
   );
 };
 
-export { SignupForm };
+export { LoginForm };

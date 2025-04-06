@@ -6,11 +6,14 @@ import { createSessionToken } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
-    const { email, password, username } = await req.json();
+    const { email, password } = await req.json();
 
     // Validate input
-    if (!email || !password || !username) {
-      return NextResponse.json({ message: "All fields are required." }, { status: 400 });
+    if (!email || !password) {
+      return NextResponse.json(
+        { message: "All fields are required." },
+        { status: 400 }
+      );
     }
 
     // Hash the password
@@ -22,7 +25,7 @@ export async function POST(req: Request) {
       data: {
         email,
         passwordHash: hashedPassword,
-        username,
+        username: null,
       },
       select: {
         id: true,
@@ -43,12 +46,21 @@ export async function POST(req: Request) {
       path: "/",
     });
 
-    return NextResponse.json({ message: "User created successfully", user }, { status: 201 });
+    return NextResponse.json(
+      { message: "User created successfully", user },
+      { status: 201 }
+    );
   } catch (error: any) {
     if (error.code === "23505") {
-      return NextResponse.json({ message: "Email or username already exists" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Email or username already exists" },
+        { status: 400 }
+      );
     }
     console.error("Database Error:", error);
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

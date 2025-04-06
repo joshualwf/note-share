@@ -9,8 +9,9 @@ datasource db {
 
 model User {
   id             Int             @id @default(autoincrement())
+  onboarding_completed Boolean     @default(false)
   email          String          @unique
-  username       String          @unique
+  username       String?         @unique
   passwordHash   String          @map("password_hash")
   profilePicture String?         @map("profile_picture")
   createdAt      DateTime        @default(now()) @map("created_at")

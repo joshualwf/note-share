@@ -1,43 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "./ui/card";
-import { LoadingSpinner } from "./LoadingSpinner";
 import { CircleAlert } from "lucide-react";
+import { LoadingSpinner } from "./LoadingSpinner";
 import Image from "next/image";
 
-interface LoginFormProps {
+interface SignupFormProps {
   heading?: string;
   subheading?: string;
-  logo?: {
-    url: string;
-    src: string;
-    alt: string;
-  };
-  loginText?: string;
-  googleText?: string;
   signupText?: string;
-  signupUrl?: string;
+  googleText?: string;
+  loginText?: string;
+  loginUrl?: string;
 }
 
-const LoginForm = ({
-  heading = "Login",
-  subheading = "Welcome back!",
-  logo = {
-    url: "https://www.shadcnblocks.com",
-    src: "https://www.shadcnblocks.com/images/block/block-1.svg",
-    alt: "logo",
-  },
-  loginText = "Login",
-  googleText = "Login with Google",
-  signupText = "Don't have an account?",
-  signupUrl = "/signup",
-}: LoginFormProps) => {
+const SignupForm = ({
+  heading = "Sign up",
+  subheading = "Welcome to NoteShare!",
+  googleText = "Sign up with Google",
+  signupText = "Create an account",
+  loginText = "Already have an account?",
+  loginUrl = "/login",
+}: SignupFormProps) => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,26 +37,28 @@ const LoginForm = ({
     e.preventDefault();
     setLoading(true);
     setError("");
+
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include", // Ensures cookies are included
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
 
       const result = await res.json();
-      setLoading(false);
-
       if (res.ok) {
         router.push("/");
         router.refresh();
       } else {
-        setError(result.error || "Invalid email or password.");
+        setError(result.message || "Signup unsuccessful!");
+        setLoading(false);
       }
     } catch (error) {
+      setError("An error occurred. Please try again.");
       setLoading(false);
-      setError("An error occurred.");
     }
   };
 
@@ -75,7 +66,6 @@ const LoginForm = ({
     <section className="pt-10 pb-32">
       <div className="container">
         <div className="flex flex-col gap-4">
-          {/* <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow "> */}
           <Card className="mx-auto w-full max-w-sm p-6">
             <div className="mb-6 flex flex-col items-center">
               <Image
@@ -91,7 +81,7 @@ const LoginForm = ({
               <div className="grid gap-4">
                 <Input
                   type="email"
-                  placeholder="Email"
+                  placeholder="Enter your email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -105,23 +95,6 @@ const LoginForm = ({
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <div className="flex justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="remember"
-                      className="border-muted-foreground"
-                    />
-                    <label
-                      htmlFor="remember"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Remember me
-                    </label>
-                  </div>
-                  <a href="#" className="text-sm text-primary hover:underline">
-                    Forgot password
-                  </a>
-                </div>
                 {error && (
                   <div className="flex items-center gap-1">
                     <CircleAlert size="20px" color="#ef4444" />
@@ -130,27 +103,30 @@ const LoginForm = ({
                     </span>
                   </div>
                 )}
-                <Button type="submit" className="mt-2 w-full">
-                  {loading ? <LoadingSpinner /> : loginText}
+                <Button
+                  type="submit"
+                  className="mt-2 w-full"
+                  disabled={loading}
+                >
+                  {loading ? <LoadingSpinner /> : signupText}
                 </Button>
                 <Button variant="outline" className="w-full">
                   <FcGoogle className="mr-2 size-5" />
                   {googleText}
                 </Button>
               </div>
-              <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
-                <p>{signupText}</p>
-                <a href={signupUrl} className="font-medium text-primary">
-                  Sign up
-                </a>
-              </div>
             </form>
+            <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
+              <p>{loginText}</p>
+              <a href={loginUrl} className="font-medium text-primary">
+                Login
+              </a>
+            </div>
           </Card>
-          {/* </div> */}
         </div>
       </div>
     </section>
   );
 };
 
-export { LoginForm };
+export { SignupForm };
