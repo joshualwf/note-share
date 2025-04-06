@@ -14,11 +14,6 @@ import Image from "next/image";
 interface LoginFormProps {
   heading?: string;
   subheading?: string;
-  logo?: {
-    url: string;
-    src: string;
-    alt: string;
-  };
   loginText?: string;
   googleText?: string;
   signupText?: string;
@@ -28,11 +23,6 @@ interface LoginFormProps {
 const LoginForm = ({
   heading = "Login",
   subheading = "Welcome back!",
-  logo = {
-    url: "https://www.shadcnblocks.com",
-    src: "https://www.shadcnblocks.com/images/block/block-1.svg",
-    alt: "logo",
-  },
   loginText = "Login",
   googleText = "Login with Google",
   signupText = "Don't have an account?",
@@ -57,17 +47,17 @@ const LoginForm = ({
       });
 
       const result = await res.json();
-      setLoading(false);
 
       if (res.ok) {
         router.push("/");
         router.refresh();
       } else {
-        setError(result.error || "Invalid email or password.");
+        setError(result.message || "Invalid email or password.");
+        setLoading(false);
       }
     } catch (error) {
+      setError("An error occurred. Please try again.");
       setLoading(false);
-      setError("An error occurred.");
     }
   };
 
@@ -75,7 +65,6 @@ const LoginForm = ({
     <section className="pt-10 pb-32">
       <div className="container">
         <div className="flex flex-col gap-4">
-          {/* <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow "> */}
           <Card className="mx-auto w-full max-w-sm p-6">
             <div className="mb-6 flex flex-col items-center">
               <Image
@@ -130,7 +119,11 @@ const LoginForm = ({
                     </span>
                   </div>
                 )}
-                <Button type="submit" className="mt-2 w-full">
+                <Button
+                  type="submit"
+                  className="mt-2 w-full"
+                  disabled={loading}
+                >
                   {loading ? <LoadingSpinner /> : loginText}
                 </Button>
                 <Button variant="outline" className="w-full">
@@ -146,7 +139,6 @@ const LoginForm = ({
               </div>
             </form>
           </Card>
-          {/* </div> */}
         </div>
       </div>
     </section>

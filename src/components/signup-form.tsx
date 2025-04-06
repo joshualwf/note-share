@@ -13,11 +13,6 @@ import Image from "next/image";
 interface SignupFormProps {
   heading?: string;
   subheading?: string;
-  logo?: {
-    url: string;
-    src: string;
-    alt: string;
-  };
   signupText?: string;
   googleText?: string;
   loginText?: string;
@@ -27,24 +22,17 @@ interface SignupFormProps {
 const SignupForm = ({
   heading = "Sign up",
   subheading = "Welcome to NoteShare!",
-  logo = {
-    url: "https://www.shadcnblocks.com",
-    src: "https://shadcnblocks.com/images/block/block-1.svg",
-    alt: "logo",
-  },
   googleText = "Sign up with Google",
   signupText = "Create an account",
   loginText = "Already have an account?",
   loginUrl = "/login",
 }: SignupFormProps) => {
   const router = useRouter();
-  // State to manage user input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -62,16 +50,16 @@ const SignupForm = ({
       });
 
       const result = await res.json();
-      setLoading(false);
       if (res.ok) {
         router.push("/");
         router.refresh();
       } else {
         setError(result.message || "Signup unsuccessful!");
+        setLoading(false);
       }
     } catch (error) {
-      setLoading(false);
       setError("An error occurred. Please try again.");
+      setLoading(false);
     }
   };
 
