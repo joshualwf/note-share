@@ -244,12 +244,7 @@ export default function Home() {
                 : "hidden"
             }`}
           >
-            <DotLottieReact
-              src="https://lottie.host/09228e02-bedc-4e90-ac17-bc7008750b0f/CZPdI1qHyk.lottie"
-              loop
-              autoplay
-              style={{ width: "600px", height: "300px" }}
-            />
+            <iframe src="https://lottie.host/embed/712494ef-bec7-4086-99a2-46b434be807a/7Wp7qom6dl.lottie" />
             <span className="">No matching materials found</span>
             <span className="text-muted-foreground mt-1">
               Try using general keywords or check your spelling
