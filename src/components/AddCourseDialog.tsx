@@ -8,12 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { SquarePlus } from "lucide-react";
+import { CircleAlert, SquarePlus } from "lucide-react";
 import { Label } from "./ui/label";
 import { Combobox } from "./ComboBox";
 import { DUMMY } from "@/app/constants/constants";
 import { Input } from "./ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 function AddCourseDialog({
   contributeSchool,
@@ -27,6 +28,7 @@ function AddCourseDialog({
   const [addCourseSchool, setAddCourseSchool] = useState<string | null>(null);
   const [addCourseCode, setAddCourseCode] = useState<string | null>(null);
   const [addCourseName, setAddCourseName] = useState<string | null>(null);
+  const [error, setError] = useState("");
   const triggerLabel = "Add new course!";
   const { toast } = useToast();
 
@@ -34,19 +36,17 @@ function AddCourseDialog({
     if (open && contributeSchool) {
       setAddCourseSchool(contributeSchool);
     }
-  }, [open, contributeSchool]);  
+  }, [open, contributeSchool]);
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
     if (!addCourseSchool || !(addCourseCode || addCourseName)) {
-      toast({
-        title: "Hold on!",
-        description: "Please fill out all fields before submitting.",
-      });
+      setError("Please fill out all fields before submitting.");
       return;
     }
 
-    setLoading(true);
     const formData = new FormData();
     formData.append("schoolName", addCourseSchool);
     formData.append("courseCode", addCourseCode || "");
@@ -57,6 +57,7 @@ function AddCourseDialog({
       body: formData,
     });
     if (res.ok) {
+      setOpen(false);
       toast({
         title: "Thank you!",
         description: "Course created successfully :-)",
@@ -69,18 +70,12 @@ function AddCourseDialog({
     } else {
       const errorStatus = await res.status;
       if (errorStatus == 409) {
-        toast({
-          title: "Existing Course",
-          description: "This course already exists!",
-        });
+        setError("This course already exists!");
       } else {
-        toast({
-          title: "Submission failed",
-          description: "Something went wrong. Please try again.",
-        });
+        setError("Something went wrong. Please try again.");
       }
     }
-    setOpen(false);
+    setLoading(false);
   };
 
   return (
@@ -126,8 +121,14 @@ function AddCourseDialog({
             placeholder="e.g. DSA1101"
           />
         </div>
+        {error && (
+          <div className="flex items-center gap-1">
+            <CircleAlert size="20px" color="#ef4444" />
+            <span className="text-center text-sm text-red-500">{error}</span>
+          </div>
+        )}
         <Button onClick={handleSubmit} disabled={loading}>
-          {loading ? "Submitting..." : "Add"}
+          {loading ? <LoadingSpinner /> : "Add"}
         </Button>
       </DialogContent>
     </Dialog>

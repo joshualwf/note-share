@@ -16,6 +16,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { ContributeDrawerDialog } from "@/components/ContributeDrawerDialog";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 type Post = {
   id: number;
@@ -41,6 +42,7 @@ export default function Home() {
   const [courseCodeFilter, setCourseCodeFilter] = useState<string | null>(null);
   const [courseNameFilter, setCourseNameFilter] = useState<string | null>(null);
   const [mainSearchQuery, setMainSearchQuery] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
   // used for pagination
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -59,9 +61,16 @@ export default function Home() {
   // Reset to page 1 when filters/search change
   useEffect(() => {
     setCurrentPage(1);
-  }, [resourceTypesFilter, schoolFilter, courseFilter, mainSearchQuery, sortBy]);
+  }, [
+    resourceTypesFilter,
+    schoolFilter,
+    courseFilter,
+    mainSearchQuery,
+    sortBy,
+  ]);
 
   const fetchDocuments = async (page = 1) => {
+    setLoading(true);
     const params = new URLSearchParams({
       page: page.toString(),
       resourceTypes: JSON.stringify(resourceTypesFilter),
@@ -81,16 +90,22 @@ export default function Home() {
       console.error("Failed to fetch documents:", err);
       setDocuments([]);
     }
+    setLoading(false);
   };
   useEffect(() => {
     fetchDocuments(currentPage);
-  }, [currentPage, resourceTypesFilter, schoolFilter, courseFilter, mainSearchQuery, sortBy]);
+  }, [
+    currentPage,
+    resourceTypesFilter,
+    schoolFilter,
+    courseFilter,
+    mainSearchQuery,
+    sortBy,
+  ]);
 
   // pagination
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(
-    documentCount / itemsPerPage
-  );
+  const totalPages = Math.ceil(documentCount / itemsPerPage);
 
   return (
     <>
@@ -149,70 +164,97 @@ export default function Home() {
         <div className="relative w-full flex flex-col gap-y-3">
           <div className="flex items-center justify-between p-4 text-xs sm:text-sm md:text-base">
             <h3 className="text-muted-foreground text-center text-l">
-              {documents.length}{" "}
-              {documents.length === 1 ? "result" : "results"}
+              {documents.length} {documents.length === 1 ? "result" : "results"}
             </h3>
             <div className="flex gap-2">
               <ContributeDrawerDialog fetchDocument={fetchDocuments} />
               <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
             </div>
           </div>
-          {documents.map((doc) => (
-            <DocumentCard
-              key={doc.id}
-              id={doc.id}
-              title={doc.description}
-              school={doc.schoolName}
-              courseCode={doc.courseCode}
-              courseName={doc.courseName}
-              likes={doc.upvoteCount}
-              fileKey={doc.fileKey}
-              uploadTime={doc.createdAt}
-            />
-          ))}
-          <Pagination className="justify-end">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  href="#"
-                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                  className={
-                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
-                  }
-                  aria-disabled={currentPage === 1}
+          {documents.length > 0 && (
+            <>
+              {documents.map((doc) => (
+                <DocumentCard
+                  key={doc.id}
+                  id={doc.id}
+                  title={doc.description}
+                  school={doc.schoolName}
+                  courseCode={doc.courseCode}
+                  courseName={doc.courseName}
+                  likes={doc.upvoteCount}
+                  fileKey={doc.fileKey}
+                  uploadTime={doc.createdAt}
                 />
-              </PaginationItem>
-
-              {Array.from({ length: totalPages }, (_, i) => (
-                <PaginationItem key={i}>
-                  <PaginationLink
-                    href="#"
-                    onClick={() => setCurrentPage(i + 1)}
-                    className={
-                      currentPage === i + 1
-                        ? "font-bold text-primary bg-accent"
-                        : ""
-                    }
-                  >
-                    {i + 1}
-                  </PaginationLink>
-                </PaginationItem>
               ))}
+              <Pagination className="justify-end">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
+                      className={
+                        currentPage === 1
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }
+                      aria-disabled={currentPage === 1}
+                    />
+                  </PaginationItem>
 
-              <PaginationItem>
-                <PaginationNext
-                  href="#"
-                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                  className={
-                    currentPage === totalPages
-                      ? "pointer-events-none opacity-50"
-                      : ""
-                  }
-                  aria-disabled={currentPage === totalPages}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <PaginationItem key={i}>
+                      <PaginationLink
+                        href="#"
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={
+                          currentPage === i + 1
+                            ? "font-bold text-primary bg-accent"
+                            : ""
+                        }
+                      >
+                        {i + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
+                      className={
+                        currentPage === totalPages
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }
+                      aria-disabled={currentPage === totalPages}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </>
+          )}
+          <div
+            className={`${
+              documents.length === 0 && !loading
+                ? "flex flex-col items-center"
+                : "hidden"
+            }`}
+          >
+            <DotLottieReact
+              src="https://lottie.host/09228e02-bedc-4e90-ac17-bc7008750b0f/CZPdI1qHyk.lottie"
+              loop
+              autoplay
+              style={{ width: "600px", height: "300px" }}
+            />
+            <span className="">No matching materials found</span>
+            <span className="text-muted-foreground mt-1">
+              Try using general keywords or check your spelling
+            </span>
+          </div>
         </div>
       </div>
     </>

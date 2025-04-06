@@ -128,7 +128,12 @@ const LoginForm = ({
                 >
                   {loading ? <LoadingSpinner /> : loginText}
                 </Button>
-                <Button type="button" variant="outline" className="w-full" onClick={() => window.location.href = "/api/oauth/google"}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => (window.location.href = "/api/oauth/google")}
+                >
                   <FcGoogle className="mr-2 size-5" />
                   {googleText}
                 </Button>

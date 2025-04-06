@@ -23,11 +23,9 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FolderPlus } from "lucide-react";
+import { CircleAlert, FolderPlus } from "lucide-react";
 import { Combobox } from "./ComboBox";
-import {
-  RESOURCE_TYPES,
-} from "@/app/constants/constants";
+import { RESOURCE_TYPES } from "@/app/constants/constants";
 import { FormEvent, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
@@ -40,6 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 export function ContributeDrawerDialog({
   fetchDocument,
@@ -67,7 +66,10 @@ export function ContributeDrawerDialog({
             <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
-          <ContributeCourseForm setOpen={setOpen} fetchDocument={fetchDocument} />
+          <ContributeCourseForm
+            setOpen={setOpen}
+            fetchDocument={fetchDocument}
+          />
         </DialogContent>
       </Dialog>
     );
@@ -86,7 +88,11 @@ export function ContributeDrawerDialog({
           <DrawerTitle>{dialogTitle}</DrawerTitle>
           <DrawerDescription>{dialogDescription}</DrawerDescription>
         </DrawerHeader>
-        <ContributeCourseForm className="px-4" setOpen={setOpen} fetchDocument={fetchDocument}/>
+        <ContributeCourseForm
+          className="px-4"
+          setOpen={setOpen}
+          fetchDocument={fetchDocument}
+        />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -106,21 +112,34 @@ function ContributeCourseForm({
   fetchDocument: () => void;
 }) {
   const [loading, setLoading] = useState(false);
-  const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
+  const [schools, setSchools] = useState<{ value: string; label: string }[]>(
+    []
+  );
+  const [error, setError] = useState("");
   const [course, setCourse] = useState<{ value: string; label: string }[]>([]);
   const [contributeSchool, setContributeSchool] = useState<string | null>(null);
-  const [contributeCourseInfo, setContributeCourseInfo] = useState<string | null>(null);
-  const [contributeCourseCode, setContributeCourseCourse] = useState<string | null>(null);
-  const [contributeCourseName, setContributeCourseName] = useState<string | null>(null);
-  const [contributeResourceType, setContributeResourceType] = useState<string | null>(null);
-  const [contributeDescription, setContributeDescription] = useState<string>("");
-  const [contributeUploadedFile, setContributeUploadedFile] = useState<File | null>(null);
+  const [contributeCourseInfo, setContributeCourseInfo] = useState<
+    string | null
+  >(null);
+  const [contributeCourseCode, setContributeCourseCourse] = useState<
+    string | null
+  >(null);
+  const [contributeCourseName, setContributeCourseName] = useState<
+    string | null
+  >(null);
+  const [contributeResourceType, setContributeResourceType] = useState<
+    string | null
+  >(null);
+  const [contributeDescription, setContributeDescription] =
+    useState<string>("");
+  const [contributeUploadedFile, setContributeUploadedFile] =
+    useState<File | null>(null);
 
   const { toast } = useToast();
 
   const fetchSchools = async () => {
     try {
-      const res = await fetch('/api/getSchools');
+      const res = await fetch("/api/getSchools");
       const data = await res.json();
       setSchools(data);
     } catch (err) {
@@ -134,7 +153,9 @@ function ContributeCourseForm({
 
   const fetchCourses = async (school: string) => {
     try {
-      const res = await fetch(`/api/getCourses?school=${encodeURIComponent(school)}`);
+      const res = await fetch(
+        `/api/getCourses?school=${encodeURIComponent(school)}`
+      );
       const data = await res.json();
       setCourse(data);
     } catch (err) {
@@ -150,7 +171,9 @@ function ContributeCourseForm({
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    
+    setLoading(true);
+    setError("");
+
     if (
       !contributeUploadedFile ||
       !contributeDescription ||
@@ -158,10 +181,8 @@ function ContributeCourseForm({
       !contributeCourseInfo ||
       !contributeResourceType
     ) {
-      toast({
-        title: "Hold on!",
-        description: "Please fill out all fields before submitting.",
-      });
+      setError("Please fill out all fields before submitting.");
+      setLoading(false);
       return;
     }
     setLoading(true);
@@ -183,21 +204,15 @@ function ContributeCourseForm({
         description: "File uploaded successfully :-)",
       });
       fetchDocument();
+      setOpen(false);
     } else {
       const errorStatus = await res.status;
       if (errorStatus == 401) {
-        toast({
-          title: "Unauthorized Access",
-          description: "Please log in before contributing!",
-        });
+        setError("Please login before contributing!");
       } else {
-        toast({
-          title: "Submission failed",
-          description: "Something went wrong. Please try again.",
-        });
+        setError("Something went wrong. Please try again.");
       }
     }
-    setOpen(false);
     setLoading(false);
   };
 
@@ -233,7 +248,7 @@ function ContributeCourseForm({
           emptyState={
             <div className="p-2 text-center">
               <p className="text-sm mb-2">Not found...</p>
-              <AddSchoolDialog fetchSchools={fetchSchools}/>
+              <AddSchoolDialog fetchSchools={fetchSchools} />
             </div>
           }
         />
@@ -244,12 +259,17 @@ function ContributeCourseForm({
           selectedValue={contributeCourseInfo}
           setSelectedValue={setContributeCourseInfo}
           data={course}
-          placeholder={contributeSchool ? "Select course..." : "Select a school first..."}
+          placeholder={
+            contributeSchool ? "Select course..." : "Select a school first..."
+          }
           disabled={!contributeSchool}
           emptyState={
             <div className="p-2 text-center">
               <p className="text-sm mb-2">Not found...</p>
-              <AddCourseDialog contributeSchool={contributeSchool} fetchCourses={fetchCourses}/>
+              <AddCourseDialog
+                contributeSchool={contributeSchool}
+                fetchCourses={fetchCourses}
+              />
             </div>
           }
           setCourseCode={setContributeCourseCourse}
@@ -273,8 +293,14 @@ function ContributeCourseForm({
           </Select>
         </div>
       </div>
+      {error && (
+        <div className="flex items-center gap-1">
+          <CircleAlert size="20px" color="#ef4444" />
+          <span className="text-center text-sm text-red-500">{error}</span>
+        </div>
+      )}
       <Button onClick={handleSubmit} disabled={loading}>
-        {loading ? "Submitting..." : "Contribute"}
+        {loading ? <LoadingSpinner /> : "Contribute"}
       </Button>
     </form>
   );
