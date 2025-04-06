@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       where: { id: userId },
       data: {
         username,
-        onboarding_completed: true,
+        onboardingCompleted: true,
       },
     });
 

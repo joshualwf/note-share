@@ -45,7 +45,8 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
+          {/* for development after mvp */}
+          {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>

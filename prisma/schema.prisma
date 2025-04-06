@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id             Int             @id @default(autoincrement())
-  onboarding_completed Boolean     @default(false)
+  onboardingCompleted Boolean     @default(false)  @map("onboarding_completed")
   email          String          @unique
   username       String?         @unique
   passwordHash   String          @map("password_hash")
