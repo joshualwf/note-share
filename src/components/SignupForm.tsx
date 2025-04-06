@@ -9,6 +9,7 @@ import { Card } from "./ui/card";
 import { CircleAlert } from "lucide-react";
 import { LoadingSpinner } from "./LoadingSpinner";
 import Image from "next/image";
+import { useUser } from "@/app/UserContext";
 
 interface SignupFormProps {
   heading?: string;
@@ -32,6 +33,7 @@ const SignupForm = ({
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { fetchUser } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,8 +52,8 @@ const SignupForm = ({
 
       const result = await res.json();
       if (res.ok) {
+        await fetchUser();
         router.push("/");
-        router.refresh();
       } else {
         setError(result.message || "Signup unsuccessful!");
         setLoading(false);

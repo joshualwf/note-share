@@ -20,12 +20,17 @@ export async function POST(req: Request) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Generate random Dicebear avatar URL
+    const seed = crypto.randomUUID();
+    const randomGeneratedProfilePicUrl = `https://api.dicebear.com/9.x/micah/svg?seed=${seed}&scale=100&radius=50&backgroundColor=ebebec&mouth=laughing,smile`;
+
     // Insert into PostgreSQL
     const user = await prisma.user.create({
       data: {
         email,
         passwordHash: hashedPassword,
         username: null,
+        profilePicture: randomGeneratedProfilePicUrl,
       },
       select: {
         id: true,

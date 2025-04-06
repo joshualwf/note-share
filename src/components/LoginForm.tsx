@@ -10,6 +10,7 @@ import { Card } from "./ui/card";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { CircleAlert } from "lucide-react";
 import Image from "next/image";
+import { useUser } from "@/app/UserContext";
 
 interface LoginFormProps {
   heading?: string;
@@ -33,6 +34,7 @@ const LoginForm = ({
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { fetchUser } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,8 +51,8 @@ const LoginForm = ({
       const result = await res.json();
 
       if (res.ok) {
+        await fetchUser();
         router.push("/");
-        router.refresh();
       } else {
         setError(result.message || "Invalid email or password.");
         setLoading(false);

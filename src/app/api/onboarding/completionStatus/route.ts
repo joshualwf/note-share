@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     select: {
       id: true,
       email: true,
-      onboarding_completed: true,
+      onboardingCompleted: true,
     },
   });
 
@@ -27,6 +27,6 @@ export async function GET(req: NextRequest) {
   }
   return NextResponse.json({
     user,
-    isOnboardingCompleted: user.onboarding_completed,
+    isOnboardingCompleted: user.onboardingCompleted,
   });
 }

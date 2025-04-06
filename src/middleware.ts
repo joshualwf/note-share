@@ -57,7 +57,7 @@ export default async function middleware(req: NextRequest) {
     if (
       !isOnboardingCompleted &&
       path !== "/onboarding" &&
-      !path.startsWith("/api/onboarding")
+      !path.startsWith("/api")
     ) {
       return NextResponse.redirect(new URL("/onboarding", req.nextUrl));
     }
