@@ -59,12 +59,14 @@ function FilterSheet({
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [sheetSide, setSheetSide] = useState<"top" | "right">("right");
   const resourceTypes = RESOURCE_TYPES;
-  const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
+  const [schools, setSchools] = useState<{ value: string; label: string }[]>(
+    []
+  );
   const [course, setCourse] = useState<{ value: string; label: string }[]>([]);
 
   const fetchSchools = async () => {
     try {
-      const res = await fetch('/api/getSchools');
+      const res = await fetch("/api/getSchools");
       const data = await res.json();
       setSchools(data);
     } catch (err) {
@@ -78,7 +80,9 @@ function FilterSheet({
 
   const fetchCourses = async (school: string) => {
     try {
-      const res = await fetch(`/api/getCourses?school=${encodeURIComponent(school)}`);
+      const res = await fetch(
+        `/api/getCourses?school=${encodeURIComponent(school)}`
+      );
       const data = await res.json();
       setCourse(data);
     } catch (err) {
@@ -91,7 +95,6 @@ function FilterSheet({
       fetchCourses(schoolFilter);
     }
   }, [schoolFilter]);
-  
 
   const getUpdatedResourceTypes = (prev: string[], type: string): string[] => {
     if (!Array.isArray(prev)) return [];
@@ -197,9 +200,7 @@ function FilterSheet({
             variant="outline"
             onClick={handleClearAllFilters}
             disabled={
-              resourceTypesFilter.length === 0 &&
-              !schoolFilter &&
-              !courseFilter
+              resourceTypesFilter.length === 0 && !schoolFilter && !courseFilter
             }
           >
             Clear all filters

@@ -23,7 +23,7 @@ interface ComboboxProps {
   setSelectedValue: (value: string | null) => void;
   data: { value: string; label: string }[];
   placeholder?: string;
-  disabled: boolean;
+  disabled?: boolean;
   emptyState?: React.ReactNode;
   setCourseCode?: (value: string | null) => void;
   setCourseName?: (value: string | null) => void;
@@ -42,10 +42,13 @@ export function Combobox({
   const [open, setOpen] = React.useState(false);
 
   return (
-    <Popover open={open} onOpenChange={(nextOpen) => {
-      if (!disabled) {
-        setOpen(nextOpen);
-      }}}
+    <Popover
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (!disabled) {
+          setOpen(nextOpen);
+        }
+      }}
       modal={true}
     >
       <PopoverTrigger asChild>
@@ -96,7 +99,9 @@ export function Combobox({
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        selectedValue === combinedValue ? "opacity-100" : "opacity-0"
+                        selectedValue === combinedValue
+                          ? "opacity-100"
+                          : "opacity-0"
                       )}
                     />
                     {combinedValue}
