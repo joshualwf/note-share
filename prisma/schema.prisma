@@ -8,19 +8,19 @@ datasource db {
 }
 
 model User {
-  id             Int             @id @default(autoincrement())
-  onboarding_completed Boolean     @default(false)
-  email          String          @unique
-  username       String?         @unique
-  passwordHash   String          @map("password_hash")
-  profilePicture String?         @map("profile_picture")
-  createdAt      DateTime        @default(now()) @map("created_at")
-  admin          Int             @default(0)
-  comments       Comment[]
-  commentUpvotes CommentUpvote[]
-  posts          Post[]
-  postUpvotes    PostUpvote[]
-  savedCourses   SavedCourse[]
+  id                   Int             @id @default(autoincrement())
+  email                String          @unique
+  username             String?         @unique
+  passwordHash         String          @map("password_hash")
+  profilePicture       String?         @map("profile_picture")
+  createdAt            DateTime        @default(now()) @map("created_at")
+  onboarding_completed Boolean         @default(false)
+  admin                Int             @default(0)
+  comments             Comment[]
+  commentUpvotes       CommentUpvote[]
+  posts                Post[]
+  postUpvotes          PostUpvote[]
+  savedCourses         SavedCourse[]
 }
 
 model Post {
