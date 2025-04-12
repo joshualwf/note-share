@@ -18,9 +18,7 @@ function DocumentViewer({ postId }: Props) {
   useEffect(() => {
     async function fetchPresignedUrl() {
       try {
-        console.log("A1");
         const res = await fetch(`/api/getPost/${postId}`);
-        console.log("A2");
         if (!res.ok) throw new Error("Failed to fetch");
 
         const data = await res.json();
