@@ -5,7 +5,6 @@ import { uploadFileToS3, deleteFileFromS3 } from "@/lib/s3";
 
 export async function POST(req: NextRequest) {
   let fileKey: string | null = null;
-
   try {
     const user = await getUserFromCookie();
     if (!user) {
@@ -15,19 +14,19 @@ export async function POST(req: NextRequest) {
     const userId = Number(user.id);
     const formData = await req.formData();
 
+    const description = formData.get("description") as string;
     const school = formData.get("school") as string;
     const courseCode = formData.get("courseCode") as string; // not required
     const courseName = formData.get("courseName") as string;
-    const description = formData.get("description") as string;
     const resourceTypes = formData.get("resourceTypes") as string;
     const file = formData.get("file") as File;
     const fileType = formData.get("fileType") as string;
 
     // Validate required fields
     if (
+      !description ||
       !school ||
       !courseName ||
-      !description ||
       !resourceTypes ||
       !file ||
       !fileType
