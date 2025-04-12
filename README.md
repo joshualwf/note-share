@@ -47,7 +47,9 @@ npx prisma db seed
 **Clean up Docker volumes (remove data):**
 
 ```bash
-docker-compose down -v
+docker stop $(docker ps -q)        # stops all running containers
+docker rm $(docker ps -aq)         # removes all containers
+docker-compose down -v             # stops containers & deletes associated volumes
 ```
 
 ### Running the Development Server
