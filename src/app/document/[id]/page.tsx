@@ -1,9 +1,4 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
-import "@cyntler/react-doc-viewer/dist/index.css";
+import React from "react";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -15,28 +10,24 @@ import { Button } from "@/components/ui/button";
 import { SendHorizontal } from "lucide-react";
 import Comment from "@/components/Comment";
 import { mockComments } from "@/app/constants/mockData";
+import DocumentViewer from "@/components/DocumentViewer";
 
-function DocumentPage() {
-  const searchParams = useSearchParams();
-  const fileKey = searchParams.get("fileKey");
-  const title = searchParams.get("title");
+type Props = {
+  params: { id: string };
+  searchParams: { title?: string; fileKey?: string };
+};
 
-  // insert api call to get the public url + file type here, dont need to use useEffect/have any loading state because the document viewer alr handles that
-  const docPublicUrl = `https://noteshare-uploads.s3.ap-southeast-2.amazonaws.com/uploads/b0266786-4d1b-426f-b540-8f3d7b3ac21c.pptx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVWABJOMECPLN7NP4%2F20250405%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20250405T152901Z&X-Amz-Expires=60&X-Amz-Signature=a7c8a3367d8e979c9c3f949a122187176c419ee7dd0f88a9e7fd8ad37a749036&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject`;
-  const docFileType = "pptx";
-  const docs = [{ uri: docPublicUrl, fileType: docFileType }];
-
+async function DocumentPage({ params, searchParams }: Props) {
+  const { title } = await searchParams;
+  const { id } = await params;
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full w-full">
       <ResizablePanel
         defaultSize={75}
         className={`h-full w-full !overflow-auto ${styles.scrollTransparent}`}
       >
-        <DocViewer
-          documents={docs}
-          pluginRenderers={DocViewerRenderers}
-          theme={{ primary: "#f1f5f9" }}
-        />
+        <h1>this is the title: {title}</h1>
+        <DocumentViewer postId={id} />
       </ResizablePanel>
       <ResizableHandle withHandle className="shadow-2xl" />
       <ResizablePanel

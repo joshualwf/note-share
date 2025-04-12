@@ -1,4 +1,3 @@
-// CONSTANTS DECLARED HERE
 export const RESOURCE_TYPES = [
   "Notes",
   "Practice materials",
@@ -10,6 +9,7 @@ export const RESOURCE_TYPES = [
   "Essays",
   "Others",
 ];
+
 export const SCHOOLS = [
   {
     value: "National University of Singapore",
@@ -47,11 +47,42 @@ export const COURSECODES = [
   { value: "CS118", label: "CS118 - Computer Networks" },
 ];
 
-export const DUMMY = []
+export const DUMMY = [];
 
 export const SCHOOLTYPE = [
   { value: "Primary", label: "" },
   { value: "Secondary", label: "" },
   { value: "Tertiary", label: "" },
   { value: "University", label: "" },
-]
+];
+
+// this is according to https://www.npmjs.com/package/@cyntler/react-doc-viewer
+// to change the allowed file types for user to contribute, edit this list
+export const MIME_TYPE_MAP: Record<string, string> = {
+  "image/bmp": "bmp",
+  "text/csv": "csv",
+  "application/vnd.oasis.opendocument.text": "odt",
+  "application/msword": "doc",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+    "docx",
+  "image/gif": "gif",
+  "text/htm": "htm",
+  "text/html": "html",
+  "image/jpg": "jpg",
+  "image/jpeg": "jpeg",
+  "application/pdf": "pdf",
+  "image/png": "png",
+  "application/vnd.ms-powerpoint": "ppt",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+    "pptx",
+  "image/tiff": "tiff",
+  "text/plain": "txt",
+  "application/vnd.ms-excel": "xls",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+  "video/mp4": "mp4",
+  "image/webp": "webp",
+};
+
+export const ACCEPTED_FILE_EXTENSIONS = Object.values(MIME_TYPE_MAP)
+  .map((ext) => `.${ext}`)
+  .join(",");

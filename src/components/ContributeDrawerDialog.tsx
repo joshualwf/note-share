@@ -25,7 +25,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CircleAlert, FolderPlus } from "lucide-react";
 import { Combobox } from "./ComboBox";
-import { RESOURCE_TYPES } from "@/app/constants/constants";
+import {
+  ACCEPTED_FILE_EXTENSIONS,
+  MIME_TYPE_MAP,
+  RESOURCE_TYPES,
+} from "@/app/constants/constants";
 import { FormEvent, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
@@ -124,9 +128,7 @@ function ContributeCourseForm({
   const [contributeCourseCode, setContributeCourseCourse] = useState<
     string | null
   >(null);
-  const [contributeCourseName, setContributeCourseName] = useState<
-    string | null
-  >(null);
+  const [contributeCourseName, setContributeCourseName] = useState<string>("");
   const [contributeResourceType, setContributeResourceType] = useState<
     string | null
   >(null);
@@ -169,11 +171,17 @@ function ContributeCourseForm({
     }
   }, [contributeSchool]);
 
+  const allowedMimeTypes = Object.keys(MIME_TYPE_MAP);
+  const allowedExtensions = Array.from(new Set(Object.values(MIME_TYPE_MAP)))
+    .map((ext) => `.${ext}`)
+    .join(", ");
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
+    // check for missing input fields
     if (
       !contributeUploadedFile ||
       !contributeDescription ||
@@ -185,14 +193,33 @@ function ContributeCourseForm({
       setLoading(false);
       return;
     }
+
+    // check for allowed file MIME type
+    if (
+      contributeUploadedFile &&
+      !allowedMimeTypes.includes(contributeUploadedFile.type)
+    ) {
+      setError(
+        `Unsupported file type. Please upload any of these types: ${allowedExtensions}`
+      );
+      setLoading(false);
+      return;
+    }
+    const mimeType = contributeUploadedFile.type;
+    const fileType = MIME_TYPE_MAP[mimeType];
+
     setLoading(true);
     const formData = new FormData();
-    formData.append("description", contributeDescription);
-    formData.append("school", contributeSchool);
-    formData.append("courseCode", contributeCourseCode || "");
-    formData.append("courseName", contributeCourseName || "");
+    formData.append("description", contributeDescription.trim());
+    formData.append("school", contributeSchool.trim());
+    formData.append(
+      "courseCode",
+      (contributeCourseCode || "").trim().toUpperCase()
+    );
+    formData.append("courseName", contributeCourseName.trim());
     formData.append("resourceTypes", JSON.stringify(contributeResourceType));
     formData.append("file", contributeUploadedFile);
+    formData.append("fileType", fileType);
 
     const res = await fetch("/api/contribute", {
       method: "POST",
@@ -222,6 +249,7 @@ function ContributeCourseForm({
         <Label>Upload document</Label>
         <Input
           type="file"
+          accept={ACCEPTED_FILE_EXTENSIONS}
           onChange={(e) => {
             if (e.target.files?.[0]) {
               setContributeUploadedFile(e.target.files[0]);

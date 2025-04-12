@@ -38,7 +38,6 @@ export function DocumentCard({
         pathname: `/document/${id}`,
         query: {
           title,
-          fileKey,
         },
       }}
     >
@@ -46,10 +45,10 @@ export function DocumentCard({
         <CardHeader>
           <CardTitle>{title}</CardTitle>
           <CardDescription>
-          {school} |{" "}
-          {courseCode && courseName
-            ? `${courseCode} - ${courseName}`
-            : courseCode || courseName}
+            {school} |{" "}
+            {courseCode && courseName
+              ? `${courseCode} - ${courseName}`
+              : courseCode || courseName}
           </CardDescription>
           <div className="flex flex-row flex-start text-muted-foreground text-sm gap-1 items-center">
             <div className="py-1 px-1 rounded-lg flex flex-row h-6 items-center gap-1">

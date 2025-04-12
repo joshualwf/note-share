@@ -29,6 +29,7 @@ docker-compose up --build
 
   ```bash
   npx prisma db push
+  npx prisma generate # if you need to regenerate Prisma client functions
   ```
 
 - **For production** (with migration tracking)  

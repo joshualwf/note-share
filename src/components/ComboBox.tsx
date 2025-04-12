@@ -26,7 +26,7 @@ interface ComboboxProps {
   disabled?: boolean;
   emptyState?: React.ReactNode;
   setCourseCode?: (value: string | null) => void;
-  setCourseName?: (value: string | null) => void;
+  setCourseName?: (value: string) => void;
 }
 
 export function Combobox({

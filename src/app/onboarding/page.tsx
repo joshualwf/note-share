@@ -18,15 +18,22 @@ export default function Page() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    const sanitizedUsername = username.trim().toLowerCase();
+    const usernameRegex = /^[a-z0-9_]{1,20}$/;
+    if (!usernameRegex.test(sanitizedUsername)) {
+      setError(
+        "Username can only contain letters, numbers, or underscores (max 20 characters)."
+      );
+      setLoading(false);
+      return;
+    }
     try {
       const res = await fetch("/api/onboarding/submitForm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ sanitizedUsername }),
         credentials: "include",
       });
-      console.log("at handle submit");
-      console.log("result", res);
       const result = await res.json();
 
       if (res.ok) {
@@ -37,7 +44,6 @@ export default function Page() {
         setLoading(false);
       }
     } catch (error) {
-      console.log("error", error);
       setError("An error occurred. Please try again.");
       setLoading(false);
     }

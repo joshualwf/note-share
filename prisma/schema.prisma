@@ -29,7 +29,8 @@ model Post {
   description String
   schoolName  String       @map("school_name")
   courseCode  String?      @map("course_code")
-  courseName  String?      @map("course_name")
+  courseName  String       @map("course_name")
+  fileType    String       @map("file_type")
   fileKey     String       @map("file_key")
   postType    String       @map("post_type")
   upvoteCount Int          @default(0) @map("upvote_count")

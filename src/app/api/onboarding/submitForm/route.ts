@@ -32,13 +32,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (username.length < 5) {
-      return NextResponse.json(
-        { message: "Username too short (minimum 5 characters)" },
-        { status: 400 }
-      );
-    }
-
     if (username.length > 20) {
       return NextResponse.json(
         { message: "Username too long (max 20 characters)" },

@@ -16,16 +16,35 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
 
     const school = formData.get("school") as string;
-    const courseCode = formData.get("courseCode") as string;
+    const courseCode = formData.get("courseCode") as string; // not required
     const courseName = formData.get("courseName") as string;
     const description = formData.get("description") as string;
-    const file = formData.get("file") as File;
     const resourceTypes = formData.get("resourceTypes") as string;
+    const file = formData.get("file") as File;
+    const fileType = formData.get("fileType") as string;
+
+    // Validate required fields
+    if (
+      !school ||
+      !courseName ||
+      !description ||
+      !resourceTypes ||
+      !file ||
+      !fileType
+    ) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
     // Upload file to S3
     fileKey = await uploadFileToS3(file);
     if (!fileKey) {
-      return NextResponse.json({ message: "File upload failed" }, { status: 500 });
+      return NextResponse.json(
+        { message: "File upload failed" },
+        { status: 500 }
+      );
     }
 
     // Create the post
@@ -37,12 +56,12 @@ export async function POST(req: NextRequest) {
         courseCode: courseCode,
         courseName: courseName,
         fileKey: fileKey,
+        fileType: fileType,
         postType: JSON.parse(resourceTypes), // assuming it's sent as a JSON string array
       },
     });
 
     return NextResponse.json({ message: "Success" });
-
   } catch (error) {
     console.error("Contribute API error:", error);
 
