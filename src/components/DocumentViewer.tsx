@@ -18,9 +18,8 @@ function DocumentViewer({ postId }: Props) {
   useEffect(() => {
     async function fetchPresignedUrl() {
       try {
-        const res = await fetch(`/api/getPost/${postId}`);
+        const res = await fetch(`/api/posts/getPostS3File/${postId}`);
         if (!res.ok) throw new Error("Failed to fetch");
-
         const data = await res.json();
         setDocs([{ uri: data.url, fileType: data.fileType }]);
       } catch (err) {

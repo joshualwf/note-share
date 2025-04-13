@@ -37,7 +37,6 @@ export async function GET(req: NextRequest) {
   if (resourceTypes.length > 0) {
     where.postType = { in: resourceTypes };
   }
-  console.log("Where filter:", where);
 
   const [posts, totalCount] = await Promise.all([
     prisma.post.findMany({

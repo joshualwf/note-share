@@ -82,7 +82,7 @@ export default function Home() {
     });
 
     try {
-      const res = await fetch(`/api/getPosts?${params.toString()}`);
+      const res = await fetch(`/api/posts/getPosts?${params.toString()}`);
       const data = await res.json();
       setDocuments(data.posts);
       setDocumentCount(data.totalCount);
