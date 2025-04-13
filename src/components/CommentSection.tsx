@@ -52,9 +52,12 @@ function CommentSection({ postId }: { postId: number }) {
         return;
       }
 
+      toast({
+        title: "Commented successfully!",
+      });
       setCommentText(""); // Clear the input
       const newComment = await res.json();
-      setComments((prev) => [...prev, newComment]); // Append new comment
+      fetchComments();
     } catch (err) {
       console.error(err);
       toast({
@@ -70,7 +73,7 @@ function CommentSection({ postId }: { postId: number }) {
       </div>
       <div className="flex flex-col grow w-full pb-6 justify-between overflow-hidden">
         <div
-          className={`flex flex-col w-full overflow-y-auto px-4 pt-4 gap-2 `}
+          className={`flex flex-col w-full overflow-y-auto px-4 pt-4 gap-2 scroll-transparent`}
         >
           {comments.map((comment, index) => (
             <Comment
@@ -82,17 +85,23 @@ function CommentSection({ postId }: { postId: number }) {
             />
           ))}
         </div>
-        <div className="flex gap-2 border border-color-accent rounded-2xl p-4 shadow-lg mx-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handlePostComment();
+          }}
+          className="flex gap-2 border border-color-accent rounded-2xl p-4 shadow-lg mx-4"
+        >
           <Input
             className="grow"
             placeholder="Ask anything"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
           ></Input>
-          <Button onClick={handlePostComment}>
+          <Button type="submit">
             <SendHorizontal />
           </Button>
-        </div>
+        </form>
       </div>
     </>
   );

@@ -4,7 +4,6 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import styles from "./document.module.css";
 import DocumentViewer from "@/components/DocumentViewer";
 import CommentSection from "@/components/CommentSection";
 
@@ -20,7 +19,7 @@ async function DocumentPage({ params, searchParams }: Props) {
     <ResizablePanelGroup direction="horizontal" className="h-full w-full">
       <ResizablePanel
         defaultSize={75}
-        className={`h-full w-full !overflow-auto ${styles.scrollTransparent}`}
+        className={`h-full w-full !overflow-auto scroll-transparent`}
       >
         <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px] bg-accent">
           <span className="font-semibold">{title}</span>

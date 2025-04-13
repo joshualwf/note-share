@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import { getRelativeTime } from "@/app/utils/utils";
 import { CommentType } from "@/app/types/comment";
 import { Input } from "./ui/input";
+import { useToast } from "@/hooks/use-toast";
 
 type Props = CommentType & {
   postId: number;
@@ -29,6 +30,8 @@ function Comment({
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [replyText, setReplyText] = useState(`@${username} `);
 
+  const { toast } = useToast();
+
   const handleReplySubmit = async () => {
     if (!replyText.trim()) return;
     try {
@@ -45,6 +48,9 @@ function Comment({
       if (!res.ok) throw new Error("Failed to post reply");
       setReplyText(`@${username} `);
       setShowReplyInput(false);
+      toast({
+        title: "Replied successfully!",
+      });
       fetchComments();
     } catch (err) {
       console.error("Error posting reply:", err);
@@ -84,16 +90,22 @@ function Comment({
           </Button>
         </div>
         {showReplyInput && (
-          <div className="flex gap-2 mb-3 items-center">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleReplySubmit();
+            }}
+            className="flex gap-2 mb-3 items-center"
+          >
             <Input
               placeholder="Write a reply..."
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
             />
-            <Button onClick={handleReplySubmit}>
+            <Button type="submit">
               <SendHorizontal />
             </Button>
-          </div>
+          </form>
         )}
 
         {replies.length > 0 && (
