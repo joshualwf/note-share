@@ -56,7 +56,6 @@ function CommentSection({ postId }: { postId: number }) {
         title: "Commented successfully!",
       });
       setCommentText(""); // Clear the input
-      const newComment = await res.json();
       fetchComments();
     } catch (err) {
       console.error(err);

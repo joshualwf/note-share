@@ -69,8 +69,8 @@ export default function ContributeDrawerDialog() {
       setSchools([]);
     }
   };
-  const cachedContributeForm = sessionStorage.getItem("contribute-form");
   useEffect(() => {
+    const cachedContributeForm = sessionStorage.getItem("contribute-form");
     if (cachedContributeForm) {
       try {
         const parsed = JSON.parse(cachedContributeForm);
@@ -297,7 +297,8 @@ export default function ContributeDrawerDialog() {
                   <div className="grid gap-2">
                     <Label>Type of document</Label>
                     <div className="flex flex-row gap-2 flex-wrap">
-                      {(restored || !cachedContributeForm) && (
+                      {(restored ||
+                        !sessionStorage.getItem("contribute-form")) && (
                         <Select
                           onValueChange={(value) =>
                             setContributeResourceType(value)
