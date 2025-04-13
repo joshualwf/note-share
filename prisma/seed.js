@@ -589,6 +589,71 @@ async function main() {
     ],
     skipDuplicates: true, // avoid errors on rerun
   });
+
+  await prisma.user.createMany({
+    data: [
+      {
+        id: 1001,
+        email: "alice@example.com",
+        username: "alice",
+        passwordHash: "hashed_pw1",
+        profilePicture:
+          "https://api.dicebear.com/9.x/micah/svg?seed=552676&scale=100&radius=50&backgroundColor=ebebec&mouth=laughing,smile",
+      },
+      {
+        id: 1002,
+        email: "bob@example.com",
+        username: "bob",
+        passwordHash: "hashed_pw2",
+        profilePicture:
+          "https://api.dicebear.com/9.x/micah/svg?seed=918885&scale=100&radius=50&backgroundColor=ebebec&mouth=laughing,smile",
+      },
+      {
+        id: 1003,
+        email: "charlie@example.com",
+        username: "charlie",
+        passwordHash: "hashed_pw3",
+        profilePicture:
+          "https://api.dicebear.com/9.x/micah/svg?seed=315982&scale=100&radius=50&backgroundColor=ebebec&mouth=laughing,smile",
+      },
+    ],
+    skipDuplicates: true,
+  });
+
+  // Create top-level comments for postId 1
+  await prisma.comment.create({
+    data: {
+      id: 2001,
+      userId: 1001,
+      postId: 1,
+      commentText: "This is super helpful, thanks!",
+      upvoteCount: 5,
+      createdAt: new Date("2024-10-01T10:30:00.000Z"),
+    },
+  });
+
+  await prisma.comment.create({
+    data: {
+      id: 2002,
+      userId: 1002,
+      postId: 1,
+      commentText: "Can anyone explain slide 12?",
+      upvoteCount: 2,
+      createdAt: new Date("2024-10-01T11:00:00.000Z"),
+    },
+  });
+
+  // Reply to the second comment
+  await prisma.comment.create({
+    data: {
+      userId: 1003,
+      postId: 1,
+      parentCommentId: 2002,
+      commentText: "It’s about dynamic programming!",
+      upvoteCount: 1,
+      createdAt: new Date("2024-10-01T11:15:00.000Z"),
+    },
+  });
 }
 
 main()

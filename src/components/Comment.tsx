@@ -4,29 +4,31 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { ThumbsUp, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "./ui/button";
 import { getRelativeTime } from "@/app/utils/utils";
-import { CommentProps } from "@/app/types/comment";
+import { CommentType } from "@/app/types/comment";
 
 function Comment({
   username,
-  profilePic = "https://github.com/shadcn.png",
-  time,
+  profilePicture = "https://github.com/shadcn.png",
+  createdAt,
   text,
-  likeCount = 0,
+  upvoteCount = 0,
   replies = [],
   isReply = false,
-}: CommentProps) {
+}: CommentType) {
   const [showReplies, setShowReplies] = useState(false);
 
   return (
     <div className="flex gap-2">
       <Avatar className={isReply ? "w-6 h-6" : "w-10 h-10"}>
-        <AvatarImage src={profilePic} />
+        <AvatarImage src={profilePicture} />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <div className="flex flex-col items-start">
         <div className="flex flex-row gap-1">
           <span className="font-bold text-xs">@{username}</span>
-          <span className="text-xs font-light">{getRelativeTime(time)}</span>
+          <span className="text-xs font-light">
+            {getRelativeTime(createdAt)}
+          </span>
         </div>
         <span className="text-sm mt-1">{text}</span>
         <div className="flex items-center gap-2">
@@ -37,7 +39,7 @@ function Comment({
             >
               <ThumbsUp className="w-4 h-4" />
             </Button>
-            {likeCount > 0 && <span className="text-xs">{likeCount}</span>}
+            {upvoteCount > 0 && <span className="text-xs">{upvoteCount}</span>}
           </div>
           <Button
             variant="ghost"

@@ -40,6 +40,13 @@ function DocumentViewer({ postId }: Props) {
       documents={docs}
       pluginRenderers={DocViewerRenderers}
       theme={{ primary: "#f1f5f9" }}
+      config={{
+        header: {
+          disableHeader: true,
+          disableFileName: true,
+          retainURLParams: false,
+        },
+      }}
     />
   );
 }

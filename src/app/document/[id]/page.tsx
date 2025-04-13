@@ -5,12 +5,8 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import styles from "./document.module.css";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { SendHorizontal } from "lucide-react";
-import Comment from "@/components/Comment";
-import { mockComments } from "@/app/constants/mockData";
 import DocumentViewer from "@/components/DocumentViewer";
+import CommentSection from "@/components/CommentSection";
 
 type Props = {
   params: { id: string };
@@ -26,7 +22,9 @@ async function DocumentPage({ params, searchParams }: Props) {
         defaultSize={75}
         className={`h-full w-full !overflow-auto ${styles.scrollTransparent}`}
       >
-        <h1>this is the title: {title}</h1>
+        <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px] bg-accent">
+          <span className="font-semibold">{title}</span>
+        </div>
         <DocumentViewer postId={id} />
       </ResizablePanel>
       <ResizableHandle withHandle className="shadow-2xl" />
@@ -35,24 +33,7 @@ async function DocumentPage({ params, searchParams }: Props) {
         minSize={20}
         className="h-full w-full flex flex-col"
       >
-        <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px]">
-          <span className="font-semibold">Comments</span>
-        </div>
-        <div className="flex flex-col grow w-full pb-6 justify-between overflow-hidden">
-          <div
-            className={`flex flex-col w-full overflow-y-auto px-4 pt-4 gap-2 ${styles.scrollTransparent}`}
-          >
-            {mockComments.map((comment, index) => (
-              <Comment key={index} {...comment} />
-            ))}
-          </div>
-          <div className="flex gap-2 border border-color-accent rounded-2xl p-4 shadow-lg mx-4">
-            <Input className="grow" placeholder="Ask anything"></Input>
-            <Button>
-              <SendHorizontal />
-            </Button>
-          </div>
-        </div>
+        <CommentSection postId={Number(id)} />
       </ResizablePanel>
     </ResizablePanelGroup>
   );

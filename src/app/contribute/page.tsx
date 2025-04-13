@@ -170,7 +170,7 @@ export default function ContributeDrawerDialog() {
       (contributeCourseCode || "").trim().toUpperCase()
     );
     formData.append("courseName", contributeCourseName.trim());
-    formData.append("resourceTypes", contributeResourceType);
+    formData.append("resourceTypes", JSON.stringify(contributeResourceType));
     formData.append("file", contributeUploadedFile);
     formData.append("fileType", contributeFileType);
 
