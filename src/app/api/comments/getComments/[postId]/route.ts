@@ -32,17 +32,17 @@ export async function GET(
     });
 
     const formatted = topLevelComments.map((comment) => ({
-      username: comment.user.username ?? "Anonymous",
-      profilePicture:
-        comment.user.profilePicture ?? "https://github.com/shadcn.png",
+      commentId: comment.id,
+      username: comment.user.username,
+      profilePicture: comment.user.profilePicture,
       createdAt: comment.createdAt,
       text: comment.commentText,
       upvoteCount: comment.upvoteCount,
       isReply: false,
       replies: comment.childComments.map((reply) => ({
-        username: reply.user.username ?? "Anonymous",
-        profilePicture:
-          reply.user.profilePicture ?? "https://github.com/shadcn.png",
+        commentId: reply.id,
+        username: reply.user.username,
+        profilePicture: reply.user.profilePicture,
         createdAt: reply.createdAt,
         text: reply.commentText,
         upvoteCount: reply.upvoteCount,

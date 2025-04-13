@@ -1,10 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { ThumbsUp, ChevronDown, ChevronUp } from "lucide-react";
+import { ThumbsUp, ChevronDown, ChevronUp, SendHorizontal } from "lucide-react";
 import { Button } from "./ui/button";
 import { getRelativeTime } from "@/app/utils/utils";
 import { CommentType } from "@/app/types/comment";
+import { Input } from "./ui/input";
+
+type Props = CommentType & {
+  postId: number;
+  topLevelCommentId: number;
+  fetchComments: () => void;
+};
 
 function Comment({
   username,
@@ -14,8 +21,35 @@ function Comment({
   upvoteCount = 0,
   replies = [],
   isReply = false,
-}: CommentType) {
+  postId,
+  topLevelCommentId,
+  fetchComments,
+}: Props) {
   const [showReplies, setShowReplies] = useState(false);
+  const [showReplyInput, setShowReplyInput] = useState(false);
+  const [replyText, setReplyText] = useState(`@${username} `);
+
+  const handleReplySubmit = async () => {
+    if (!replyText.trim()) return;
+    try {
+      const res = await fetch(`/api/comments/postComment/${postId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: replyText.trim(),
+          parentCommentId: topLevelCommentId,
+        }),
+        credentials: "include",
+      });
+
+      if (!res.ok) throw new Error("Failed to post reply");
+      setReplyText(`@${username} `);
+      setShowReplyInput(false);
+      fetchComments();
+    } catch (err) {
+      console.error("Error posting reply:", err);
+    }
+  };
 
   return (
     <div className="flex gap-2">
@@ -44,10 +78,23 @@ function Comment({
           <Button
             variant="ghost"
             className="px-1 py-0 border rounded-2xl border-transparent hover:bg-accent"
+            onClick={() => setShowReplyInput((prev) => !prev)}
           >
             <span className="text-xs font-bold">Reply</span>
           </Button>
         </div>
+        {showReplyInput && (
+          <div className="flex gap-2 mb-3 items-center">
+            <Input
+              placeholder="Write a reply..."
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+            />
+            <Button onClick={handleReplySubmit}>
+              <SendHorizontal />
+            </Button>
+          </div>
+        )}
 
         {replies.length > 0 && (
           <>
@@ -69,7 +116,14 @@ function Comment({
             {showReplies && (
               <div className="mt-2 pl-4 border-l border-accent">
                 {replies.map((reply, index) => (
-                  <Comment key={index} {...reply} isReply />
+                  <Comment
+                    key={index}
+                    {...reply}
+                    isReply
+                    postId={postId}
+                    topLevelCommentId={topLevelCommentId}
+                    fetchComments={fetchComments}
+                  />
                 ))}
               </div>
             )}

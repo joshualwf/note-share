@@ -13,20 +13,20 @@ function CommentSection({ postId }: { postId: number }) {
   const [commentText, setCommentText] = useState("");
 
   const { toast } = useToast();
-  useEffect(() => {
-    async function fetchComments() {
-      try {
-        const res = await fetch(`/api/comments/getComments/${postId}`);
-        if (!res.ok) throw new Error("Failed to fetch comments");
-        const data = await res.json();
-        setComments(data);
-      } catch (err) {
-        console.error(err);
-        toast({
-          title: "Failed to load comments",
-        });
-      }
+  async function fetchComments() {
+    try {
+      const res = await fetch(`/api/comments/getComments/${postId}`);
+      if (!res.ok) throw new Error("Failed to fetch comments");
+      const data = await res.json();
+      setComments(data);
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "Failed to load comments",
+      });
     }
+  }
+  useEffect(() => {
     fetchComments();
   }, []);
 
@@ -73,7 +73,13 @@ function CommentSection({ postId }: { postId: number }) {
           className={`flex flex-col w-full overflow-y-auto px-4 pt-4 gap-2 `}
         >
           {comments.map((comment, index) => (
-            <Comment key={index} {...comment} />
+            <Comment
+              key={index}
+              {...comment}
+              topLevelCommentId={comment.commentId}
+              postId={postId}
+              fetchComments={fetchComments}
+            />
           ))}
         </div>
         <div className="flex gap-2 border border-color-accent rounded-2xl p-4 shadow-lg mx-4">

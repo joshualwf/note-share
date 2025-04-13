@@ -1,4 +1,5 @@
 export type CommentType = {
+  commentId: number;
   username: string;
   profilePicture?: string;
   createdAt: string;
