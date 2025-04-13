@@ -106,11 +106,9 @@ export default function ContributeDrawerDialog() {
       fetchCourses(contributeSchool);
     }
 
-    if (!contributeSchool) {
-      setContributeCourseInfo(null);
-      setContributeCourseCode(null);
-      setContributeCourseName("");
-    }
+    setContributeCourseInfo(null);
+    setContributeCourseCode(null);
+    setContributeCourseName("");
   }, [contributeSchool]);
 
   const allowedMimeTypes = Object.keys(MIME_TYPE_MAP);
