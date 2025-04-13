@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,12 +29,14 @@ const LoginForm = ({
   signupText = "Don't have an account?",
   signupUrl = "/signup",
 }: LoginFormProps) => {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { fetchUser } = useUser();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +54,7 @@ const LoginForm = ({
 
       if (res.ok) {
         await fetchUser();
-        router.push("/");
+        router.push(redirectTo);
       } else {
         setError(result.message || "Invalid email or password.");
         setLoading(false);
@@ -140,7 +142,12 @@ const LoginForm = ({
               </div>
               <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
                 <p>{signupText}</p>
-                <a href={signupUrl} className="font-medium text-primary">
+                <a
+                  href={`${signupUrl}?redirect=${encodeURIComponent(
+                    redirectTo
+                  )}`}
+                  className="font-medium text-primary"
+                >
                   Sign up
                 </a>
               </div>

@@ -59,7 +59,11 @@ export default async function middleware(req: NextRequest) {
       path !== "/onboarding" &&
       !path.startsWith("/api")
     ) {
-      return NextResponse.redirect(new URL("/onboarding", req.nextUrl));
+      const redirectUrl = new URL(
+        `/onboarding?redirect=${encodeURIComponent(path)}`,
+        req.nextUrl
+      );
+      return NextResponse.redirect(redirectUrl);
     }
   }
 

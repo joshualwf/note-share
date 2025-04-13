@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -27,12 +27,12 @@ function AddCourseDialog({
   const [open, setOpen] = React.useState(false);
   const [addCourseSchool, setAddCourseSchool] = useState<string | null>(null);
   const [addCourseCode, setAddCourseCode] = useState<string | null>(null);
-  const [addCourseName, setAddCourseName] = useState<string | null>(null);
+  const [addCourseName, setAddCourseName] = useState<string>("");
   const [error, setError] = useState("");
   const triggerLabel = "Add new course!";
   const { toast } = useToast();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (open && contributeSchool) {
       setAddCourseSchool(contributeSchool);
     }
@@ -42,15 +42,15 @@ function AddCourseDialog({
     e.preventDefault();
     setError("");
     setLoading(true);
-    if (!addCourseSchool || !(addCourseCode || addCourseName)) {
+    if (!addCourseSchool || !addCourseName) {
       setError("Please fill out all fields before submitting.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("schoolName", addCourseSchool);
-    formData.append("courseCode", addCourseCode || "");
-    formData.append("courseName", addCourseName || "");
+    formData.append("schoolName", addCourseSchool.trim());
+    formData.append("courseName", addCourseName.trim());
+    formData.append("courseCode", (addCourseCode || "").trim().toUpperCase());
 
     const res = await fetch("/api/addCourse", {
       method: "POST",
@@ -98,8 +98,8 @@ function AddCourseDialog({
           <Combobox
             selectedValue={addCourseSchool}
             setSelectedValue={setAddCourseSchool}
-            data={DUMMY}
             placeholder="Select school..."
+            data={[]}
             disabled={true}
           />
         </div>
@@ -109,16 +109,16 @@ function AddCourseDialog({
           <Input
             value={addCourseName ?? ""}
             onChange={(e) => setAddCourseName(e.target.value)}
-            placeholder="e.g. Intro to data science"
+            placeholder="eg: Intro to data science"
           />
         </div>
 
         <div className="grid gap-2">
-          <Label>Course code (for university)</Label>
+          <Label>Course code (optional)</Label>
           <Input
             value={addCourseCode ?? ""}
             onChange={(e) => setAddCourseCode(e.target.value)}
-            placeholder="e.g. DSA1101"
+            placeholder="eg: DSA1101"
           />
         </div>
         {error && (

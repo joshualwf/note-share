@@ -36,7 +36,7 @@ function AddSchoolDialog({ fetchSchools }: { fetchSchools?: () => void }) {
     }
 
     const formData = new FormData();
-    formData.append("name", addSchool);
+    formData.append("name", addSchool.trim());
     formData.append("type", addSchoolType || "");
 
     const res = await fetch("/api/addSchool", {
@@ -86,7 +86,7 @@ function AddSchoolDialog({ fetchSchools }: { fetchSchools?: () => void }) {
           <Input
             value={addSchool ?? ""}
             onChange={(e) => setAddSchool(e.target.value)}
-            placeholder="e.g. Hogwarts School of Witchcraft"
+            placeholder="eg: Hogwarts School of Witchcraft"
           />
         </div>
 

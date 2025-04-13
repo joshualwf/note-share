@@ -52,7 +52,7 @@ export const DUMMY = [];
 export const SCHOOLTYPE = [
   { value: "Primary", label: "" },
   { value: "Secondary", label: "" },
-  { value: "Tertiary", label: "" },
+  { value: "Pre-University", label: "" },
   { value: "University", label: "" },
 ];
 

@@ -3,20 +3,20 @@ import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import FilterSheet from "@/components/FilterSheet";
 import { TypeAnimation } from "react-type-animation";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { ContributeDrawerDialog } from "@/components/ContributeDrawerDialog";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { FolderPlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type Post = {
   id: number;
@@ -167,7 +167,13 @@ export default function Home() {
               {documents.length} {documents.length === 1 ? "result" : "results"}
             </h3>
             <div className="flex gap-2">
-              <ContributeDrawerDialog fetchDocument={fetchDocuments} />
+              <Link href="/contribute">
+                <Button>
+                  <FolderPlus />
+                  <span className="hidden sm:inline">Contribute</span>
+                </Button>
+              </Link>
+              {/* <ContributeDrawerDialog fetchDocument={fetchDocuments} /> */}
               <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
             </div>
           </div>
