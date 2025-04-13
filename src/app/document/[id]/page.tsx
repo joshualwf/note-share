@@ -64,6 +64,8 @@ async function DocumentPage({ params, searchParams }: Props) {
               </Avatar>
               <span className="font-bold">@{username}</span>
             </div>
+
+            {/* do not remove this for now */}
             {/* <div className="flex items-center gap-1">
               <School className="w-4 h-4" />
               <span>{schoolName}</span>
