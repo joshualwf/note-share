@@ -15,6 +15,7 @@ type Props = CommentType & {
 };
 
 function Comment({
+  commentId,
   username,
   profilePicture = "https://github.com/shadcn.png",
   createdAt,
@@ -63,6 +64,27 @@ function Comment({
     }
   };
 
+  const handleToggleUpvote = async () => {
+    try {
+      const res = await fetch(`/api/comments/postCommentUpvote/${commentId}`, {
+        method: "POST",
+        credentials: "include",
+      });
+      console.log("A1");
+      const result = await res.json();
+      if (!res.ok) {
+        console.log("A2");
+        toast({ title: result.message || "Failed to toggle upvote" });
+        return;
+      }
+      console.log("A3");
+      fetchComments(); // refresh the comment list
+    } catch (err) {
+      console.error("Error toggling upvote:", err);
+      toast({ title: "Something went wrong while upvoting" });
+    }
+  };
+
   return (
     <div className="flex gap-2">
       <Avatar className={isReply ? "w-6 h-6" : "w-10 h-10"}>
@@ -82,6 +104,7 @@ function Comment({
             <Button
               variant="ghost"
               className="px-1 py-0 border rounded-2xl border-transparent hover:bg-accent"
+              onClick={handleToggleUpvote}
             >
               <ThumbsUp className="w-4 h-4" />
             </Button>
@@ -101,7 +124,7 @@ function Comment({
               e.preventDefault();
               handleReplySubmit();
             }}
-            className="flex gap-2 mb-3 items-center"
+            className="flex gap-2 mb-3 items-center mt-1"
           >
             <Input
               placeholder="Write a reply..."

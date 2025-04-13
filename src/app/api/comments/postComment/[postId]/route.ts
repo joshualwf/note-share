@@ -15,9 +15,7 @@ export async function POST(
 
   const body = await req.json();
   const { text, parentCommentId } = body;
-  console.log("text", text);
   if (!text || typeof text !== "string") {
-    console.log("hi");
     return NextResponse.json(
       { message: "Invalid comment text" },
       { status: 400 }
