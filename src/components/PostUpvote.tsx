@@ -45,7 +45,7 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
     <div className="flex gap-1 items-center">
       <Button
         variant="ghost"
-        className="px-1 py-0 border rounded-2xl border-transparent hover:bg-muted-foreground"
+        className="px-1 py-0 border rounded-2xl border-transparent hover:bg-background"
         onClick={handleToggleUpvote}
       >
         <ThumbsUp className="w-4 h-4" />
