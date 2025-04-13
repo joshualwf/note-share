@@ -45,14 +45,6 @@ docker-compose up --build
 npx prisma db seed
 ```
 
-**To clean up Docker container:**
-
-```bash
-docker stop $(docker ps -q)        # stops all running containers
-docker rm $(docker ps -aq)         # removes all containers
-docker-compose down -v             # stops containers & deletes associated volumes
-```
-
 ### Running the Development Server
 
 ```bash
@@ -60,3 +52,11 @@ npm run dev
 ```
 
 Then, open [http://localhost:3000](http://localhost:3000) in your browser to access the application.
+
+### Teardown: Clean up Docker container
+
+```bash
+docker stop $(docker ps -q)        # stops all running containers
+docker rm $(docker ps -aq)         # removes all containers
+docker-compose down -v             # stops containers & deletes associated volumes
+```

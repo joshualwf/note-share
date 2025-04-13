@@ -619,41 +619,6 @@ async function main() {
     ],
     skipDuplicates: true,
   });
-
-  // Create top-level comments for postId 1
-  await prisma.comment.create({
-    data: {
-      id: 2001,
-      userId: 1001,
-      postId: 1,
-      commentText: "This is super helpful, thanks!",
-      upvoteCount: 5,
-      createdAt: new Date("2024-10-01T10:30:00.000Z"),
-    },
-  });
-
-  await prisma.comment.create({
-    data: {
-      id: 2002,
-      userId: 1002,
-      postId: 1,
-      commentText: "Can anyone explain slide 12?",
-      upvoteCount: 2,
-      createdAt: new Date("2024-10-01T11:00:00.000Z"),
-    },
-  });
-
-  // Reply to the second comment
-  await prisma.comment.create({
-    data: {
-      userId: 1003,
-      postId: 1,
-      parentCommentId: 2002,
-      commentText: "It’s about dynamic programming!",
-      upvoteCount: 1,
-      createdAt: new Date("2024-10-01T11:15:00.000Z"),
-    },
-  });
 }
 
 main()
