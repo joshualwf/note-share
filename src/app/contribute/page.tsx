@@ -69,11 +69,11 @@ export default function ContributeDrawerDialog() {
       setSchools([]);
     }
   };
+  const cachedContributeForm = sessionStorage.getItem("contribute-form");
   useEffect(() => {
-    const cached = sessionStorage.getItem("contribute-form");
-    if (cached) {
+    if (cachedContributeForm) {
       try {
-        const parsed = JSON.parse(cached);
+        const parsed = JSON.parse(cachedContributeForm);
         setContributeDescription(parsed.contributeDescription || "");
         setContributeSchool(parsed.contributeSchool || null);
         setContributeCourseInfo(parsed.contributeCourseInfo || null);
@@ -104,6 +104,12 @@ export default function ContributeDrawerDialog() {
   useEffect(() => {
     if (contributeSchool) {
       fetchCourses(contributeSchool);
+    }
+
+    if (!contributeSchool) {
+      setContributeCourseInfo(null);
+      setContributeCourseCode(null);
+      setContributeCourseName("");
     }
   }, [contributeSchool]);
 
@@ -293,7 +299,7 @@ export default function ContributeDrawerDialog() {
                   <div className="grid gap-2">
                     <Label>Type of document</Label>
                     <div className="flex flex-row gap-2 flex-wrap">
-                      {restored && (
+                      {(restored || !cachedContributeForm) && (
                         <Select
                           onValueChange={(value) =>
                             setContributeResourceType(value)
