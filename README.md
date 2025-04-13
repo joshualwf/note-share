@@ -45,7 +45,7 @@ docker-compose up --build
 npx prisma db seed
 ```
 
-**Clean up Docker container:**
+**To clean up Docker container:**
 
 ```bash
 docker stop $(docker ps -q)        # stops all running containers
