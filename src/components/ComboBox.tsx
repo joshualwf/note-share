@@ -58,11 +58,11 @@ export function Combobox({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            "w-[310px] justify-between",
+            "min-w-[310px] justify-between py-5",
             disabled && "opacity-50 cursor-not-allowed pointer-events-none"
           )}
         >
-          {selectedValue ?? placeholder}
+          <span className="text-wrap">{selectedValue ?? placeholder}</span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -70,7 +70,7 @@ export function Combobox({
         side="bottom"
         avoidCollisions={false}
         align="center"
-        className="w-[310px] p-0"
+        className="min-w-[310px] p-0"
       >
         <Command>
           <CommandInput placeholder={placeholder} />
