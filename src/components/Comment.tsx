@@ -45,7 +45,13 @@ function Comment({
         credentials: "include",
       });
 
-      if (!res.ok) throw new Error("Failed to post reply");
+      if (!res.ok) {
+        const result = await res.json();
+        toast({
+          title: result.message || "Failed to post reply",
+        });
+        return;
+      }
       setReplyText(`@${username} `);
       setShowReplyInput(false);
       toast({
