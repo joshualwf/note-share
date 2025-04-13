@@ -46,7 +46,7 @@ export default function Page() {
         setLoading(false);
       }
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      setError("An error occurred, please try again");
       setLoading(false);
     }
   };
@@ -79,7 +79,9 @@ export default function Page() {
                     />
                     {error && (
                       <div className="flex items-center gap-1">
-                        <CircleAlert size="20px" color="#ef4444" />
+                        <div>
+                          <CircleAlert size="20px" color="#ef4444" />
+                        </div>
                         <span className="text-center text-sm text-red-500">
                           {error}
                         </span>

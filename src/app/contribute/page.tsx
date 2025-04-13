@@ -120,12 +120,16 @@ export default function ContributeDrawerDialog() {
     // check for missing input fields
     if (
       !contributeUploadedFile ||
+      !(contributeUploadedFile instanceof File) ||
       !contributeDescription ||
       !contributeSchool ||
       !contributeCourseName ||
       !contributeResourceType
     ) {
-      setError("Please fill out all fields before submitting.");
+      // setError("Please fill out all fields before submitting");
+      setError(
+        `Unsupported file type. Please upload any of these types: ${allowedExtensions}`
+      );
       setLoading(false);
       return;
     }
@@ -145,7 +149,7 @@ export default function ContributeDrawerDialog() {
     const maxSizeInBytes = 100 * 1024 * 1024; // 100MB
     // check for file size
     if (contributeUploadedFile.size > maxSizeInBytes) {
-      setError("File size must be less than 100MB.");
+      setError("File size must be less than 100MB");
       setLoading(false);
       return;
     }
@@ -199,7 +203,7 @@ export default function ContributeDrawerDialog() {
         router.push(`/signup?redirect=${redirectTo}`);
         return;
       } else {
-        setError("Something went wrong. Please try again.");
+        setError("Something went wrong. Please try again");
       }
     }
     setLoading(false);
@@ -312,7 +316,11 @@ export default function ContributeDrawerDialog() {
                   </div>
                   {error && (
                     <div className="flex items-center gap-1">
-                      <CircleAlert size="20px" color="#ef4444" />
+                      <div>
+                        <div>
+                          <CircleAlert size="20px" color="#ef4444" />
+                        </div>
+                      </div>
                       <span className="text-center text-sm text-red-500">
                         {error}
                       </span>

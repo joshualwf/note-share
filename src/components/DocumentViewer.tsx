@@ -25,7 +25,7 @@ function DocumentViewer({ postId }: Props) {
         setDocs([{ uri: data.url, fileType: data.fileType }]);
       } catch (err) {
         console.error(err);
-        setError("Unable to load document.");
+        setError("Unable to load document");
       }
     }
 
