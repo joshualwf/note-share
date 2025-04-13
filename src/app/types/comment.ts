@@ -1,9 +1,10 @@
-export interface CommentProps {
+export type CommentType = {
+  commentId: number;
   username: string;
-  profilePic?: string;
-  time: Date;
+  profilePicture?: string;
+  createdAt: string;
   text: string;
-  likeCount?: number;
-  replies?: CommentProps[];
+  upvoteCount?: number;
+  replies?: Comment[];
   isReply?: boolean;
-}
+};

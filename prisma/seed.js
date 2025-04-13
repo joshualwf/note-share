@@ -16,39 +16,42 @@ async function main() {
       { name: "University of the Arts Singapore", type: "university" },
       { name: "Nanyang University", type: "university" },
       { name: "SIM University", type: "university" },
-      { name: "Anderson Junior College", type: "tertiary" },
-      { name: "Anderson Serangoon Junior College", type: "tertiary" },
-      { name: "Anglo-Chinese Junior College", type: "tertiary" },
-      { name: "Catholic Junior College", type: "tertiary" },
-      { name: "Dunman High School (Tertiary)", type: "tertiary" },
-      { name: "Eunoia Junior College", type: "tertiary" },
-      { name: "Hwa Chong Institution (Tertiary)", type: "tertiary" },
-      { name: "Hwa Chong Junior College", type: "tertiary" },
-      { name: "Innova Junior College", type: "tertiary" },
-      { name: "Junior college (Singapore)", type: "tertiary" },
-      { name: "Jurong Junior College", type: "tertiary" },
-      { name: "Jurong Pioneer Junior College", type: "tertiary" },
-      { name: "Meridian Junior College", type: "tertiary" },
-      { name: "Nanyang Junior College", type: "tertiary" },
-      { name: "National Junior College", type: "tertiary" },
-      { name: "Raffles Institution (Tertiary)", type: "tertiary" },
-      { name: "Raffles Junior College", type: "tertiary" },
-      { name: "Saint Andrew's Junior College", type: "tertiary" },
-      { name: "St. Joseph's Institution, Singapore", type: "tertiary" },
-      { name: "Serangoon Junior College", type: "tertiary" },
-      { name: "Tampines Junior College", type: "tertiary" },
-      { name: "Tampines Meridian Junior College", type: "tertiary" },
-      { name: "Temasek Junior College", type: "tertiary" },
-      { name: "Victoria Junior College", type: "tertiary" },
-      { name: "Yishun Innova Junior College", type: "tertiary" },
-      { name: "Singapore Polytechnic", type: "tertiary" },
-      { name: "Temasek Polytechnic", type: "tertiary" },
-      { name: "Nanyang Polytechnic", type: "tertiary" },
-      { name: "Ngee Ann Polytechnic", type: "tertiary" },
-      { name: "Republic Polytechnic", type: "tertiary" },
-      { name: "ITE College Central", type: "tertiary" },
-      { name: "ITE College East", type: "tertiary" },
-      { name: "ITE College West", type: "tertiary" },
+      { name: "Anderson Junior College", type: "Pre-University" },
+      { name: "Anderson Serangoon Junior College", type: "Pre-University" },
+      { name: "Anglo-Chinese Junior College", type: "Pre-University" },
+      { name: "Catholic Junior College", type: "Pre-University" },
+      { name: "Dunman High School (Pre-University)", type: "Pre-University" },
+      { name: "Eunoia Junior College", type: "Pre-University" },
+      {
+        name: "Hwa Chong Institution (Pre-University)",
+        type: "Pre-University",
+      },
+      { name: "Hwa Chong Junior College", type: "Pre-University" },
+      { name: "Innova Junior College", type: "Pre-University" },
+      { name: "Junior college (Singapore)", type: "Pre-University" },
+      { name: "Jurong Junior College", type: "Pre-University" },
+      { name: "Jurong Pioneer Junior College", type: "Pre-University" },
+      { name: "Meridian Junior College", type: "Pre-University" },
+      { name: "Nanyang Junior College", type: "Pre-University" },
+      { name: "National Junior College", type: "Pre-University" },
+      { name: "Raffles Institution (Pre-University)", type: "Pre-University" },
+      { name: "Raffles Junior College", type: "Pre-University" },
+      { name: "Saint Andrew's Junior College", type: "Pre-University" },
+      { name: "St. Joseph's Institution, Singapore", type: "Pre-University" },
+      { name: "Serangoon Junior College", type: "Pre-University" },
+      { name: "Tampines Junior College", type: "Pre-University" },
+      { name: "Tampines Meridian Junior College", type: "Pre-University" },
+      { name: "Temasek Junior College", type: "Pre-University" },
+      { name: "Victoria Junior College", type: "Pre-University" },
+      { name: "Yishun Innova Junior College", type: "Pre-University" },
+      { name: "Singapore Polytechnic", type: "Pre-University" },
+      { name: "Temasek Polytechnic", type: "Pre-University" },
+      { name: "Nanyang Polytechnic", type: "Pre-University" },
+      { name: "Ngee Ann Polytechnic", type: "Pre-University" },
+      { name: "Republic Polytechnic", type: "Pre-University" },
+      { name: "ITE College Central", type: "Pre-University" },
+      { name: "ITE College East", type: "Pre-University" },
+      { name: "ITE College West", type: "Pre-University" },
       { name: "Admiralty Secondary School", type: "secondary" },
       { name: "Ahmad Ibrahim Secondary School", type: "secondary" },
       { name: "Anderson Secondary School", type: "secondary" },
@@ -585,6 +588,71 @@ async function main() {
       },
     ],
     skipDuplicates: true, // avoid errors on rerun
+  });
+
+  await prisma.user.createMany({
+    data: [
+      {
+        id: 1001,
+        email: "alice@example.com",
+        username: "alice",
+        passwordHash: "hashed_pw1",
+        profilePicture:
+          "https://api.dicebear.com/9.x/micah/svg?seed=552676&scale=100&radius=50&backgroundColor=ebebec&mouth=laughing,smile",
+      },
+      {
+        id: 1002,
+        email: "bob@example.com",
+        username: "bob",
+        passwordHash: "hashed_pw2",
+        profilePicture:
+          "https://api.dicebear.com/9.x/micah/svg?seed=918885&scale=100&radius=50&backgroundColor=ebebec&mouth=laughing,smile",
+      },
+      {
+        id: 1003,
+        email: "charlie@example.com",
+        username: "charlie",
+        passwordHash: "hashed_pw3",
+        profilePicture:
+          "https://api.dicebear.com/9.x/micah/svg?seed=315982&scale=100&radius=50&backgroundColor=ebebec&mouth=laughing,smile",
+      },
+    ],
+    skipDuplicates: true,
+  });
+
+  // Create top-level comments for postId 1
+  await prisma.comment.create({
+    data: {
+      id: 2001,
+      userId: 1001,
+      postId: 1,
+      commentText: "This is super helpful, thanks!",
+      upvoteCount: 5,
+      createdAt: new Date("2024-10-01T10:30:00.000Z"),
+    },
+  });
+
+  await prisma.comment.create({
+    data: {
+      id: 2002,
+      userId: 1002,
+      postId: 1,
+      commentText: "Can anyone explain slide 12?",
+      upvoteCount: 2,
+      createdAt: new Date("2024-10-01T11:00:00.000Z"),
+    },
+  });
+
+  // Reply to the second comment
+  await prisma.comment.create({
+    data: {
+      userId: 1003,
+      postId: 1,
+      parentCommentId: 2002,
+      commentText: "It’s about dynamic programming!",
+      upvoteCount: 1,
+      createdAt: new Date("2024-10-01T11:15:00.000Z"),
+    },
   });
 }
 

@@ -18,14 +18,13 @@ function DocumentViewer({ postId }: Props) {
   useEffect(() => {
     async function fetchPresignedUrl() {
       try {
-        const res = await fetch(`/api/getPost/${postId}`);
+        const res = await fetch(`/api/posts/getPostS3File/${postId}`);
         if (!res.ok) throw new Error("Failed to fetch");
-
         const data = await res.json();
         setDocs([{ uri: data.url, fileType: data.fileType }]);
       } catch (err) {
         console.error(err);
-        setError("Unable to load document.");
+        setError("Unable to load document");
       }
     }
 
@@ -40,6 +39,13 @@ function DocumentViewer({ postId }: Props) {
       documents={docs}
       pluginRenderers={DocViewerRenderers}
       theme={{ primary: "#f1f5f9" }}
+      config={{
+        header: {
+          disableHeader: true,
+          disableFileName: true,
+          retainURLParams: false,
+        },
+      }}
     />
   );
 }

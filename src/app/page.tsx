@@ -3,19 +3,20 @@ import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import FilterSheet from "@/components/FilterSheet";
 import { TypeAnimation } from "react-type-animation";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { ContributeDrawerDialog } from "@/components/ContributeDrawerDialog";
+import { FolderPlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 type Post = {
@@ -82,7 +83,7 @@ export default function Home() {
     });
 
     try {
-      const res = await fetch(`/api/getPosts?${params.toString()}`);
+      const res = await fetch(`/api/posts/getPosts?${params.toString()}`);
       const data = await res.json();
       setDocuments(data.posts);
       setDocumentCount(data.totalCount);
@@ -167,7 +168,13 @@ export default function Home() {
               {documents.length} {documents.length === 1 ? "result" : "results"}
             </h3>
             <div className="flex gap-2">
-              <ContributeDrawerDialog fetchDocument={fetchDocuments} />
+              <Link href="/contribute">
+                <Button>
+                  <FolderPlus />
+                  <span className="hidden sm:inline">Contribute</span>
+                </Button>
+              </Link>
+              {/* <ContributeDrawerDialog fetchDocument={fetchDocuments} /> */}
               <SortSelect selectedValue={sortBy} setSelectedValue={setSortBy} />
             </div>
           </div>
@@ -244,7 +251,18 @@ export default function Home() {
                 : "hidden"
             }`}
           >
-            <iframe src="https://lottie.host/embed/712494ef-bec7-4086-99a2-46b434be807a/7Wp7qom6dl.lottie" />
+            {/* <iframe
+              src="https://lottie.host/embed/712494ef-bec7-4086-99a2-46b434be807a/7Wp7qom6dl.lottie"
+              style={{ background: "transparent" }}
+            /> */}
+            <div className="h-[200px]">
+              <DotLottieReact
+                src="https://lottie.host/f5c73039-3b1a-4b09-9ffe-c6c0acd128f3/qfF0Udo0ac.lottie"
+                loop
+                autoplay
+              />
+            </div>
+
             <span className="">No matching materials found</span>
             <span className="text-muted-foreground mt-1">
               Try using general keywords or check your spelling

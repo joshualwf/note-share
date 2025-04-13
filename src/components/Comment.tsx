@@ -1,32 +1,102 @@
 "use client";
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { ThumbsUp, ChevronDown, ChevronUp } from "lucide-react";
+import { ThumbsUp, ChevronDown, ChevronUp, SendHorizontal } from "lucide-react";
 import { Button } from "./ui/button";
 import { getRelativeTime } from "@/app/utils/utils";
-import { CommentProps } from "@/app/types/comment";
+import { CommentType } from "@/app/types/comment";
+import { Input } from "./ui/input";
+import { useToast } from "@/hooks/use-toast";
+
+type Props = CommentType & {
+  postId: number;
+  topLevelCommentId: number;
+  fetchComments: () => void;
+};
 
 function Comment({
+  commentId,
   username,
-  profilePic = "https://github.com/shadcn.png",
-  time,
+  profilePicture = "https://github.com/shadcn.png",
+  createdAt,
   text,
-  likeCount = 0,
+  upvoteCount = 0,
   replies = [],
   isReply = false,
-}: CommentProps) {
+  postId,
+  topLevelCommentId,
+  fetchComments,
+}: Props) {
   const [showReplies, setShowReplies] = useState(false);
+  const [showReplyInput, setShowReplyInput] = useState(false);
+  const [replyText, setReplyText] = useState(`@${username} `);
+
+  const { toast } = useToast();
+
+  const handleReplySubmit = async () => {
+    if (!replyText.trim()) return;
+    try {
+      const res = await fetch(`/api/comments/postComment/${postId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: replyText.trim(),
+          parentCommentId: topLevelCommentId,
+        }),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const result = await res.json();
+        toast({
+          title: result.message || "Failed to post reply",
+        });
+        return;
+      }
+      setReplyText(`@${username} `);
+      setShowReplyInput(false);
+      toast({
+        title: "Replied successfully!",
+      });
+      fetchComments();
+    } catch (err) {
+      console.error("Error posting reply:", err);
+    }
+  };
+
+  const handleToggleUpvote = async () => {
+    try {
+      const res = await fetch(`/api/comments/postCommentUpvote/${commentId}`, {
+        method: "POST",
+        credentials: "include",
+      });
+      console.log("A1");
+      const result = await res.json();
+      if (!res.ok) {
+        console.log("A2");
+        toast({ title: result.message || "Failed to toggle upvote" });
+        return;
+      }
+      console.log("A3");
+      fetchComments(); // refresh the comment list
+    } catch (err) {
+      console.error("Error toggling upvote:", err);
+      toast({ title: "Something went wrong while upvoting" });
+    }
+  };
 
   return (
     <div className="flex gap-2">
       <Avatar className={isReply ? "w-6 h-6" : "w-10 h-10"}>
-        <AvatarImage src={profilePic} />
+        <AvatarImage src={profilePicture} />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <div className="flex flex-col items-start">
         <div className="flex flex-row gap-1">
           <span className="font-bold text-xs">@{username}</span>
-          <span className="text-xs font-light">{getRelativeTime(time)}</span>
+          <span className="text-xs font-light">
+            {getRelativeTime(createdAt)}
+          </span>
         </div>
         <span className="text-sm mt-1">{text}</span>
         <div className="flex items-center gap-2">
@@ -34,18 +104,38 @@ function Comment({
             <Button
               variant="ghost"
               className="px-1 py-0 border rounded-2xl border-transparent hover:bg-accent"
+              onClick={handleToggleUpvote}
             >
               <ThumbsUp className="w-4 h-4" />
             </Button>
-            {likeCount > 0 && <span className="text-xs">{likeCount}</span>}
+            {upvoteCount > 0 && <span className="text-xs">{upvoteCount}</span>}
           </div>
           <Button
             variant="ghost"
             className="px-1 py-0 border rounded-2xl border-transparent hover:bg-accent"
+            onClick={() => setShowReplyInput((prev) => !prev)}
           >
             <span className="text-xs font-bold">Reply</span>
           </Button>
         </div>
+        {showReplyInput && (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleReplySubmit();
+            }}
+            className="flex gap-2 mb-3 items-center mt-1"
+          >
+            <Input
+              placeholder="Write a reply..."
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+            />
+            <Button type="submit">
+              <SendHorizontal />
+            </Button>
+          </form>
+        )}
 
         {replies.length > 0 && (
           <>
@@ -67,7 +157,14 @@ function Comment({
             {showReplies && (
               <div className="mt-2 pl-4 border-l border-accent">
                 {replies.map((reply, index) => (
-                  <Comment key={index} {...reply} isReply />
+                  <Comment
+                    key={index}
+                    {...reply}
+                    isReply
+                    postId={postId}
+                    topLevelCommentId={topLevelCommentId}
+                    fetchComments={fetchComments}
+                  />
                 ))}
               </div>
             )}

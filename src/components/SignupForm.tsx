@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "./ui/card";
@@ -34,6 +34,8 @@ const SignupForm = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { fetchUser } = useUser();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,13 +55,13 @@ const SignupForm = ({
       const result = await res.json();
       if (res.ok) {
         await fetchUser();
-        router.push("/");
+        router.push(redirectTo);
       } else {
         setError(result.message || "Signup unsuccessful!");
         setLoading(false);
       }
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      setError("An error occurred, please try again");
       setLoading(false);
     }
   };
@@ -99,7 +101,9 @@ const SignupForm = ({
                 </div>
                 {error && (
                   <div className="flex items-center gap-1">
-                    <CircleAlert size="20px" color="#ef4444" />
+                    <div>
+                      <CircleAlert size="20px" color="#ef4444" />
+                    </div>
                     <span className="text-center text-sm text-red-500">
                       {error}
                     </span>
@@ -112,7 +116,12 @@ const SignupForm = ({
                 >
                   {loading ? <LoadingSpinner /> : signupText}
                 </Button>
-                <Button type="button" variant="outline" className="w-full" onClick={() => window.location.href = "/api/oauth/google"}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => (window.location.href = "/api/oauth/google")}
+                >
                   <FcGoogle className="mr-2 size-5" />
                   {googleText}
                 </Button>
@@ -120,7 +129,10 @@ const SignupForm = ({
             </form>
             <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
               <p>{loginText}</p>
-              <a href={loginUrl} className="font-medium text-primary">
+              <a
+                href={`${loginUrl}?redirect=${encodeURIComponent(redirectTo)}`}
+                className="font-medium text-primary"
+              >
                 Login
               </a>
             </div>

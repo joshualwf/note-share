@@ -30,13 +30,13 @@ function AddSchoolDialog({ fetchSchools }: { fetchSchools?: () => void }) {
     setError("");
     setLoading(true);
     if (!addSchool || !addSchoolType) {
-      setError("Please fill out all fields before submitting.");
+      setError("Please fill out all fields before submitting");
       setLoading(false);
       return;
     }
 
     const formData = new FormData();
-    formData.append("name", addSchool);
+    formData.append("name", addSchool.trim());
     formData.append("type", addSchoolType || "");
 
     const res = await fetch("/api/addSchool", {
@@ -59,7 +59,7 @@ function AddSchoolDialog({ fetchSchools }: { fetchSchools?: () => void }) {
       if (errorStatus == 409) {
         setError("This school already exists!");
       } else {
-        setError("Something went wrong. Please try again.");
+        setError("Something went wrong, please try again");
       }
     }
     setLoading(false);
@@ -86,7 +86,7 @@ function AddSchoolDialog({ fetchSchools }: { fetchSchools?: () => void }) {
           <Input
             value={addSchool ?? ""}
             onChange={(e) => setAddSchool(e.target.value)}
-            placeholder="e.g. Hogwarts School of Witchcraft"
+            placeholder="eg: Hogwarts School of Witchcraft"
           />
         </div>
 
@@ -102,7 +102,9 @@ function AddSchoolDialog({ fetchSchools }: { fetchSchools?: () => void }) {
         </div>
         {error && (
           <div className="flex items-center gap-1">
-            <CircleAlert size="20px" color="#ef4444" />
+            <div>
+              <CircleAlert size="20px" color="#ef4444" />
+            </div>
             <span className="text-center text-sm text-red-500">{error}</span>
           </div>
         )}

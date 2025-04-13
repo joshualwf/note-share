@@ -94,6 +94,8 @@ function FilterSheet({
     if (schoolFilter) {
       fetchCourses(schoolFilter);
     }
+
+    setCourseFilter(null);
   }, [schoolFilter]);
 
   const getUpdatedResourceTypes = (prev: string[], type: string): string[] => {
@@ -186,7 +188,12 @@ function FilterSheet({
                   selectedValue={courseFilter}
                   setSelectedValue={setCourseFilter}
                   data={course}
-                  placeholder="Select course..."
+                  placeholder={
+                    schoolFilter
+                      ? "Select course..."
+                      : "Select a school first..."
+                  }
+                  disabled={!schoolFilter}
                   setCourseCode={setCourseCodeFilter}
                   setCourseName={setCourseNameFilter}
                 />

@@ -4,13 +4,18 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import styles from "./document.module.css";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { SendHorizontal } from "lucide-react";
-import Comment from "@/components/Comment";
-import { mockComments } from "@/app/constants/mockData";
 import DocumentViewer from "@/components/DocumentViewer";
+import CommentSection from "@/components/CommentSection";
+import PostUpvote from "@/components/PostUpvote";
+import {
+  BookOpen,
+  Clock,
+  GraduationCap,
+  School,
+  ThumbsDown,
+} from "lucide-react";
+import { getRelativeTime } from "@/app/utils/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type Props = {
   params: { id: string };
@@ -20,13 +25,65 @@ type Props = {
 async function DocumentPage({ params, searchParams }: Props) {
   const { title } = await searchParams;
   const { id } = await params;
+  const postIdNum = Number(id);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/getPostDetails/${id}`,
+    {
+      method: "GET",
+      cache: "no-store", // ensures SSR freshness
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to load post data");
+  }
+
+  const post = await res.json();
+  const {
+    description,
+    schoolName,
+    courseCode,
+    courseName,
+    upvoteCount,
+    createdAt,
+    user,
+  } = post;
+  const { username, profilePicture } = user;
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full w-full">
       <ResizablePanel
         defaultSize={75}
-        className={`h-full w-full !overflow-auto ${styles.scrollTransparent}`}
+        className={`h-full w-full !overflow-auto scroll-transparent`}
       >
-        <h1>this is the title: {title}</h1>
+        <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px] bg-accent items-center justify-between">
+          <span className="font-semibold">{description}</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={profilePicture} />
+              </Avatar>
+              <span className="font-bold">@{username}</span>
+            </div>
+
+            {/* do not remove this for now */}
+            {/* <div className="flex items-center gap-1">
+              <School className="w-4 h-4" />
+              <span>{schoolName}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <BookOpen className="w-4 h-4" />
+              <span>
+                {courseName} - {courseCode}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              <span>{getRelativeTime(createdAt)}</span>
+            </div> */}
+
+            <PostUpvote postId={postIdNum} initialUpvoteCount={5} />
+          </div>
+        </div>
         <DocumentViewer postId={id} />
       </ResizablePanel>
       <ResizableHandle withHandle className="shadow-2xl" />
@@ -35,24 +92,7 @@ async function DocumentPage({ params, searchParams }: Props) {
         minSize={20}
         className="h-full w-full flex flex-col"
       >
-        <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px]">
-          <span className="font-semibold">Comments</span>
-        </div>
-        <div className="flex flex-col grow w-full pb-6 justify-between overflow-hidden">
-          <div
-            className={`flex flex-col w-full overflow-y-auto px-4 pt-4 gap-2 ${styles.scrollTransparent}`}
-          >
-            {mockComments.map((comment, index) => (
-              <Comment key={index} {...comment} />
-            ))}
-          </div>
-          <div className="flex gap-2 border border-color-accent rounded-2xl p-4 shadow-lg mx-4">
-            <Input className="grow" placeholder="Ask anything"></Input>
-            <Button>
-              <SendHorizontal />
-            </Button>
-          </div>
-        </div>
+        <CommentSection postId={postIdNum} />
       </ResizablePanel>
     </ResizablePanelGroup>
   );

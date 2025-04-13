@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CircleAlert } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
@@ -14,6 +14,8 @@ export default function Page() {
   const [error, setError] = useState("");
   const router = useRouter();
   const { fetchUser } = useUser();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -31,20 +33,20 @@ export default function Page() {
       const res = await fetch("/api/onboarding/submitForm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sanitizedUsername }),
+        body: JSON.stringify({ username: sanitizedUsername }),
         credentials: "include",
       });
       const result = await res.json();
 
       if (res.ok) {
         await fetchUser();
-        router.push("/");
+        router.push(redirectTo);
       } else {
         setError(result.message || "Invalid username");
         setLoading(false);
       }
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      setError("An error occurred, please try again");
       setLoading(false);
     }
   };
@@ -77,7 +79,9 @@ export default function Page() {
                     />
                     {error && (
                       <div className="flex items-center gap-1">
-                        <CircleAlert size="20px" color="#ef4444" />
+                        <div>
+                          <CircleAlert size="20px" color="#ef4444" />
+                        </div>
                         <span className="text-center text-sm text-red-500">
                           {error}
                         </span>
