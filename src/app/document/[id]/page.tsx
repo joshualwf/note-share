@@ -81,7 +81,10 @@ async function DocumentPage({ params, searchParams }: Props) {
               <span>{getRelativeTime(createdAt)}</span>
             </div> */}
 
-            <PostUpvote postId={postIdNum} initialUpvoteCount={5} />
+            <PostUpvote
+              postId={postIdNum}
+              initialUpvoteCount={Number(upvoteCount)}
+            />
           </div>
         </div>
         <DocumentViewer postId={id} />
