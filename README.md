@@ -37,7 +37,7 @@ docker-compose up --build
   ```bash
   npx prisma migrate deploy
   ```
-  💡 Note: In order to generate new migration files after editing `prisma/schema.prisma`, run `npx migrate dev`
+  💡 Note: In order to generate new migration files after editing `prisma/schema.prisma`, run `npx prisma migrate dev --name <name of migration>` (insert the name of migration)
 
 **Seed the database with dummy data according to `prisma/seed.js`:**
 

@@ -1,8 +1,9 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
+    "onboarding_completed" BOOLEAN NOT NULL DEFAULT false,
     "email" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
+    "username" TEXT,
     "password_hash" TEXT NOT NULL,
     "profile_picture" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -17,7 +18,9 @@ CREATE TABLE "Post" (
     "user_id" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
     "school_name" TEXT NOT NULL,
-    "course_code" TEXT NOT NULL,
+    "course_code" TEXT,
+    "course_name" TEXT NOT NULL,
+    "file_type" TEXT NOT NULL,
     "file_key" TEXT NOT NULL,
     "post_type" TEXT NOT NULL,
     "upvote_count" INTEGER NOT NULL DEFAULT 0,
@@ -39,7 +42,8 @@ CREATE TABLE "School" (
 CREATE TABLE "Course" (
     "id" SERIAL NOT NULL,
     "school_name" TEXT NOT NULL,
-    "course_code" TEXT NOT NULL,
+    "course_name" TEXT,
+    "course_code" TEXT,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
 );
@@ -92,9 +96,6 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Course_school_name_course_code_key" ON "Course"("school_name", "course_code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SavedCourse_user_id_course_id_key" ON "SavedCourse"("user_id", "course_id");
