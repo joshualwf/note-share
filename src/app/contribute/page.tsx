@@ -297,25 +297,23 @@ export default function ContributeDrawerDialog() {
                   <div className="grid gap-2">
                     <Label>Type of document</Label>
                     <div className="flex flex-row gap-2 flex-wrap">
-                      {restored && (
-                        <Select
-                          onValueChange={(value) =>
-                            setContributeResourceType(value)
-                          }
-                          value={contributeResourceType}
-                        >
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select type..." />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {RESOURCE_TYPES.map((type) => (
-                              <SelectItem key={type} value={type}>
-                                {type}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
+                      <Select
+                        onValueChange={(value) =>
+                          setContributeResourceType(value)
+                        }
+                        value={contributeResourceType}
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Select type..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {RESOURCE_TYPES.map((type) => (
+                            <SelectItem key={type} value={type}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                   {error && (
