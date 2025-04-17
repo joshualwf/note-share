@@ -159,7 +159,7 @@ function Comment({
                 {replies.map((reply, index) => (
                   <Comment
                     key={index}
-                    {...reply}
+                    {...(reply as unknown as CommentType)}
                     isReply
                     postId={postId}
                     topLevelCommentId={topLevelCommentId}

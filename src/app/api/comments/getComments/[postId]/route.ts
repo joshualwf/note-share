@@ -1,12 +1,9 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { postId: string } }
-) {
-  const { postId } = await params;
-  const postIdNum = Number(postId);
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const postIdNum = Number(searchParams.get("postId"));
 
   if (isNaN(postIdNum)) {
     return new Response("Invalid post ID", { status: 400 });

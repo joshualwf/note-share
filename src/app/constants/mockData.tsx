@@ -1,4 +1,3 @@
-import { CommentProps } from "../types/comment";
 import { RESOURCE_TYPES } from "./constants";
 
 // MOCK RESPONSES FROM BACKEND APIs
@@ -130,7 +129,7 @@ export const mockDocuments: Post[] = [
   },
 ];
 
-export const mockComments: CommentProps[] = [
+export const mockComments: any[] = [
   {
     username: "code_wizard",
     time: new Date("2025-03-15"),

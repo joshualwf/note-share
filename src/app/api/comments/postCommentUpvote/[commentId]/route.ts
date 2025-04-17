@@ -2,13 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getUserFromCookie } from "@/lib/auth";
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { commentId: string } }
-) {
-  const { commentId } = await params;
-  const commentIdNum = Number(commentId);
-  if (!commentId || isNaN(commentIdNum)) {
+export async function POST(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const commentIdNum = Number(searchParams.get("commentId"));
+  if (isNaN(commentIdNum)) {
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 400 }

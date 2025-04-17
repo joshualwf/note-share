@@ -17,14 +17,15 @@ import {
 import { getRelativeTime } from "@/app/utils/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-type Props = {
-  params: { id: string };
-  searchParams: { title?: string; fileKey?: string };
-};
+type Params = Promise<{ id: string }>;
+type SearchParams = Promise<{ title?: string; fileKey?: string }>;
 
-async function DocumentPage({ params, searchParams }: Props) {
-  const { title } = await searchParams;
-  const { id } = await params;
+async function DocumentPage(props: {
+  params: Params;
+  searchParams: SearchParams;
+}) {
+  const { title } = await props.searchParams;
+  const { id } = await props.params;
   const postIdNum = Number(id);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/getPostDetails/${id}`,

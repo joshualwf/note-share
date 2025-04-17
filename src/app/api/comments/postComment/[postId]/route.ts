@@ -3,12 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { decrypt, getUserFromCookie } from "@/lib/auth";
 import { cookies } from "next/headers";
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { postId: string } }
-) {
-  const { postId } = await params;
-  const postIdNum = Number(postId);
+export async function POST(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const postIdNum = Number(searchParams.get("postId"));
   if (isNaN(postIdNum)) {
     return NextResponse.json({ message: "Invalid post id" }, { status: 400 });
   }

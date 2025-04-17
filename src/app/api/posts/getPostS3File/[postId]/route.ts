@@ -4,12 +4,9 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { postId: string } }
-) {
-  const { postId } = await params;
-  const postIdNum = Number(postId);
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const postIdNum = Number(searchParams.get("postId"));
 
   if (isNaN(postIdNum)) {
     return new Response("Invalid post ID", { status: 400 });

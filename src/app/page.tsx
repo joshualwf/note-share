@@ -3,7 +3,7 @@ import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
 import { SortSelect } from "@/components/SortSelect";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import FilterSheet from "@/components/FilterSheet";
 import { TypeAnimation } from "react-type-animation";
 import {
@@ -109,7 +109,7 @@ export default function Home() {
   const totalPages = Math.ceil(documentCount / itemsPerPage);
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <div className="w-full flex flex-col fade-in">
         <div className="w-full flex flex-col pt-8 pb-5 bg-accent px-4">
           <div>
@@ -270,6 +270,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </>
+    </Suspense>
   );
 }
