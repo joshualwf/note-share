@@ -11,7 +11,6 @@ export type SessionPayload = {
   expiresAt: Date;
 };
 
-
 export async function getUserFromCookie() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session")?.value;
@@ -56,7 +55,7 @@ export async function decrypt(sessionToken: string | undefined = "") {
       expiresAt: new Date(payload.expiresAt as string),
     };
   } catch (error) {
-    console.error("Invalid or expired session token");
+    // console.error("Invalid or expired session token");
     return null;
   }
 }
