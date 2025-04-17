@@ -39,6 +39,7 @@ export function Combobox({
   setCourseCode,
   setCourseName,
 }: ComboboxProps) {
+  console.log("Combobox data:", data);
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -77,37 +78,38 @@ export function Combobox({
           <CommandList>
             <CommandEmpty>{emptyState ?? "Not found..."}</CommandEmpty>
             <CommandGroup>
-              {data.map((item, index) => {
-                const combinedValue =
-                  item.value && item.label
-                    ? `${item.value} - ${item.label}`
-                    : item.value || item.label || "";
+              {data.length > 0 &&
+                data.map((item, index) => {
+                  const combinedValue =
+                    item.value && item.label
+                      ? `${item.value} - ${item.label}`
+                      : item.value || item.label || "";
 
-                return (
-                  <CommandItem
-                    key={`${item.value}-${item.label}-${index}`}
-                    value={combinedValue}
-                    onSelect={(currentValue) => {
-                      setSelectedValue(
-                        currentValue === selectedValue ? null : currentValue
-                      );
-                      setOpen(false);
-                      if (setCourseCode) setCourseCode(item.value);
-                      if (setCourseName) setCourseName(item.label);
-                    }}
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        selectedValue === combinedValue
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                    />
-                    {combinedValue}
-                  </CommandItem>
-                );
-              })}
+                  return (
+                    <CommandItem
+                      key={`${item.value}-${item.label}-${index}`}
+                      value={combinedValue}
+                      onSelect={(currentValue) => {
+                        setSelectedValue(
+                          currentValue === selectedValue ? null : currentValue
+                        );
+                        setOpen(false);
+                        if (setCourseCode) setCourseCode(item.value);
+                        if (setCourseName) setCourseName(item.label);
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          selectedValue === combinedValue
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      {combinedValue}
+                    </CommandItem>
+                  );
+                })}
             </CommandGroup>
           </CommandList>
         </Command>

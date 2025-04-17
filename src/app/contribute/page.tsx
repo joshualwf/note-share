@@ -297,8 +297,7 @@ export default function ContributeDrawerDialog() {
                   <div className="grid gap-2">
                     <Label>Type of document</Label>
                     <div className="flex flex-row gap-2 flex-wrap">
-                      {(restored ||
-                        !sessionStorage.getItem("contribute-form")) && (
+                      {restored && (
                         <Select
                           onValueChange={(value) =>
                             setContributeResourceType(value)
