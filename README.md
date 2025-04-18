@@ -16,21 +16,21 @@ npm install
 
 ### Database Setup
 
-**Build docker container**:
+**Build docker container**
 
 ```bash
 docker-compose up --build
 ```
 
-**Set up db tables according to the prisma schema**
-This directly applies your current Prisma schema to the DB according to `prisma/schema.prisma`:
+**Set up db tables according to the prisma schema**  
+This directly applies your current Prisma schema to the DB according to `prisma/schema.prisma`
 
 ```bash
 npx prisma db push
 npx prisma generate # if you need to regenerate Prisma client functions
 ```
 
-**Seed the database with dummy data according to `prisma/seed.js`:**
+**Seed the database with dummy data according to `prisma/seed.js`**
 
 ```bash
 npx prisma db seed
