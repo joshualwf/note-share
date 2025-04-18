@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 "use client";
 import { InputMainSearch } from "@/components/InputMainSearch";
 import { DocumentCard } from "@/components/DocumentCard";
@@ -91,8 +92,14 @@ export default function Home() {
   const totalPages = Math.ceil(
     documentCount / itemsPerPage
   );
+=======
+import HomePage from "@/components/HomePage";
+import { Suspense } from "react";
+>>>>>>> Stashed changes
 
+export default function Page() {
   return (
+<<<<<<< Updated upstream
     <>
       <div className="w-full flex flex-col fade-in">
         <div className="w-full flex flex-col pt-8 pb-5 bg-accent px-4">
@@ -216,5 +223,10 @@ export default function Home() {
         </div>
       </div>
     </>
+=======
+    <Suspense fallback={<>Loading...</>}>
+        <HomePage />
+    </Suspense>
+>>>>>>> Stashed changes
   );
 }

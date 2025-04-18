@@ -1,45 +1,52 @@
-<<<<<<< Updated upstream
 "use client";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CircleAlert } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { useUser } from "../UserContext";
-export default function Page() {
+import { useUser } from "../app/UserContext";
+export default function OnboardingForm() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
   const { fetchUser } = useUser();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    const sanitizedUsername = username.trim().toLowerCase();
+    const usernameRegex = /^[a-z0-9_]{1,20}$/;
+    if (!usernameRegex.test(sanitizedUsername)) {
+      setError(
+        "Username can only contain letters, numbers, or underscores (max 20 characters)."
+      );
+      setLoading(false);
+      return;
+    }
     try {
       const res = await fetch("/api/onboarding/submitForm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ username: sanitizedUsername }),
         credentials: "include",
       });
-      console.log("at handle submit");
-      console.log("result", res);
       const result = await res.json();
 
       if (res.ok) {
         await fetchUser();
-        router.push("/");
+        router.push(redirectTo);
       } else {
         setError(result.message || "Invalid username");
         setLoading(false);
       }
     } catch (error) {
-      console.log("error", error);
-      setError("An error occurred. Please try again.");
+      setError("An error occurred, please try again");
       setLoading(false);
     }
   };
@@ -72,7 +79,9 @@ export default function Page() {
                     />
                     {error && (
                       <div className="flex items-center gap-1">
-                        <CircleAlert size="20px" color="#ef4444" />
+                        <div>
+                          <CircleAlert size="20px" color="#ef4444" />
+                        </div>
                         <span className="text-center text-sm text-red-500">
                           {error}
                         </span>
@@ -91,18 +100,6 @@ export default function Page() {
             </div>
           </div>
         </section>
-=======
-import OnboardingForm  from "@/components/OnboardingForm";
-import {Suspense} from "react";
-
-export default function Page() {
-  return (
-    <div className="flex min-h-svh w-full justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <Suspense fallback={<>Loading...</>}>
-          <OnboardingForm />
-        </Suspense>
->>>>>>> Stashed changes
       </div>
     </div>
   );

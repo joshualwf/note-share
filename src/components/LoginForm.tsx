@@ -109,13 +109,26 @@ const LoginForm = ({
                       Remember me
                     </label>
                   </div>
+<<<<<<< Updated upstream
                   <a href="#" className="text-sm text-primary hover:underline">
+=======
+                  <a
+                    href="#"
+                    className="text-sm text-primary hover:underline"
+                  >
+>>>>>>> Stashed changes
                     Forgot password
                   </a>
                 </div>
                 {error && (
                   <div className="flex items-center gap-1">
+<<<<<<< Updated upstream
                     <CircleAlert size="20px" color="#ef4444" />
+=======
+                    <div>
+                      <CircleAlert size="20px" color="#ef4444" />
+                    </div>
+>>>>>>> Stashed changes
                     <span className="text-center text-sm text-red-500">
                       {error}
                     </span>
@@ -128,14 +141,32 @@ const LoginForm = ({
                 >
                   {loading ? <LoadingSpinner /> : loginText}
                 </Button>
+<<<<<<< Updated upstream
                 <Button type="button" variant="outline" className="w-full" onClick={() => window.location.href = "/api/oauth/google"}>
+=======
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => (window.location.href = "/api/oauth/google")}
+                >
+>>>>>>> Stashed changes
                   <FcGoogle className="mr-2 size-5" />
                   {googleText}
                 </Button>
               </div>
               <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
                 <p>{signupText}</p>
+<<<<<<< Updated upstream
                 <a href={signupUrl} className="font-medium text-primary">
+=======
+                <a
+                  href={`${signupUrl}?redirect=${encodeURIComponent(
+                    redirectTo
+                  )}`}
+                  className="font-medium text-primary"
+                >
+>>>>>>> Stashed changes
                   Sign up
                 </a>
               </div>

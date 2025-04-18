@@ -99,7 +99,13 @@ const SignupForm = ({
                 </div>
                 {error && (
                   <div className="flex items-center gap-1">
+<<<<<<< Updated upstream
                     <CircleAlert size="20px" color="#ef4444" />
+=======
+                    <div>
+                      <CircleAlert size="20px" color="#ef4444" />
+                    </div>
+>>>>>>> Stashed changes
                     <span className="text-center text-sm text-red-500">
                       {error}
                     </span>
@@ -112,7 +118,16 @@ const SignupForm = ({
                 >
                   {loading ? <LoadingSpinner /> : signupText}
                 </Button>
+<<<<<<< Updated upstream
                 <Button type="button" variant="outline" className="w-full" onClick={() => window.location.href = "/api/oauth/google"}>
+=======
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => (window.location.href = "/api/oauth/google")}
+                >
+>>>>>>> Stashed changes
                   <FcGoogle className="mr-2 size-5" />
                   {googleText}
                 </Button>
@@ -120,7 +135,16 @@ const SignupForm = ({
             </form>
             <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
               <p>{loginText}</p>
+<<<<<<< Updated upstream
               <a href={loginUrl} className="font-medium text-primary">
+=======
+              <a
+                href={`${loginUrl}?redirect=${encodeURIComponent(
+                  redirectTo
+                )}`}
+                className="font-medium text-primary"
+              >
+>>>>>>> Stashed changes
                 Login
               </a>
             </div>
