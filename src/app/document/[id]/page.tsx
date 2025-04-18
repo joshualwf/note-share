@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { getRelativeTime } from "@/app/utils/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Head from "next/head";
 
 type Params = Promise<{ id: string }>;
 type SearchParams = Promise<{ title?: string; fileKey?: string }>;
@@ -51,23 +52,32 @@ async function DocumentPage(props: {
   } = post;
   const { username, profilePicture } = user;
   return (
-    <ResizablePanelGroup direction="horizontal" className="h-full w-full">
-      <ResizablePanel
-        defaultSize={75}
-        className={`h-full w-full !overflow-auto scroll-transparent`}
-      >
-        <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px] bg-accent items-center justify-between">
-          <span className="font-semibold">{description}</span>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              <Avatar className="w-10 h-10">
-                <AvatarImage src={profilePicture} />
-              </Avatar>
-              <span className="font-bold">@{username}</span>
-            </div>
+    <>
+      <Head>
+        <title>{description}</title>
+        <meta
+          name="description"
+          content={`${description}, ${schoolName}, ${courseName}, ${courseCode}`}
+          key="desc"
+        />
+      </Head>
+      <ResizablePanelGroup direction="horizontal" className="h-full w-full">
+        <ResizablePanel
+          defaultSize={75}
+          className={`h-full w-full !overflow-auto scroll-transparent`}
+        >
+          <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px] bg-accent items-center justify-between">
+            <span className="font-semibold">{description}</span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <Avatar className="w-10 h-10">
+                  <AvatarImage src={profilePicture} />
+                </Avatar>
+                <span className="font-bold">@{username}</span>
+              </div>
 
-            {/* do not remove this for now */}
-            {/* <div className="flex items-center gap-1">
+              {/* do not remove this for now */}
+              {/* <div className="flex items-center gap-1">
               <School className="w-4 h-4" />
               <span>{schoolName}</span>
             </div>
@@ -82,23 +92,24 @@ async function DocumentPage(props: {
               <span>{getRelativeTime(createdAt)}</span>
             </div> */}
 
-            <PostUpvote
-              postId={postIdNum}
-              initialUpvoteCount={Number(upvoteCount)}
-            />
+              <PostUpvote
+                postId={postIdNum}
+                initialUpvoteCount={Number(upvoteCount)}
+              />
+            </div>
           </div>
-        </div>
-        <DocumentViewer postId={id} />
-      </ResizablePanel>
-      <ResizableHandle withHandle className="shadow-2xl" />
-      <ResizablePanel
-        defaultSize={25}
-        minSize={20}
-        className="h-full w-full flex flex-col"
-      >
-        <CommentSection postId={postIdNum} />
-      </ResizablePanel>
-    </ResizablePanelGroup>
+          <DocumentViewer postId={id} />
+        </ResizablePanel>
+        <ResizableHandle withHandle className="shadow-2xl" />
+        <ResizablePanel
+          defaultSize={25}
+          minSize={20}
+          className="h-full w-full flex flex-col"
+        >
+          <CommentSection postId={postIdNum} />
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </>
   );
 }
 
