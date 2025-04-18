@@ -70,14 +70,11 @@ function Comment({
         method: "POST",
         credentials: "include",
       });
-      console.log("A1");
       const result = await res.json();
       if (!res.ok) {
-        console.log("A2");
         toast({ title: result.message || "Failed to toggle upvote" });
         return;
       }
-      console.log("A3");
       fetchComments(); // refresh the comment list
     } catch (err) {
       console.error("Error toggling upvote:", err);

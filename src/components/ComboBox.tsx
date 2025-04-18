@@ -39,7 +39,6 @@ export function Combobox({
   setCourseCode,
   setCourseName,
 }: ComboboxProps) {
-  console.log("Combobox data:", data);
   const [open, setOpen] = React.useState(false);
 
   return (

@@ -19,7 +19,6 @@ export async function POST(req: NextRequest) {
 
     // Validation
     if (!username || typeof username !== "string") {
-      console.log("username", username);
       return NextResponse.json(
         { message: "Username is required" },
         { status: 400 }

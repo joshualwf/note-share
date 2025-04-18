@@ -14,7 +14,7 @@ export default async function sitemap() {
       priority: 1,
     }));
   } catch {
-    console.log("failed to get posts");
+    // failed to get posts
   }
 
   return [
