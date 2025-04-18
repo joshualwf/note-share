@@ -60,6 +60,15 @@ async function DocumentPage(props: {
           content={`${description}, ${schoolName}, ${courseName}, ${courseCode}`}
           key="desc"
         />
+        <meta property="og:title" content={description} />
+        <meta
+          property="og:description"
+          content={`${description}, ${schoolName}, ${courseName}, ${courseCode}`}
+        />
+        <meta
+          property="og:image"
+          content={`${process.env.NEXT_PUBLIC_BASE_URL}/icon9.png`}
+        />
       </Head>
       <ResizablePanelGroup direction="horizontal" className="h-full w-full">
         <ResizablePanel

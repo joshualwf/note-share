@@ -118,6 +118,15 @@ export default function Home() {
           content="Access free exam papers, notes, cheatsheets, tutorials, exam solutions, practice papers and discussions for University, Junior College, Polytechnic, Secondary and Primary schools!"
           key="desc"
         />
+        <meta property="og:title" content="Free Study materials" />
+        <meta
+          property="og:description"
+          content="Access free exam papers, notes, cheatsheets, tutorials, exam solutions, practice papers and discussions for University, Junior College, Polytechnic, Secondary and Primary schools!"
+        />
+        <meta
+          property="og:image"
+          content={`${process.env.NEXT_PUBLIC_BASE_URL}/icon9.png`}
+        />
       </Head>
       <Suspense fallback={<div>Loading...</div>}>
         <div className="w-full flex flex-col fade-in">
