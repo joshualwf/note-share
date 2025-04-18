@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -67,83 +67,79 @@ const SignupForm = ({
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <section className="pt-10 pb-32">
-        <div className="container">
-          <div className="flex flex-col gap-4">
-            <Card className="mx-auto w-full max-w-sm p-6">
-              <div className="mb-6 flex flex-col items-center">
-                <Image
-                  src="/icon9.png"
-                  width="60"
-                  height="60"
-                  alt="standing nerd"
+    <section className="pt-10 pb-32">
+      <div className="container">
+        <div className="flex flex-col gap-4">
+          <Card className="mx-auto w-full max-w-sm p-6">
+            <div className="mb-6 flex flex-col items-center">
+              <Image
+                src="/icon9.png"
+                width="60"
+                height="60"
+                alt="standing nerd"
+              />
+              <p className="mb-2 text-2xl font-bold">{heading}</p>
+              <p className="text-muted-foreground">{subheading}</p>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="grid gap-4">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                <p className="mb-2 text-2xl font-bold">{heading}</p>
-                <p className="text-muted-foreground">{subheading}</p>
-              </div>
-              <form onSubmit={handleSubmit}>
-                <div className="grid gap-4">
+                <div>
                   <Input
-                    type="email"
-                    placeholder="Enter your email"
+                    type="password"
+                    placeholder="Enter your password"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
-                  <div>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                  {error && (
-                    <div className="flex items-center gap-1">
-                      <div>
-                        <CircleAlert size="20px" color="#ef4444" />
-                      </div>
-                      <span className="text-center text-sm text-red-500">
-                        {error}
-                      </span>
-                    </div>
-                  )}
-                  <Button
-                    type="submit"
-                    className="mt-2 w-full"
-                    disabled={loading}
-                  >
-                    {loading ? <LoadingSpinner /> : signupText}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => (window.location.href = "/api/oauth/google")}
-                  >
-                    <FcGoogle className="mr-2 size-5" />
-                    {googleText}
-                  </Button>
                 </div>
-              </form>
-              <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
-                <p>{loginText}</p>
-                <a
-                  href={`${loginUrl}?redirect=${encodeURIComponent(
-                    redirectTo
-                  )}`}
-                  className="font-medium text-primary"
+                {error && (
+                  <div className="flex items-center gap-1">
+                    <div>
+                      <CircleAlert size="20px" color="#ef4444" />
+                    </div>
+                    <span className="text-center text-sm text-red-500">
+                      {error}
+                    </span>
+                  </div>
+                )}
+                <Button
+                  type="submit"
+                  className="mt-2 w-full"
+                  disabled={loading}
                 >
-                  Login
-                </a>
+                  {loading ? <LoadingSpinner /> : signupText}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => (window.location.href = "/api/oauth/google")}
+                >
+                  <FcGoogle className="mr-2 size-5" />
+                  {googleText}
+                </Button>
               </div>
-            </Card>
-          </div>
+            </form>
+            <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
+              <p>{loginText}</p>
+              <a
+                href={`${loginUrl}?redirect=${encodeURIComponent(redirectTo)}`}
+                className="font-medium text-primary"
+              >
+                Login
+              </a>
+            </div>
+          </Card>
         </div>
-      </section>
-    </Suspense>
+      </div>
+    </section>
   );
 };
 

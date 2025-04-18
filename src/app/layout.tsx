@@ -10,6 +10,7 @@ import { UserNav } from "@/components/UserNav";
 import { Toaster } from "@/components/ui/toaster";
 import Image from "next/image";
 import { UserProvider } from "./UserContext";
+import { Suspense } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -60,7 +61,7 @@ export default async function RootLayout({
               </div>
             </div>
             <div className="grow flex flex-col h-0 min-h-0 overflow-auto">
-              {children}
+              <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
             </div>
           </UserProvider>
         </ThemeProvider>
