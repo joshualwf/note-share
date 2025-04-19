@@ -80,7 +80,9 @@ const SignupForm = ({
       const result = await res.json();
       if (res.ok) {
         await fetchUser();
-        setDialogOpen ? setDialogOpen(false) : router.push(redirectTo || "/");
+        setDialogOpen
+          ? setDialogOpen(false)
+          : router.push(redirectTo || `${process.env.NEXT_PUBLIC_BASE_URL}`);
       } else {
         setError(result.message || "Signup unsuccessful!");
         setLoading(false);
