@@ -44,6 +44,7 @@ const SignupForm = ({
   const { fetchUser } = useUser();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect");
+  console.log("redirectTo", redirectTo);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
