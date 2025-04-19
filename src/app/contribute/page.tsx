@@ -29,8 +29,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { LoginSignupDialog } from "@/components/LoginSignupDialog";
+import { useUser } from "../UserContext";
 
 export default function ContributeDrawerDialog() {
+  const { fetchContributionStatus } = useUser();
   const formTitle = "Contribute";
   const formDescription = "Help others learn and succeed!";
 
@@ -169,11 +171,11 @@ export default function ContributeDrawerDialog() {
       body: formData,
     });
     if (res.ok) {
-      sessionStorage.removeItem("contribute-form");
       toast({
         title: "Thank you!",
         description: "File uploaded successfully 🤓",
       });
+      fetchContributionStatus();
       router.push("/");
     } else {
       const errorStatus = await res.status;
