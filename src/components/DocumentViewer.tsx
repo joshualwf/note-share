@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "@cyntler/react-doc-viewer/dist/index.css";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 type Props = {
   postId: string;
@@ -32,7 +33,12 @@ function DocumentViewer({ postId }: Props) {
   }, [postId]);
 
   if (error) return <p className="text-red-500">{error}</p>;
-  if (!docs) return <p>Loading document...</p>;
+  if (!docs)
+    return (
+      <div className="flex justify-center pt-4">
+        <LoadingSpinner />
+      </div>
+    );
 
   return (
     <DocViewer

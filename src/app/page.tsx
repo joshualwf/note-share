@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import Head from "next/head";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 type Post = {
   id: number;
@@ -81,6 +82,7 @@ export default function Home() {
       courseName: courseNameFilter || "",
       search: mainSearchQuery || "",
       sortBy,
+      limit: "5",
     });
 
     try {
@@ -183,7 +185,7 @@ export default function Home() {
         <div className="relative w-full flex flex-col gap-y-3">
           <div className="flex items-center justify-between p-4 text-xs sm:text-sm md:text-base">
             <h3 className="text-muted-foreground text-center text-l">
-              {documents.length} {documents.length === 1 ? "result" : "results"}
+              {documentCount} {documentCount === 1 ? "result" : "results"}
             </h3>
             <div className="flex gap-2">
               <Link href="/contribute">
@@ -261,6 +263,11 @@ export default function Home() {
                 </PaginationContent>
               </Pagination>
             </>
+          )}
+          {loading && (
+            <div className="flex flex-col items-center self-center">
+              <LoadingSpinner />
+            </div>
           )}
           <div
             className={`${

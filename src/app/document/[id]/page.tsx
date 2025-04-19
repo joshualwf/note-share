@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Head from "next/head";
 import DesktopCommentSection from "@/components/DesktopCommentSection";
 import MobileCommentSection from "@/components/MobileCommentSection";
+import ContributePrompt from "@/components/ContributePrompt";
 
 type Params = Promise<{ id: string }>;
 type SearchParams = Promise<{ title?: string; fileKey?: string }>;
@@ -72,13 +73,14 @@ async function DocumentPage(props: {
           content={`${process.env.NEXT_PUBLIC_BASE_URL}/icon9.png`}
         />
       </Head>
+      <ContributePrompt />
       <ResizablePanelGroup direction="horizontal" className="h-full w-full">
         <ResizablePanel
           defaultSize={75}
           className={`h-full w-full !overflow-auto scroll-transparent`}
         >
           <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px] bg-accent items-center justify-between">
-            <span className="font-semibold">{description}</span>
+            <span className="font-semibold break-all mr-2">{description}</span>
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
                 <Avatar className="w-10 h-10">

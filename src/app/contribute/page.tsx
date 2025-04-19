@@ -29,8 +29,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { LoginSignupDialog } from "@/components/LoginSignupDialog";
+import { useUser } from "../UserContext";
 
 export default function ContributeDrawerDialog() {
+  const { fetchContributionStatus } = useUser();
   const formTitle = "Contribute";
   const formDescription = "Help others learn and succeed!";
 
@@ -112,12 +114,18 @@ export default function ContributeDrawerDialog() {
     if (
       !contributeUploadedFile ||
       !(contributeUploadedFile instanceof File) ||
-      !contributeDescription ||
+      !contributeDescription.trim() ||
       !contributeSchool ||
       !contributeCourseName ||
       !contributeResourceType
     ) {
       setError("Please fill out all fields before submitting");
+      setLoading(false);
+      return;
+    }
+
+    if (contributeDescription.trim().length > 50) {
+      setError("Description must be shorter than 50 characters long");
       setLoading(false);
       return;
     }
@@ -163,11 +171,11 @@ export default function ContributeDrawerDialog() {
       body: formData,
     });
     if (res.ok) {
-      sessionStorage.removeItem("contribute-form");
       toast({
         title: "Thank you!",
         description: "File uploaded successfully 🤓",
       });
+      fetchContributionStatus();
       router.push("/");
     } else {
       const errorStatus = await res.status;

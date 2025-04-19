@@ -4,16 +4,17 @@ import { prisma } from "@/lib/prisma";
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
 
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = 5;
-  const skip = (page - 1) * limit;
-
+  const pageParam = searchParams.get("page");
+  const page = pageParam ? parseInt(pageParam) : undefined;
   const school = searchParams.get("school") || undefined;
   const courseCode = searchParams.get("courseCode") || undefined;
   const courseName = searchParams.get("courseName") || undefined;
   const search = searchParams.get("search")?.toLowerCase() || "";
   const resourceTypes = JSON.parse(searchParams.get("resourceTypes") || "[]");
   const sortBy = searchParams.get("sortBy") || "Popularity";
+  const limitParam = searchParams.get("limit");
+  const limit = limitParam ? parseInt(limitParam) : undefined;
+  const skip = page && limit ? (page - 1) * limit : undefined;
 
   const where: any = {};
 
@@ -41,8 +42,8 @@ export async function GET(req: NextRequest) {
   const [posts, totalCount] = await Promise.all([
     prisma.post.findMany({
       where,
-      skip,
-      take: limit,
+      ...(skip !== undefined && { skip }),
+      ...(limit !== undefined && { take: limit }),
       orderBy:
         sortBy === "Popularity"
           ? { upvoteCount: "desc" }
@@ -50,6 +51,5 @@ export async function GET(req: NextRequest) {
     }),
     prisma.post.count({ where }),
   ]);
-
   return NextResponse.json({ posts, totalCount });
 }
