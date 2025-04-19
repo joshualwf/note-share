@@ -51,6 +51,5 @@ export async function GET(req: NextRequest) {
     }),
     prisma.post.count({ where }),
   ]);
-  console.log("totalCount", totalCount);
   return NextResponse.json({ posts, totalCount });
 }
