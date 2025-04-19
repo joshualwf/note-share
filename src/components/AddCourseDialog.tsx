@@ -60,7 +60,7 @@ function AddCourseDialog({
       setOpen(false);
       toast({
         title: "Thank you!",
-        description: "Course created successfully :-)",
+        description: "Course created successfully 🤓",
       });
       if (contributeSchool && fetchCourses) {
         fetchCourses(contributeSchool);

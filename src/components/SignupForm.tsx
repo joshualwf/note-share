@@ -18,6 +18,9 @@ interface SignupFormProps {
   googleText?: string;
   loginText?: string;
   loginUrl?: string;
+  className?: string;
+  setDialogOpen?: (open: boolean) => void;
+  setDialogModeToLogin?: () => void;
 }
 
 const SignupForm = ({
@@ -27,6 +30,9 @@ const SignupForm = ({
   signupText = "Create an account",
   loginText = "Already have an account?",
   loginUrl = "/login",
+  className,
+  setDialogOpen,
+  setDialogModeToLogin,
 }: SignupFormProps) => {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -55,7 +61,7 @@ const SignupForm = ({
       const result = await res.json();
       if (res.ok) {
         await fetchUser();
-        router.push(redirectTo);
+        setDialogOpen ? setDialogOpen(false) : router.push(redirectTo);
       } else {
         setError(result.message || "Signup unsuccessful!");
         setLoading(false);
@@ -67,11 +73,11 @@ const SignupForm = ({
   };
 
   return (
-    <section className="pt-10 pb-32">
+    <section className={`pt-10 pb-32 ${className ?? ""}`}>
       <div className="container">
         <div className="flex flex-col gap-4">
           <Card className="mx-auto w-full max-w-sm p-6">
-            <div className="mb-6 flex flex-col items-center">
+            <div className="mb-6 flex flex-col items-center text-center">
               <Image
                 src="/icon9.png"
                 width="60"
@@ -120,7 +126,32 @@ const SignupForm = ({
                   type="button"
                   variant="outline"
                   className="w-full"
-                  onClick={() => (window.location.href = "/api/oauth/google")}
+                  onClick={async () => {
+                    const popup = window.open(
+                      `/api/oauth/google`,
+                      "googleLogin",
+                      "width=500,height=600"
+                    );
+
+                    const checkLogin = setInterval(async () => {
+                      if (popup?.closed) {
+                        clearInterval(checkLogin);
+                        // Now check if user is logged in
+                        const res = await fetch("/api/getUser", {
+                          credentials: "include",
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          if (data.user) {
+                            await fetchUser();
+                            setDialogOpen
+                              ? setDialogOpen(false)
+                              : router.push(redirectTo);
+                          }
+                        }
+                      }
+                    }, 500);
+                  }}
                 >
                   <FcGoogle className="mr-2 size-5" />
                   {googleText}
@@ -129,12 +160,24 @@ const SignupForm = ({
             </form>
             <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
               <p>{loginText}</p>
-              <a
-                href={`${loginUrl}?redirect=${encodeURIComponent(redirectTo)}`}
-                className="font-medium text-primary"
-              >
-                Login
-              </a>
+              {setDialogModeToLogin ? (
+                <button
+                  type="button"
+                  onClick={setDialogModeToLogin}
+                  className="font-medium text-primary hover:underline"
+                >
+                  Login
+                </button>
+              ) : (
+                <a
+                  href={`${loginUrl}?redirect=${encodeURIComponent(
+                    redirectTo
+                  )}`}
+                  className="font-medium text-primary"
+                >
+                  Login
+                </a>
+              )}
             </div>
           </Card>
         </div>

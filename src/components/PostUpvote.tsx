@@ -29,7 +29,7 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
         return;
       }
 
-      if (data.message === "Like added successfully") {
+      if (data.message === "Like added! 👍🏻") {
         setUpvoteCount((prev: number) => prev + 1);
       } else if (data.message === "Like removed") {
         setUpvoteCount((prev: number) => Math.max(0, prev - 1));
