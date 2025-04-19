@@ -81,6 +81,7 @@ export default function Home() {
       courseName: courseNameFilter || "",
       search: mainSearchQuery || "",
       sortBy,
+      limit: "5",
     });
 
     try {
@@ -183,7 +184,7 @@ export default function Home() {
         <div className="relative w-full flex flex-col gap-y-3">
           <div className="flex items-center justify-between p-4 text-xs sm:text-sm md:text-base">
             <h3 className="text-muted-foreground text-center text-l">
-              {documents.length} {documents.length === 1 ? "result" : "results"}
+              {documentCount} {documentCount === 1 ? "result" : "results"}
             </h3>
             <div className="flex gap-2">
               <Link href="/contribute">
