@@ -32,8 +32,9 @@ export default async function middleware(req: NextRequest) {
         cookie: sessionCookie || "",
       },
     });
-
+    console.log("A1");
     if (res.status === 401 || res.status === 404) {
+      console.log("A2");
       return NextResponse.redirect(new URL("/login", baseUrl));
     }
 
@@ -41,14 +42,16 @@ export default async function middleware(req: NextRequest) {
 
     // If accessing /login or /signup while logged in, redirect to home
     if (path === "/login" || path === "/signup") {
+      console.log("A3");
       return NextResponse.redirect(new URL("/", baseUrl));
     }
 
     // If accessing /onboarding but already completed onboarding, redirect to home
     if (path === "/onboarding" && isOnboardingCompleted) {
+      console.log("A4");
       return NextResponse.redirect(new URL("/", baseUrl));
     }
-
+    console.log("A4.5");
     // If accessing any other page (not onboarding/api) but not yet onboarded -> redirect to onboarding
     if (
       !isOnboardingCompleted &&
@@ -56,14 +59,16 @@ export default async function middleware(req: NextRequest) {
       !path.startsWith("/api") &&
       !path.startsWith("/authcomplete")
     ) {
+      console.log("A5");
       const redirectUrl = new URL(
         `/onboarding?redirect=${encodeURIComponent(path)}`,
         baseUrl
       );
+      console.log("I am redirecting to onboarding");
       return NextResponse.redirect(redirectUrl);
     }
   }
-
+  console.log("A6");
   return NextResponse.next();
 }
 
