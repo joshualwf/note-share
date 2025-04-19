@@ -19,22 +19,10 @@ export function LoginSignupDialog({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
-  const [dialogMode, setDialogMode] = useState<"login" | "signup">("login");
+  const [dialogMode, setDialogMode] = useState<"login" | "signup">("signup");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        {/* <DialogHeader>
-          <DialogTitle>Login required</DialogTitle>
-          <DialogDescription>
-            Please log in or sign up to continue.
-          </DialogDescription>
-        </DialogHeader>
-        <Button
-          className="w-full mt-4"
-          onClick={() => (window.location.href = "/login")}
-        >
-          Go to Login
-        </Button> */}
         {dialogMode === "login" ? (
           <LoginForm
             className="!py-3"
