@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import Head from "next/head";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 type Post = {
   id: number;
@@ -262,6 +263,11 @@ export default function Home() {
                 </PaginationContent>
               </Pagination>
             </>
+          )}
+          {loading && (
+            <div className="flex flex-col items-center self-center">
+              <LoadingSpinner />
+            </div>
           )}
           <div
             className={`${
