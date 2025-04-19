@@ -145,7 +145,7 @@ export default function Home() {
                   1500,
                   "Free cheatsheets",
                   1500,
-                  "Free tutorial",
+                  "Free tutorials",
                   1500,
                   "Free exam solutions",
                   1500,
