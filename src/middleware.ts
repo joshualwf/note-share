@@ -52,6 +52,8 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/", baseUrl));
     }
     console.log("A4.5");
+    console.log("path", path);
+    console.log("isOnboardingCompleted", isOnboardingCompleted);
     // If accessing any other page (not onboarding/api) but not yet onboarded -> redirect to onboarding
     if (
       !isOnboardingCompleted &&
