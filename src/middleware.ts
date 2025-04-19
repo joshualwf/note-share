@@ -21,35 +21,32 @@ export default async function middleware(req: NextRequest) {
   const sessionCookie = cookieStore.get("session")?.value;
   const session = await decrypt(sessionCookie);
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   if (isProtectedRoute && !session?.userId) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl));
+    return NextResponse.redirect(new URL("/login", baseUrl));
   }
-
   // fetch onboarding completion status if session exists
   if (session?.userId) {
-    const res = await fetch(
-      `${req.nextUrl.origin}/api/onboarding/completionStatus`,
-      {
-        headers: {
-          cookie: sessionCookie || "",
-        },
-      }
-    );
+    const res = await fetch(`${baseUrl}/api/onboarding/completionStatus`, {
+      headers: {
+        cookie: sessionCookie || "",
+      },
+    });
 
     if (res.status === 401 || res.status === 404) {
-      return NextResponse.redirect(new URL("/login", req.nextUrl));
+      return NextResponse.redirect(new URL("/login", baseUrl));
     }
 
     const { isOnboardingCompleted } = await res.json();
 
     // If accessing /login or /signup while logged in, redirect to home
     if (path === "/login" || path === "/signup") {
-      return NextResponse.redirect(new URL("/", req.nextUrl));
+      return NextResponse.redirect(new URL("/", baseUrl));
     }
 
     // If accessing /onboarding but already completed onboarding, redirect to home
     if (path === "/onboarding" && isOnboardingCompleted) {
-      return NextResponse.redirect(new URL("/", req.nextUrl));
+      return NextResponse.redirect(new URL("/", baseUrl));
     }
 
     // If accessing any other page (not onboarding/api) but not yet onboarded -> redirect to onboarding
@@ -61,7 +58,7 @@ export default async function middleware(req: NextRequest) {
     ) {
       const redirectUrl = new URL(
         `/onboarding?redirect=${encodeURIComponent(path)}`,
-        req.nextUrl
+        baseUrl
       );
       return NextResponse.redirect(redirectUrl);
     }
