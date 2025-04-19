@@ -18,6 +18,7 @@ type UserContextType = {
   user: User | null;
   fetchUser: () => Promise<void>;
   loading: boolean;
+  isDesktop: boolean;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -25,6 +26,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
   const fetchUser = async () => {
     const res = await fetch("/api/getUser", { credentials: "include" });
@@ -36,11 +38,18 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    handleResize(); // initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
     fetchUser();
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, fetchUser, loading }}>
+    <UserContext.Provider value={{ user, fetchUser, loading, isDesktop }}>
       {children}
     </UserContext.Provider>
   );

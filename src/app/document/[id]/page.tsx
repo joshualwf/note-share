@@ -17,6 +17,8 @@ import {
 import { getRelativeTime } from "@/app/utils/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Head from "next/head";
+import DesktopCommentSection from "@/components/DesktopCommentSection";
+import MobileCommentSection from "@/components/MobileCommentSection";
 
 type Params = Promise<{ id: string }>;
 type SearchParams = Promise<{ title?: string; fileKey?: string }>;
@@ -109,15 +111,9 @@ async function DocumentPage(props: {
           </div>
           <DocumentViewer postId={id} />
         </ResizablePanel>
-        <ResizableHandle withHandle className="shadow-2xl" />
-        <ResizablePanel
-          defaultSize={25}
-          minSize={20}
-          className="h-full w-full flex flex-col"
-        >
-          <CommentSection postId={postIdNum} />
-        </ResizablePanel>
+        <DesktopCommentSection postId={postIdNum} />
       </ResizablePanelGroup>
+      <MobileCommentSection postId={postIdNum} />
     </>
   );
 }
