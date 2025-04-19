@@ -112,12 +112,18 @@ export default function ContributeDrawerDialog() {
     if (
       !contributeUploadedFile ||
       !(contributeUploadedFile instanceof File) ||
-      !contributeDescription ||
+      !contributeDescription.trim() ||
       !contributeSchool ||
       !contributeCourseName ||
       !contributeResourceType
     ) {
       setError("Please fill out all fields before submitting");
+      setLoading(false);
+      return;
+    }
+
+    if (contributeDescription.trim().length > 50) {
+      setError("Description must be shorter than 50 characters long");
       setLoading(false);
       return;
     }

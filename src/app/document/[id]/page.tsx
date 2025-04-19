@@ -78,7 +78,7 @@ async function DocumentPage(props: {
           className={`h-full w-full !overflow-auto scroll-transparent`}
         >
           <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px] bg-accent items-center justify-between">
-            <span className="font-semibold">{description}</span>
+            <span className="font-semibold break-all mr-2">{description}</span>
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
                 <Avatar className="w-10 h-10">
