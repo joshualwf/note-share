@@ -17,7 +17,6 @@ export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
   const isProtectedRoute = matchRoute(protectedRoutes, path);
-
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("session")?.value;
   const session = await decrypt(sessionCookie);
@@ -57,7 +56,8 @@ export default async function middleware(req: NextRequest) {
     if (
       !isOnboardingCompleted &&
       path !== "/onboarding" &&
-      !path.startsWith("/api")
+      !path.startsWith("/api") &&
+      !path.startsWith("/authcomplete")
     ) {
       const redirectUrl = new URL(
         `/onboarding?redirect=${encodeURIComponent(path)}`,
