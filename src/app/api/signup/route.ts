@@ -28,8 +28,8 @@ export async function POST(req: Request) {
     const user = await prisma.user.create({
       data: {
         email,
-        passwordHash: hashedPassword,
         username: null,
+        passwordHash: hashedPassword,
         profilePicture: randomGeneratedProfilePicUrl,
       },
       select: {

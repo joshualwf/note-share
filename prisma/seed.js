@@ -452,173 +452,33 @@ async function main() {
     ],
     skipDuplicates: true, // avoid errors on rerun
   });
-  // await prisma.course.createMany({
-  //   data: [
-  //     {
-  //       schoolName: "National University of Singapore",
-  //       courseName: "Introduction to Programming",
-  //       courseCode: "CS1001",
-  //     },
-  //     {
-  //       schoolName: "National University of Singapore",
-  //       courseName: "Data Structures and Algorithms",
-  //       courseCode: "CS1002",
-  //     },
-  //     {
-  //       schoolName: "National University of Singapore",
-  //       courseName: "Computer Systems",
-  //       courseCode: "CS1003",
-  //     },
-  //     {
-  //       schoolName: "National University of Singapore",
-  //       courseName: "Operating Systems",
-  //       courseCode: "CS1004",
-  //     },
-  //     {
-  //       schoolName: "National University of Singapore",
-  //       courseName: "Software Engineering",
-  //       courseCode: "CS1005",
-  //     },
-  //     {
-  //       schoolName: "National University of Singapore",
-  //       courseName: "Databases",
-  //       courseCode: "CS1006",
-  //     },
-  //     {
-  //       schoolName: "National University of Singapore",
-  //       courseName: "Computer Networks",
-  //       courseCode: "CS1007",
-  //     },
-  //     {
-  //       schoolName: "National University of Singapore",
-  //       courseName: "Artificial Intelligence",
-  //       courseCode: "CS1008",
-  //     },
-  //     {
-  //       schoolName: "National University of Singapore",
-  //       courseName: "Machine Learning",
-  //       courseCode: "CS1009",
-  //     },
+  const standardCourses = [
+    "English",
+    "Chinese",
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Science",
+  ];
 
-  //     {
-  //       schoolName: "Nanyang Technological University",
-  //       courseName: "Programming Fundamentals",
-  //       courseCode: "SC1001",
-  //     },
-  //     {
-  //       schoolName: "Nanyang Technological University",
-  //       courseName: "Discrete Mathematics",
-  //       courseCode: "SC1002",
-  //     },
-  //     {
-  //       schoolName: "Nanyang Technological University",
-  //       courseName: "Object-Oriented Programming",
-  //       courseCode: "SC1003",
-  //     },
-  //     {
-  //       schoolName: "Nanyang Technological University",
-  //       courseName: "Linear Algebra for Computing",
-  //       courseCode: "SC1004",
-  //     },
-  //     {
-  //       schoolName: "Nanyang Technological University",
-  //       courseName: "Digital Logic",
-  //       courseCode: "SC1005",
-  //     },
-  //     {
-  //       schoolName: "Nanyang Technological University",
-  //       courseName: "Computer Organisation & Architecture",
-  //       courseCode: "SC1006",
-  //     },
-  //     {
-  //       schoolName: "Nanyang Technological University",
-  //       courseName: "Introduction to Cybersecurity",
-  //       courseCode: "SC1007",
-  //     },
-  //     {
-  //       schoolName: "Nanyang Technological University",
-  //       courseName: "Cloud Computing Basics",
-  //       courseCode: "SC1008",
-  //     },
-  //     {
-  //       schoolName: "Nanyang Technological University",
-  //       courseName: "Introduction to Web Development",
-  //       courseCode: "SC1009",
-  //     },
+  const targetSchools = await prisma.school.findMany({
+    where: {
+      type: { in: ["primary", "secondary"] },
+    },
+  });
 
-  //     {
-  //       schoolName: "Singapore Management University",
-  //       courseName: "Introduction to Business Analytics",
-  //       courseCode: "COR1001",
-  //     },
-  //     {
-  //       schoolName: "Singapore Management University",
-  //       courseName: "Management Communication",
-  //       courseCode: "COR1002",
-  //     },
-  //     {
-  //       schoolName: "Singapore Management University",
-  //       courseName: "Calculus for Business",
-  //       courseCode: "COR1003",
-  //     },
-  //     {
-  //       schoolName: "Singapore Management University",
-  //       courseName: "Financial Accounting",
-  //       courseCode: "COR1004",
-  //     },
-  //     {
-  //       schoolName: "Singapore Management University",
-  //       courseName: "Microeconomics",
-  //       courseCode: "COR1005",
-  //     },
-  //     {
-  //       schoolName: "Singapore Management University",
-  //       courseName: "Programming with Python",
-  //       courseCode: "COR1006",
-  //     },
-  //     {
-  //       schoolName: "Singapore Management University",
-  //       courseName: "Design Thinking",
-  //       courseCode: "COR1007",
-  //     },
-  //     {
-  //       schoolName: "Singapore Management University",
-  //       courseName: "Ethics and Social Responsibility",
-  //       courseCode: "COR1008",
-  //     },
-  //   ],
-  //   skipDuplicates: true, // avoid errors on rerun
-  // });
+  const courseData = targetSchools.flatMap((school) =>
+    standardCourses.map((courseName) => ({
+      schoolName: school.name,
+      courseName,
+    }))
+  );
 
-  // await prisma.user.createMany({
-  //   data: [
-  //     {
-  //       id: 1001,
-  //       email: "alice@example.com",
-  //       username: "alice",
-  //       passwordHash: "hashed_pw1",
-  //       profilePicture:
-  //         "https://api.dicebear.com/9.x/micah/svg?seed=552676&scale=100&radius=50&backgroundColor=ebebec&mouth=laughing,smile",
-  //     },
-  //     {
-  //       id: 1002,
-  //       email: "bob@example.com",
-  //       username: "bob",
-  //       passwordHash: "hashed_pw2",
-  //       profilePicture:
-  //         "https://api.dicebear.com/9.x/micah/svg?seed=918885&scale=100&radius=50&backgroundColor=ebebec&mouth=laughing,smile",
-  //     },
-  //     {
-  //       id: 1003,
-  //       email: "charlie@example.com",
-  //       username: "charlie",
-  //       passwordHash: "hashed_pw3",
-  //       profilePicture:
-  //         "https://api.dicebear.com/9.x/micah/svg?seed=315982&scale=100&radius=50&backgroundColor=ebebec&mouth=laughing,smile",
-  //     },
-  //   ],
-  //   skipDuplicates: true,
-  // });
+  await prisma.course.createMany({
+    data: courseData,
+    skipDuplicates: true,
+  });
 }
 
 main()
