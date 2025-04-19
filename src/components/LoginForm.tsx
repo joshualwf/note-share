@@ -142,7 +142,32 @@ const LoginForm = ({
                   type="button"
                   variant="outline"
                   className="w-full"
-                  onClick={() => (window.location.href = "/api/oauth/google")}
+                  onClick={async () => {
+                    const popup = window.open(
+                      `/api/oauth/google`,
+                      "googleLogin",
+                      "width=500,height=600"
+                    );
+
+                    const checkLogin = setInterval(async () => {
+                      if (popup?.closed) {
+                        clearInterval(checkLogin);
+                        // Now check if user is logged in
+                        const res = await fetch("/api/getUser", {
+                          credentials: "include",
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          if (data.user) {
+                            await fetchUser();
+                            setDialogOpen
+                              ? setDialogOpen(false)
+                              : router.push(redirectTo);
+                          }
+                        }
+                      }
+                    }, 500);
+                  }}
                 >
                   <FcGoogle className="mr-2 size-5" />
                   {googleText}

@@ -34,7 +34,10 @@ export async function GET(req: Request) {
   const { data: profile } = await oauth2.userinfo.get(); // calls Google’s user info API to get the user’s info
 
   if (!profile.email) {
-    return NextResponse.json({ message: "Google account has no email" }, { status: 400 });
+    return NextResponse.json(
+      { message: "Google account has no email" },
+      { status: 400 }
+    );
   }
 
   // Check or create user in DB
@@ -64,5 +67,5 @@ export async function GET(req: Request) {
   });
 
   // Redirect to app home
-  return NextResponse.redirect(new URL("/", req.url));
+  return NextResponse.redirect(new URL("/authcomplete", req.url));
 }
