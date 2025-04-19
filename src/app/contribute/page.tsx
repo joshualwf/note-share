@@ -117,10 +117,7 @@ export default function ContributeDrawerDialog() {
       !contributeCourseName ||
       !contributeResourceType
     ) {
-      // setError("Please fill out all fields before submitting");
-      setError(
-        `Unsupported file type. Please upload any of these types: ${allowedExtensions}`
-      );
+      setError("Please fill out all fields before submitting");
       setLoading(false);
       return;
     }
