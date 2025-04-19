@@ -15,18 +15,19 @@ function matchRoute(patterns: string[], pathname: string) {
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-
+  console.log("path hitting middleware", path);
   const isProtectedRoute = matchRoute(protectedRoutes, path);
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("session")?.value;
   const session = await decrypt(sessionCookie);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  if (isProtectedRoute && !session?.userId) {
-    return NextResponse.redirect(new URL("/login", baseUrl));
-  }
+  // if (isProtectedRoute && !session?.userId) {
+  //   return NextResponse.redirect(new URL("/login", baseUrl));
+  // }
   // fetch onboarding completion status if session exists
   if (session?.userId) {
+    console.log("path inside check 1", path);
     const res = await fetch(`${baseUrl}/api/onboarding/completionStatus`, {
       headers: {
         cookie: sessionCookie || "",
@@ -70,7 +71,7 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(redirectUrl);
     }
   }
-  console.log("A6");
+  console.log("A6", path);
   return NextResponse.next();
 }
 
