@@ -82,9 +82,10 @@ const SignupForm = ({
         await fetchUser();
         setDialogOpen
           ? setDialogOpen(false)
-          : router.push(
-              redirectTo || `${process.env.NEXT_PUBLIC_BASE_URL}/onboarding`
-            );
+          : // : router.push(
+            //     redirectTo || `${process.env.NEXT_PUBLIC_BASE_URL}/onboarding`
+            //   );
+            router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/onboarding`);
       } else {
         setError(result.message || "Signup unsuccessful!");
         setLoading(false);
