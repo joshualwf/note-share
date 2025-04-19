@@ -62,6 +62,16 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+    if (error.code === "P2002" && error.meta?.target?.includes("email")) {
+      return NextResponse.json(
+        {
+          message:
+            "An account with this email already exists. Try logging in instead.",
+        },
+        { status: 400 }
+      );
+    }
     console.error("Database Error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
