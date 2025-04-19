@@ -32,7 +32,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [hasContributed, setHasContributed] = useState(false);
 
   const fetchUser = async () => {
-    const res = await fetch("/api/getUser", { credentials: "include" });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getUser`, {
+      credentials: "include",
+    });
     if (res.ok) {
       const data = await res.json();
       setUser(data.user);
