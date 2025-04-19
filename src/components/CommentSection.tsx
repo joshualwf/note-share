@@ -2,18 +2,21 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { SendHorizontal } from "lucide-react";
+import { MessagesSquare, SendHorizontal } from "lucide-react";
 import Comment from "@/components/Comment";
 import { CommentType } from "@/app/types/comment";
 import { useToast } from "@/hooks/use-toast";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 function CommentSection({ postId }: { postId: number }) {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [error, setError] = useState("");
   const [commentText, setCommentText] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const { toast } = useToast();
   async function fetchComments() {
+    setLoading(true);
     try {
       const res = await fetch(`/api/comments/getComments/${postId}`);
       if (!res.ok) throw new Error("Failed to fetch comments");
@@ -24,6 +27,8 @@ function CommentSection({ postId }: { postId: number }) {
       toast({
         title: "Failed to load comments",
       });
+    } finally {
+      setLoading(false);
     }
   }
   useEffect(() => {
@@ -74,15 +79,29 @@ function CommentSection({ postId }: { postId: number }) {
         <div
           className={`flex flex-col w-full overflow-y-auto px-4 pt-4 gap-2 scroll-transparent`}
         >
-          {comments.map((comment, index) => (
-            <Comment
-              key={index}
-              {...comment}
-              topLevelCommentId={comment.commentId}
-              postId={postId}
-              fetchComments={fetchComments}
-            />
-          ))}
+          {loading ? (
+            <div className="flex justify-center pt-4">
+              <LoadingSpinner />
+            </div>
+          ) : comments.length === 0 ? (
+            <div className="flex flex-col items-center pt-4 text-center justify-center">
+              <MessagesSquare size={64} />
+              <span className="mt-1">Psst.. No comments yet</span>
+              <span className="text-muted-foreground mt-1">
+                Be the first to ask a question or share your thoughts 🤓
+              </span>
+            </div>
+          ) : (
+            comments.map((comment, index) => (
+              <Comment
+                key={index}
+                {...comment}
+                topLevelCommentId={comment.commentId}
+                postId={postId}
+                fetchComments={fetchComments}
+              />
+            ))
+          )}
         </div>
         <form
           onSubmit={(e) => {
