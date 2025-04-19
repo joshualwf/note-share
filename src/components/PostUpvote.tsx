@@ -29,7 +29,7 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
         return;
       }
 
-      if (data.message === "Like added! 👍🏻") {
+      if (data.message === "Like added") {
         setUpvoteCount((prev: number) => prev + 1);
       } else if (data.message === "Like removed") {
         setUpvoteCount((prev: number) => Math.max(0, prev - 1));
@@ -43,14 +43,10 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
   };
   return (
     <div className="flex gap-1 items-center">
-      <Button
-        variant="ghost"
-        className="px-1 py-0 border rounded-2xl border-transparent hover:bg-background"
-        onClick={handleToggleUpvote}
-      >
+      <Button variant="outline" onClick={handleToggleUpvote}>
         <ThumbsUp className="w-4 h-4" />
+        {upvoteCount > 0 && <span className="text-xs">{upvoteCount}</span>}
       </Button>
-      {upvoteCount > 0 && <span className="text-xs">{upvoteCount}</span>}
     </div>
   );
 }
