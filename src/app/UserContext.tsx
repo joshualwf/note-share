@@ -46,7 +46,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     if (!user) return;
     try {
       const res = await fetch(
-        `/api/posts/getContributedStatus?userId=${user.id}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/getContributedStatus?userId=${user.id}`
       );
       const data = await res.json();
       setHasContributed(data.hasContributed);
