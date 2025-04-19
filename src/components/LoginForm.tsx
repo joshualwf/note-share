@@ -11,6 +11,7 @@ import { LoadingSpinner } from "./LoadingSpinner";
 import { CircleAlert } from "lucide-react";
 import Image from "next/image";
 import { useUser } from "@/app/UserContext";
+import Link from "next/link";
 
 interface LoginFormProps {
   heading?: string;
@@ -42,7 +43,7 @@ const LoginForm = ({
   const { fetchUser } = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/";
+  const redirectTo = searchParams.get("redirect");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +61,7 @@ const LoginForm = ({
 
       if (res.ok) {
         await fetchUser();
-        setDialogOpen ? setDialogOpen(false) : router.push(redirectTo);
+        setDialogOpen ? setDialogOpen(false) : router.push(redirectTo || "/");
       } else {
         setError(result.message || "Invalid email or password");
         setLoading(false);
@@ -104,7 +105,7 @@ const LoginForm = ({
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="remember"
@@ -120,7 +121,7 @@ const LoginForm = ({
                   <a href="#" className="text-sm text-primary hover:underline">
                     Forgot password
                   </a>
-                </div>
+                </div> */}
                 {error && (
                   <div className="flex items-center gap-1">
                     <div>
@@ -162,7 +163,7 @@ const LoginForm = ({
                             await fetchUser();
                             setDialogOpen
                               ? setDialogOpen(false)
-                              : router.push(redirectTo);
+                              : router.push(redirectTo || "/");
                           }
                         }
                       }
@@ -184,14 +185,18 @@ const LoginForm = ({
                     Sign up
                   </button>
                 ) : (
-                  <a
-                    href={`${signupUrl}?redirect=${encodeURIComponent(
+                  <Link
+                    href={
                       redirectTo
-                    )}`}
+                        ? `${signupUrl}?redirect=${encodeURIComponent(
+                            redirectTo
+                          )}`
+                        : signupUrl
+                    }
                     className="font-medium text-primary"
                   >
                     Sign up
-                  </a>
+                  </Link>
                 )}
               </div>
             </form>
