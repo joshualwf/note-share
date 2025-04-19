@@ -7,7 +7,9 @@ export default function Page() {
     // Notify opener and close popup
     if (window.opener) {
       window.opener.postMessage({ type: "auth-success" }, window.origin);
-      window.close();
+      setTimeout(() => {
+        window.close();
+      }, 1000); // Close after 3 seconds
     }
   }, []);
   return (
@@ -17,9 +19,9 @@ export default function Page() {
           <div className="font-semibold leading-none tracking-tight">
             Login/Signup completed ✅
           </div>
-          <div className="text-muted-foreground mt-2">
+          {/* <div className="text-muted-foreground mt-2">
             Please close this tab{" "}
-          </div>
+          </div> */}
         </Card>
       </div>
     </div>
