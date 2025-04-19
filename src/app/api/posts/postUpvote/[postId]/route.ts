@@ -72,7 +72,7 @@ export async function POST(
         },
       });
 
-      return NextResponse.json({ message: "Like added successfully" });
+      return NextResponse.json({ message: "Like added" });
     }
   } catch (err) {
     console.error("Error toggling post upvote:", err);

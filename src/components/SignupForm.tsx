@@ -10,6 +10,7 @@ import { CircleAlert } from "lucide-react";
 import { LoadingSpinner } from "./LoadingSpinner";
 import Image from "next/image";
 import { useUser } from "@/app/UserContext";
+import Link from "next/link";
 
 interface SignupFormProps {
   heading?: string;
@@ -37,23 +38,41 @@ const SignupForm = ({
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { fetchUser } = useUser();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/";
+  const redirectTo = searchParams.get("redirect");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
+
+    // Input validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email,
+          email: email.trim(),
           password,
         }),
       });
@@ -61,7 +80,7 @@ const SignupForm = ({
       const result = await res.json();
       if (res.ok) {
         await fetchUser();
-        setDialogOpen ? setDialogOpen(false) : router.push(redirectTo);
+        setDialogOpen ? setDialogOpen(false) : router.push(redirectTo || "/");
       } else {
         setError(result.message || "Signup unsuccessful!");
         setLoading(false);
@@ -96,15 +115,20 @@ const SignupForm = ({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                <div>
-                  <Input
-                    type="password"
-                    placeholder="Enter your password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
+                <Input
+                  type="password"
+                  placeholder="Enter your password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <Input
+                  type="password"
+                  placeholder="Confirm your password"
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
                 {error && (
                   <div className="flex items-center gap-1">
                     <div>
@@ -146,7 +170,7 @@ const SignupForm = ({
                             await fetchUser();
                             setDialogOpen
                               ? setDialogOpen(false)
-                              : router.push(redirectTo);
+                              : router.push(redirectTo || "/");
                           }
                         }
                       }
@@ -169,14 +193,16 @@ const SignupForm = ({
                   Login
                 </button>
               ) : (
-                <a
-                  href={`${loginUrl}?redirect=${encodeURIComponent(
+                <Link
+                  href={
                     redirectTo
-                  )}`}
+                      ? `${loginUrl}?redirect=${encodeURIComponent(redirectTo)}`
+                      : loginUrl
+                  }
                   className="font-medium text-primary"
                 >
                   Login
-                </a>
+                </Link>
               )}
             </div>
           </Card>

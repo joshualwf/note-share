@@ -95,7 +95,7 @@ function Comment({
             {getRelativeTime(createdAt)}
           </span>
         </div>
-        <span className="text-sm mt-1">{text}</span>
+        <span className="text-sm mt-1 break-all">{text}</span>
         <div className="flex items-center gap-2">
           <div className="flex gap-1 items-center">
             <Button
