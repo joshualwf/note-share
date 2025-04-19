@@ -56,7 +56,7 @@ function Comment({
       setReplyText(`@${username} `);
       setShowReplyInput(false);
       toast({
-        title: "Replied successfully!",
+        title: "Reply sent! 💬",
       });
       fetchComments();
     } catch (err) {

@@ -47,7 +47,7 @@ function AddSchoolDialog({ fetchSchools }: { fetchSchools?: () => void }) {
       setOpen(false);
       toast({
         title: "Thank you!",
-        description: "School added successfully :-)",
+        description: "School added successfully 🤓",
       });
       if (fetchSchools) {
         fetchSchools();

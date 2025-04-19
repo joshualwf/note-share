@@ -53,7 +53,7 @@ function CommentSection({ postId }: { postId: number }) {
       }
 
       toast({
-        title: "Commented successfully!",
+        title: "Comment added! 💬",
       });
       setCommentText(""); // Clear the input
       fetchComments();

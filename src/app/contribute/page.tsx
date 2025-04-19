@@ -28,11 +28,13 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { LoginSignupDialog } from "@/components/LoginSignupDialog";
 
 export default function ContributeDrawerDialog() {
   const formTitle = "Contribute";
   const formDescription = "Help others learn and succeed!";
 
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [schools, setSchools] = useState<{ value: string; label: string }[]>(
     []
@@ -69,25 +71,6 @@ export default function ContributeDrawerDialog() {
       setSchools([]);
     }
   };
-  useEffect(() => {
-    const cachedContributeForm = sessionStorage.getItem("contribute-form");
-    if (cachedContributeForm) {
-      try {
-        const parsed = JSON.parse(cachedContributeForm);
-        setContributeDescription(parsed.contributeDescription || "");
-        setContributeSchool(parsed.contributeSchool || null);
-        setContributeCourseInfo(parsed.contributeCourseInfo || null);
-        setContributeCourseCode(parsed.contributeCourseCode || null);
-        setContributeCourseName(parsed.contributeCourseName || "");
-        setContributeResourceType(parsed.contributeResourceType || undefined);
-        setContributeUploadedFile(parsed.contributeUploadedFile || null);
-        setRestored(true);
-      } catch (err) {
-        console.error("Failed to restore contribute form from cache:", err);
-      }
-    }
-    fetchSchools();
-  }, []);
 
   const fetchCourses = async (school: string) => {
     try {
@@ -110,6 +93,10 @@ export default function ContributeDrawerDialog() {
     setContributeCourseCode(null);
     setContributeCourseName("");
   }, [contributeSchool]);
+
+  useEffect(() => {
+    fetchSchools();
+  }, []);
 
   const allowedMimeTypes = Object.keys(MIME_TYPE_MAP);
   const allowedExtensions = Array.from(new Set(Object.values(MIME_TYPE_MAP)))
@@ -182,29 +169,14 @@ export default function ContributeDrawerDialog() {
       sessionStorage.removeItem("contribute-form");
       toast({
         title: "Thank you!",
-        description: "File uploaded successfully :-)",
+        description: "File uploaded successfully 🤓",
       });
       router.push("/");
     } else {
       const errorStatus = await res.status;
       if (errorStatus == 401) {
-        sessionStorage.setItem(
-          "contribute-form",
-          JSON.stringify({
-            contributeDescription,
-            contributeSchool,
-            contributeCourseInfo,
-            contributeCourseCode,
-            contributeCourseName,
-            contributeResourceType,
-            contributeUploadedFile,
-          })
-        );
-        toast({
-          title: "Please login/signup before contributing :-)",
-        });
-        const redirectTo = encodeURIComponent(window.location.pathname);
-        router.push(`/signup?redirect=${redirectTo}`);
+        setDialogOpen(true);
+        setLoading(false);
         return;
       } else {
         setError("Something went wrong. Please try again");
@@ -336,6 +308,7 @@ export default function ContributeDrawerDialog() {
             </div>
           </div>
         </section>
+        <LoginSignupDialog open={dialogOpen} onOpenChange={setDialogOpen} />
       </div>
     </div>
   );
