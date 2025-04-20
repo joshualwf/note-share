@@ -26,7 +26,7 @@ function ContributePrompt() {
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent>
+      <AlertDialogContent onEscapeKeyDown={(e) => e.preventDefault()}>
         <AlertDialogHeader>
           <AlertDialogTitle>Like what you see?</AlertDialogTitle>
           <AlertDialogDescription>
