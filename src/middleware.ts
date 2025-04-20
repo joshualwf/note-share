@@ -15,7 +15,6 @@ function matchRoute(patterns: string[], pathname: string) {
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  console.log("path hitting middleware", path);
   const isProtectedRoute = matchRoute(protectedRoutes, path);
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("session")?.value;
@@ -27,15 +26,12 @@ export default async function middleware(req: NextRequest) {
   // }
   // fetch onboarding completion status if session exists
   if (session?.userId) {
-    console.log("path inside check 1", path);
     const res = await fetch(`${baseUrl}/api/onboarding/completionStatus`, {
       headers: {
         cookie: sessionCookie || "",
       },
     });
-    console.log("A1");
     if (res.status === 401 || res.status === 404) {
-      console.log("A2");
       return NextResponse.redirect(new URL("/login", baseUrl));
     }
 
@@ -43,18 +39,13 @@ export default async function middleware(req: NextRequest) {
 
     // If accessing /login or /signup while logged in, redirect to home
     if (path === "/login" || path === "/signup") {
-      console.log("A3");
       return NextResponse.redirect(new URL("/", baseUrl));
     }
 
     // If accessing /onboarding but already completed onboarding, redirect to home
     if (path === "/onboarding" && isOnboardingCompleted) {
-      console.log("A4");
       return NextResponse.redirect(new URL("/", baseUrl));
     }
-    console.log("A4.5");
-    console.log("path", path);
-    console.log("isOnboardingCompleted", isOnboardingCompleted);
     // If accessing any other page (not onboarding/api) but not yet onboarded -> redirect to onboarding
     if (
       !isOnboardingCompleted &&
@@ -62,16 +53,13 @@ export default async function middleware(req: NextRequest) {
       !path.startsWith("/api") &&
       !path.startsWith("/authcomplete")
     ) {
-      console.log("A5");
       const redirectUrl = new URL(
         `/onboarding?redirect=${encodeURIComponent(path)}`,
         baseUrl
       );
-      console.log("I am redirecting to onboarding");
       return NextResponse.redirect(redirectUrl);
     }
   }
-  console.log("A6", path);
   return NextResponse.next();
 }
 

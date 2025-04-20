@@ -42,9 +42,6 @@ const SignupForm = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { fetchUser } = useUser();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect");
-  console.log("redirectTo", redirectTo);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,10 +80,7 @@ const SignupForm = ({
         await fetchUser();
         setDialogOpen
           ? setDialogOpen(false)
-          : // : router.push(
-            //     redirectTo || `${process.env.NEXT_PUBLIC_BASE_URL}/onboarding`
-            //   );
-            router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/onboarding`);
+          : router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/onboarding`);
       } else {
         setError(result.message || "Signup unsuccessful!");
         setLoading(false);
@@ -176,7 +170,7 @@ const SignupForm = ({
                             await fetchUser();
                             setDialogOpen
                               ? setDialogOpen(false)
-                              : router.push(redirectTo || "/");
+                              : router.push("/");
                           }
                         }
                       }
@@ -199,14 +193,7 @@ const SignupForm = ({
                   Login
                 </button>
               ) : (
-                <Link
-                  href={
-                    redirectTo
-                      ? `${loginUrl}?redirect=${encodeURIComponent(redirectTo)}`
-                      : loginUrl
-                  }
-                  className="font-medium text-primary"
-                >
+                <Link href={loginUrl} className="font-medium text-primary">
                   Login
                 </Link>
               )}

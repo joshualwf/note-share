@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CircleAlert } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
@@ -14,8 +14,6 @@ export default function Page() {
   const [error, setError] = useState("");
   const router = useRouter();
   const { fetchUser } = useUser();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/";
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -40,7 +38,7 @@ export default function Page() {
 
       if (res.ok) {
         await fetchUser();
-        router.push(redirectTo);
+        router.push("/");
       } else {
         setError(result.message || "Invalid username");
         setLoading(false);

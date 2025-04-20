@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "./ui/card";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { CircleAlert } from "lucide-react";
@@ -42,8 +41,6 @@ const LoginForm = ({
   const [error, setError] = useState("");
   const { fetchUser } = useUser();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +58,7 @@ const LoginForm = ({
 
       if (res.ok) {
         await fetchUser();
-        setDialogOpen ? setDialogOpen(false) : router.push(redirectTo || "/");
+        setDialogOpen ? setDialogOpen(false) : router.push("/");
       } else {
         setError(result.message || "Invalid email or password");
         setLoading(false);
@@ -163,7 +160,7 @@ const LoginForm = ({
                             await fetchUser();
                             setDialogOpen
                               ? setDialogOpen(false)
-                              : router.push(redirectTo || "/");
+                              : router.push("/");
                           }
                         }
                       }
@@ -185,16 +182,7 @@ const LoginForm = ({
                     Sign up
                   </button>
                 ) : (
-                  <Link
-                    href={
-                      redirectTo
-                        ? `${signupUrl}?redirect=${encodeURIComponent(
-                            redirectTo
-                          )}`
-                        : signupUrl
-                    }
-                    className="font-medium text-primary"
-                  >
+                  <Link href={signupUrl} className="font-medium text-primary">
                     Sign up
                   </Link>
                 )}
