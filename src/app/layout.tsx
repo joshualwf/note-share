@@ -61,7 +61,7 @@ export default async function RootLayout({
               </div>
             </div>
             <div className="grow flex flex-col h-0 min-h-0 overflow-auto">
-              <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+              <Suspense>{children}</Suspense>
             </div>
           </UserProvider>
         </ThemeProvider>
