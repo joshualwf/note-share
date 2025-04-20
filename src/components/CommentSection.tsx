@@ -79,7 +79,7 @@ function CommentSection({ postId }: { postId: number }) {
         <div
           className={`flex flex-col w-full overflow-y-auto px-4 pt-4 gap-2 scroll-transparent`}
         >
-          {loading ? (
+          {loading && comments.length === 0 ? (
             <div className="flex justify-center pt-4">
               <LoadingSpinner />
             </div>
