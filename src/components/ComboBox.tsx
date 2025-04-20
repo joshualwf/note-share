@@ -49,7 +49,7 @@ export function Combobox({
           setOpen(nextOpen);
         }
       }}
-      modal={true}
+      modal={false} // change this to fix scrolling issues
     >
       <PopoverTrigger asChild>
         <Button
