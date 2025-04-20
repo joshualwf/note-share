@@ -28,7 +28,7 @@ function ContributePrompt() {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent
         onEscapeKeyDown={(e) => e.preventDefault()}
-        className="rounded-xl w-full w-4/5"
+        className="rounded-xl w-4/5"
       >
         <AlertDialogHeader>
           <AlertDialogTitle>Like what you see?</AlertDialogTitle>
