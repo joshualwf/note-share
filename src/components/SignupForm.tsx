@@ -66,14 +66,17 @@ const SignupForm = ({
     setLoading(true);
 
     try {
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: email.trim(),
-          password,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/signup`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: email.trim(),
+            password,
+          }),
+        }
+      );
 
       const result = await res.json();
       if (res.ok) {
@@ -159,16 +162,21 @@ const SignupForm = ({
                       if (popup?.closed) {
                         clearInterval(checkLogin);
                         // Now check if user is logged in
-                        const res = await fetch("/api/getUser", {
-                          credentials: "include",
-                        });
+                        const res = await fetch(
+                          `${process.env.NEXT_PUBLIC_BASE_URL}/api/getUser`,
+                          {
+                            credentials: "include",
+                          }
+                        );
                         if (res.ok) {
                           const data = await res.json();
                           if (data.user) {
                             await fetchUser();
                             setDialogOpen
                               ? setDialogOpen(false)
-                              : router.push("/");
+                              : router.push(
+                                  `${process.env.NEXT_PUBLIC_BASE_URL}`
+                                );
                           }
                         }
                       }

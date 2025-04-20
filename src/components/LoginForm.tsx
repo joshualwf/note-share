@@ -47,7 +47,7 @@ const LoginForm = ({
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -58,7 +58,9 @@ const LoginForm = ({
 
       if (res.ok) {
         await fetchUser();
-        setDialogOpen ? setDialogOpen(false) : router.push("/");
+        setDialogOpen
+          ? setDialogOpen(false)
+          : router.push(`${process.env.NEXT_PUBLIC_BASE_URL}`);
       } else {
         setError(result.message || "Invalid email or password");
         setLoading(false);
@@ -149,16 +151,21 @@ const LoginForm = ({
                       if (popup?.closed) {
                         clearInterval(checkLogin);
                         // Now check if user is logged in
-                        const res = await fetch("/api/getUser", {
-                          credentials: "include",
-                        });
+                        const res = await fetch(
+                          `${process.env.NEXT_PUBLIC_BASE_URL}/api/getUser`,
+                          {
+                            credentials: "include",
+                          }
+                        );
                         if (res.ok) {
                           const data = await res.json();
                           if (data.user) {
                             await fetchUser();
                             setDialogOpen
                               ? setDialogOpen(false)
-                              : router.push("/");
+                              : router.push(
+                                  `${process.env.NEXT_PUBLIC_BASE_URL}`
+                                );
                           }
                         }
                       }

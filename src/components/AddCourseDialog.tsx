@@ -52,10 +52,13 @@ function AddCourseDialog({
     formData.append("courseName", addCourseName.trim());
     formData.append("courseCode", (addCourseCode || "").trim().toUpperCase());
 
-    const res = await fetch("/api/addCourse", {
-      method: "POST",
-      body: formData,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/addCourse`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
     if (res.ok) {
       setOpen(false);
       toast({

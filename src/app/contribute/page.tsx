@@ -65,7 +65,9 @@ export default function ContributeDrawerDialog() {
 
   const fetchSchools = async () => {
     try {
-      const res = await fetch("/api/getSchools");
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/getSchools`
+      );
       const data = await res.json();
       setSchools(data);
     } catch (err) {
@@ -166,17 +168,20 @@ export default function ContributeDrawerDialog() {
     formData.append("file", contributeUploadedFile);
     formData.append("fileType", contributeFileType);
 
-    const res = await fetch("/api/contribute", {
-      method: "POST",
-      body: formData,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/contribute`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
     if (res.ok) {
       toast({
         title: "Thank you!",
         description: "File uploaded successfully 🤓",
       });
       fetchContributionStatus();
-      router.push("/");
+      router.push(`${process.env.NEXT_PUBLIC_BASE_URL}`);
     } else {
       const errorStatus = await res.status;
       if (errorStatus == 401) {

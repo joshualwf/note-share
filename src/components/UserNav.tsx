@@ -22,7 +22,9 @@ export function UserNav() {
 
   const handleLogout = async () => {
     const redirectTo = window.location.pathname;
-    const res = await fetch("/api/logout", { method: "POST" });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/logout`, {
+      method: "POST",
+    });
     if (res.ok) {
       await fetchUser();
       router.push(redirectTo);

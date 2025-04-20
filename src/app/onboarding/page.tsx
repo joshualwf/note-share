@@ -28,17 +28,20 @@ export default function Page() {
       return;
     }
     try {
-      const res = await fetch("/api/onboarding/submitForm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: sanitizedUsername }),
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/onboarding/submitForm`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: sanitizedUsername }),
+          credentials: "include",
+        }
+      );
       const result = await res.json();
 
       if (res.ok) {
         await fetchUser();
-        router.push("/");
+        router.push(`${process.env.NEXT_PUBLIC_BASE_URL}`);
       } else {
         setError(result.message || "Invalid username");
         setLoading(false);

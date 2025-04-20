@@ -39,10 +39,13 @@ function AddSchoolDialog({ fetchSchools }: { fetchSchools?: () => void }) {
     formData.append("name", addSchool.trim());
     formData.append("type", addSchoolType || "");
 
-    const res = await fetch("/api/addSchool", {
-      method: "POST",
-      body: formData,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/addSchool`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
     if (res.ok) {
       setOpen(false);
       toast({

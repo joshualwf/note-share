@@ -66,7 +66,9 @@ function FilterSheet({
 
   const fetchSchools = async () => {
     try {
-      const res = await fetch("/api/getSchools");
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/getSchools`
+      );
       const data = await res.json();
       setSchools(data);
     } catch (err) {

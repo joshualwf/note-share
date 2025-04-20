@@ -55,9 +55,9 @@ export default function Home() {
 
   useEffect(() => {
     if (currentPage === 1) {
-      router.push("/"); // no page=1 in URL
+      router.push(`${process.env.NEXT_PUBLIC_BASE_URL}`); // no page=1 in URL
     } else {
-      router.push(`/?page=${currentPage}`);
+      router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/?page=${currentPage}`);
     }
   }, [currentPage]);
 
