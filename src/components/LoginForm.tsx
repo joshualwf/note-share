@@ -124,9 +124,7 @@ const LoginForm = ({
                     <div>
                       <CircleAlert size="20px" color="#ef4444" />
                     </div>
-                    <span className="text-center text-sm text-red-500">
-                      {error}
-                    </span>
+                    <span className="text-sm text-red-500">{error}</span>
                   </div>
                 )}
                 <Button

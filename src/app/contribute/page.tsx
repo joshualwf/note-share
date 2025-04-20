@@ -294,15 +294,13 @@ export default function ContributeDrawerDialog() {
                     </div>
                   </div>
                   {error && (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2">
                       <div>
                         <div>
                           <CircleAlert size="20px" color="#ef4444" />
                         </div>
                       </div>
-                      <span className="text-center text-sm text-red-500">
-                        {error}
-                      </span>
+                      <span className="text-sm text-red-500">{error}</span>
                     </div>
                   )}
                   <Button onClick={handleSubmit} disabled={loading}>

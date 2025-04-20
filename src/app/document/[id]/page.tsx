@@ -1,21 +1,15 @@
 import React from "react";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import DocumentViewer from "@/components/DocumentViewer";
-import CommentSection from "@/components/CommentSection";
 import PostUpvote from "@/components/PostUpvote";
-import {
-  BookOpen,
-  Clock,
-  GraduationCap,
-  School,
-  ThumbsDown,
-} from "lucide-react";
-import { getRelativeTime } from "@/app/utils/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import {
+//   BookOpen,
+//   Clock,
+//   GraduationCap,
+//   School,
+//   ThumbsDown,
+// } from "lucide-react";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import Head from "next/head";
 import DesktopCommentSection from "@/components/DesktopCommentSection";
 import MobileCommentSection from "@/components/MobileCommentSection";
