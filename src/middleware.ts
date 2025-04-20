@@ -21,9 +21,12 @@ export default async function middleware(req: NextRequest) {
   const session = await decrypt(sessionCookie);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+  //commented out for now because protectedRoutes is empty anyway
   // if (isProtectedRoute && !session?.userId) {
   //   return NextResponse.redirect(new URL("/login", baseUrl));
   // }
+
   // fetch onboarding completion status if session exists
   if (session?.userId) {
     const res = await fetch(`${baseUrl}/api/onboarding/completionStatus`, {
@@ -46,17 +49,14 @@ export default async function middleware(req: NextRequest) {
     if (path === "/onboarding" && isOnboardingCompleted) {
       return NextResponse.redirect(new URL("/", baseUrl));
     }
-    // If accessing any other page (not onboarding/api) but not yet onboarded -> redirect to onboarding
+    // If accessing any other page (not /onboarding or /api /authcomplete) but not yet onboarded -> redirect to onboarding
     if (
       !isOnboardingCompleted &&
       path !== "/onboarding" &&
       !path.startsWith("/api") &&
       !path.startsWith("/authcomplete")
     ) {
-      const redirectUrl = new URL(
-        `/onboarding?redirect=${encodeURIComponent(path)}`,
-        baseUrl
-      );
+      const redirectUrl = new URL(`/onboarding`, baseUrl);
       return NextResponse.redirect(redirectUrl);
     }
   }
