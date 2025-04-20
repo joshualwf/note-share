@@ -264,7 +264,7 @@ export default function Home() {
               </Pagination>
             </>
           )}
-          {loading && (
+          {documents.length === 0 && loading && (
             <div className="flex flex-col items-center self-center">
               <LoadingSpinner />
             </div>
