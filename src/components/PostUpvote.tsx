@@ -35,7 +35,7 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
         setUpvoteCount((prev: number) => Math.max(0, prev - 1));
       }
 
-      toast({ title: data.message });
+      toast({ title: `${data.message} 🤓` });
     } catch (err) {
       console.error("Upvote error:", err);
       toast({ title: "Unexpected error. Try again later." });
