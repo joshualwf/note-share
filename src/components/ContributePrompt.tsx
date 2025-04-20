@@ -26,7 +26,10 @@ function ContributePrompt() {
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent onEscapeKeyDown={(e) => e.preventDefault()}>
+      <AlertDialogContent
+        onEscapeKeyDown={(e) => e.preventDefault()}
+        className="rounded-xl w-full w-4/5"
+      >
         <AlertDialogHeader>
           <AlertDialogTitle>Like what you see?</AlertDialogTitle>
           <AlertDialogDescription>
@@ -34,11 +37,11 @@ function ContributePrompt() {
             This will only take a few seconds 🤓
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <Link href="/contribute">
+        <Link href="/contribute">
+          <AlertDialogFooter>
             <Button>Continue</Button>
-          </Link>
-        </AlertDialogFooter>
+          </AlertDialogFooter>
+        </Link>
       </AlertDialogContent>
     </AlertDialog>
   );
