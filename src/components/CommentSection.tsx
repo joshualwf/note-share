@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useUser } from "@/app/UserContext";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { MessagesSquare, SendHorizontal } from "lucide-react";
@@ -9,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { LoadingSpinner } from "./LoadingSpinner";
 
 function CommentSection({ postId }: { postId: number }) {
+  const { user } = useUser();
   const [comments, setComments] = useState<CommentType[]>([]);
   const [error, setError] = useState("");
   const [commentText, setCommentText] = useState("");
@@ -37,36 +39,53 @@ function CommentSection({ postId }: { postId: number }) {
 
   const handlePostComment = async () => {
     if (!commentText.trim()) return;
-
+  
+    const tempId = Date.now();
+    const tempComment: CommentType = {
+      commentId: tempId,
+      username: "You",
+      profilePicture: user?.profilePicture ?? undefined,
+      createdAt: new Date().toISOString(),
+      text: commentText.trim(),
+      upvoteCount: 0,
+      replies: [],
+      isReply: false,
+    };
+  
+    setComments((prev) => [tempComment, ...prev]);
+    setCommentText("");
+  
     try {
       const res = await fetch(`/api/comments/postComment/${postId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          text: commentText.trim(),
-        }),
+        body: JSON.stringify({ text: tempComment.text }),
       });
-
+  
       if (!res.ok) {
         const errorData = await res.json();
-        toast({
-          title: errorData.message || "Failed to post comment",
-        });
+        setComments((prev) => prev.filter((c) => c.commentId !== tempId));
+        toast({ title: errorData.message });
         return;
       }
-
-      toast({
-        title: "Comment added! 💬",
-      });
-      setCommentText(""); // Clear the input
-      fetchComments();
+      
+      const savedComment: CommentType = await res.json();
+  
+      // Replace optimistic comment with saved comment
+      setComments((prev) =>
+        prev.map((c) =>
+          c.commentId === tempId ? savedComment : c
+        )
+      );
+  
+      toast({ title: "Comment added! 💬" });
     } catch (err) {
+      // Remove optimistic comment on failure
+      setComments((prev) => prev.filter((c) => c.commentId !== tempId));
       console.error(err);
-      toast({
-        title: "Something went wrong while posting",
-      });
+      toast({ title: "Something went wrong while posting" });
     }
   };
 
