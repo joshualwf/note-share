@@ -35,9 +35,9 @@ type Post = {
   upvoteCount: number;
   createdAt: Date;
 };
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function Home() {
-  const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
   const [documents, setDocuments] = useState<Post[]>([]);
   const [documentCount, setDocumentCount] = useState(0);
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");

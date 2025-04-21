@@ -29,9 +29,9 @@ import { LoginSignupDialog } from "@/components/LoginSignupDialog";
 import { useUser } from "../UserContext";
 import contributeAnimationData from "@/app/assets/contribute-animation.json";
 import dynamic from "next/dynamic";
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function ContributeDrawerDialog() {
-  const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
   const { fetchContributionStatus } = useUser();
   const formTitle = "Contribute";
   const formDescription = "Help others learn and succeed!";
