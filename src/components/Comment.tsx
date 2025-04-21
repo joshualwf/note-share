@@ -7,6 +7,7 @@ import { getRelativeTime } from "@/app/utils/utils";
 import { CommentType } from "@/app/types/comment";
 import { Input } from "./ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 type Props = CommentType & {
   postId: number;
@@ -132,9 +133,8 @@ function Comment({
               onClick={handleToggleUpvote}
             >
               <ThumbsUp
-                className="w-4 h-4"
+                className={cn("w-4 h-4", hasLiked && "text-primary")}
                 strokeWidth={hasLiked ? 2.5 : 1.5}
-                color={hasLiked ? "#0b57d0" : "#000000"}
               />
             </Button>
             {upvoteCountUpdate > 0 && (

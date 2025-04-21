@@ -1,11 +1,10 @@
 "use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CircleAlert, FolderPlus } from "lucide-react";
+import { CircleAlert } from "lucide-react";
 import { Combobox } from "@/components/ComboBox";
 import {
   ACCEPTED_FILE_EXTENSIONS,
@@ -25,11 +24,11 @@ import {
 } from "@/components/ui/select";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Card } from "@/components/ui/card";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { LoginSignupDialog } from "@/components/LoginSignupDialog";
 import { useUser } from "../UserContext";
+import Lottie from "lottie-react";
+import contributeAnimationData from "@/app/assets/contribute-animation.json";
 
 export default function ContributeDrawerDialog() {
   const { fetchContributionStatus } = useUser();
@@ -202,12 +201,9 @@ export default function ContributeDrawerDialog() {
             <div className="flex flex-col gap-4">
               <Card className="mx-auto w-full max-w-sm p-6">
                 <div className="mb-6 flex flex-col items-center">
-                  <DotLottieReact
-                    src="https://lottie.host/3b08c76a-5fa2-4eb1-962c-f6680c857f9d/Kj8DvZGHkC.lottie"
-                    loop
-                    autoplay
-                    height="50%"
-                    width="100%"
+                  <Lottie
+                    animationData={contributeAnimationData}
+                    className="h-[150px] mr-2"
                   />
                   <p className="mb-2 text-2xl font-bold">{formTitle}</p>
                   <p className="text-muted-foreground text-center">

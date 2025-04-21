@@ -17,9 +17,10 @@ import {
 import { FolderPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import Head from "next/head";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import Lottie from "lottie-react";
+import searchAnimationData from "./assets/search-cartoon-animation.json";
 
 type Post = {
   id: number;
@@ -276,20 +277,9 @@ export default function Home() {
                 : "hidden"
             }`}
           >
-            {/* <iframe
-              src="https://lottie.host/embed/712494ef-bec7-4086-99a2-46b434be807a/7Wp7qom6dl.lottie"
-              style={{ background: "transparent" }}
-            /> */}
-            <div className="h-[200px]">
-              <DotLottieReact
-                src="https://lottie.host/f5c73039-3b1a-4b09-9ffe-c6c0acd128f3/qfF0Udo0ac.lottie"
-                loop
-                autoplay
-              />
-            </div>
-
-            <span className="">No matching materials found</span>
-            <span className="text-muted-foreground mt-1">
+            <Lottie animationData={searchAnimationData} className="h-[150px]" />
+            <span className="text">No matching materials found</span>
+            <span className="text-muted-foreground mt-1 text-sm">
               Try using general keywords or check your spelling
             </span>
           </div>

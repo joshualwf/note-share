@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { ThumbsUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 type PostUpvoteProps = {
   postId: number;
@@ -61,10 +62,14 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
   return (
     <div className="flex gap-1 items-center">
       <Button variant="outline" onClick={handleToggleUpvote}>
-        <ThumbsUp
+        {/* <ThumbsUp
           className="w-4 h-4"
           strokeWidth={hasLiked ? 2.5 : 1.5}
           color={hasLiked ? "#0b57d0" : "#000000"}
+        /> */}
+        <ThumbsUp
+          className={cn("w-4 h-4", hasLiked && "text-primary")}
+          strokeWidth={hasLiked ? 2.5 : 1.5}
         />
         {upvoteCount > 0 && <span className="text-xs">{upvoteCount}</span>}
       </Button>

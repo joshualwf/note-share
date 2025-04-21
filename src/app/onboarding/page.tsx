@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CircleAlert } from "lucide-react";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useUser } from "../UserContext";
+import Lottie from "lottie-react";
+import onboardingAnimationData from "@/app/assets/handshake-animation.json";
+
 export default function Page() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,10 +62,9 @@ export default function Page() {
             <div className="flex flex-col gap-4">
               <Card className="mx-auto w-full max-w-sm p-6">
                 <div className="mb-6 flex flex-col items-center">
-                  <DotLottieReact
-                    src="https://lottie.host/635f4ac2-6ee0-464e-830a-6460da7e0953/PqwW6wcuvC.lottie"
-                    loop
-                    autoplay
+                  <Lottie
+                    animationData={onboardingAnimationData}
+                    className="h-[170px]"
                   />
                   <p className="mb-2 text-2xl font-bold">Welcome!</p>
                   <p className="text-muted-foreground">
