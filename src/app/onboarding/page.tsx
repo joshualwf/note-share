@@ -7,10 +7,11 @@ import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CircleAlert } from "lucide-react";
 import { useUser } from "../UserContext";
-import Lottie from "lottie-react";
 import onboardingAnimationData from "@/app/assets/handshake-animation.json";
+import dynamic from "next/dynamic";
 
 export default function Page() {
+  const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

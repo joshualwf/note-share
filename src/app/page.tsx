@@ -19,8 +19,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Head from "next/head";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import Lottie from "lottie-react";
 import searchAnimationData from "./assets/search-cartoon-animation.json";
+import dynamic from "next/dynamic";
 
 type Post = {
   id: number;
@@ -37,6 +37,7 @@ type Post = {
 };
 
 export default function Home() {
+  const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
   const [documents, setDocuments] = useState<Post[]>([]);
   const [documentCount, setDocumentCount] = useState(0);
   const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
