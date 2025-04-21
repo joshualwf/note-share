@@ -27,10 +27,11 @@ import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { LoginSignupDialog } from "@/components/LoginSignupDialog";
 import { useUser } from "../UserContext";
-import Lottie from "lottie-react";
 import contributeAnimationData from "@/app/assets/contribute-animation.json";
+import dynamic from "next/dynamic";
 
 export default function ContributeDrawerDialog() {
+  const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
   const { fetchContributionStatus } = useUser();
   const formTitle = "Contribute";
   const formDescription = "Help others learn and succeed!";
