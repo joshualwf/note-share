@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { ThumbsUp, ChevronDown, ChevronUp, SendHorizontal } from "lucide-react";
 import { Button } from "./ui/button";
@@ -30,8 +30,29 @@ function Comment({
   const [showReplies, setShowReplies] = useState(false);
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [replyText, setReplyText] = useState(`@${username} `);
+  const [upvoteCountUpdate, setUpvoteCount] = useState(upvoteCount);
+  const [hasLiked, setHasLiked] = useState(false);
 
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchLikedStatus = async () => {
+      try {
+        const res = await fetch(`/api/comments/getCommentUpvote/${commentId}`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (res.ok && data.hasLiked !== undefined) {
+          setHasLiked(data.hasLiked);
+        }
+        console.log(res);
+      } catch (err) {
+        console.error("Failed to fetch like status:", err);
+      }
+    };
+
+    fetchLikedStatus();
+  }, [postId]);
 
   const handleReplySubmit = async () => {
     if (!replyText.trim()) return;
@@ -65,20 +86,27 @@ function Comment({
   };
 
   const handleToggleUpvote = async () => {
+    const optimisticChange = hasLiked ? -1 : 1;
+
+    setHasLiked((prev) => !prev);
+    setUpvoteCount((prev) => Math.max(0, prev + optimisticChange));
+
     try {
       const res = await fetch(`/api/comments/postCommentUpvote/${commentId}`, {
         method: "POST",
         credentials: "include",
       });
-      const result = await res.json();
+
+      const data = await res.json();
+
       if (!res.ok) {
-        toast({ title: result.message || "Failed to toggle upvote" });
-        return;
+        throw new Error(data.message || "Something went wrong.");
       }
-      fetchComments(); // refresh the comment list
-    } catch (err) {
-      console.error("Error toggling upvote:", err);
-      toast({ title: "Something went wrong while upvoting" });
+    } catch (err: any) {
+      // Revert changes if error
+      setHasLiked((prev) => !prev);
+      setUpvoteCount((prev) => Math.max(0, prev - optimisticChange));
+      toast({ title: err?.message || "Failed to update like. Try again." });
     }
   };
 
@@ -103,9 +131,15 @@ function Comment({
               className="px-1 py-0 border rounded-2xl border-transparent hover:bg-accent"
               onClick={handleToggleUpvote}
             >
-              <ThumbsUp className="w-4 h-4" />
+              <ThumbsUp
+                className="w-4 h-4"
+                strokeWidth={hasLiked ? 2.5 : 1.5}
+                color={hasLiked ? "#0b57d0" : "#000000"}
+              />
             </Button>
-            {upvoteCount > 0 && <span className="text-xs">{upvoteCount}</span>}
+            {upvoteCountUpdate > 0 && (
+              <span className="text-xs">{upvoteCountUpdate}</span>
+            )}
           </div>
           <Button
             variant="ghost"

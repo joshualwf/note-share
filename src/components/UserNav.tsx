@@ -21,13 +21,12 @@ export function UserNav() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    const redirectTo = window.location.pathname;
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/logout`, {
       method: "POST",
     });
     if (res.ok) {
       await fetchUser();
-      router.push(redirectTo);
+      router.push("/");
     } else {
       alert("Logout failed.");
     }
