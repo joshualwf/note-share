@@ -105,11 +105,11 @@ function Comment({
       if (!res.ok) {
         throw new Error(data.message || "Something went wrong.");
       }
-    } catch (err) {
+    } catch (err: any) {
       // Revert changes if error
       setHasLiked((prev) => !prev);
       setUpvoteCount((prev) => Math.max(0, prev - optimisticChange));
-      toast({ title: "Failed to update vote. Try again." });
+      toast({ title: err?.message || "Failed to update like. Try again." });
     }
   };
 
