@@ -28,7 +28,7 @@ function MobileCommentSection({ postId }: { postId: number }) {
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="grow flex flex-col h-full min-h-0 overflow-auto"
+        className="grow flex flex-col h-[calc(100vh-80px)] min-h-0 overflow-auto"
       >
         <CommentSection postId={postId} />
       </SheetContent>
