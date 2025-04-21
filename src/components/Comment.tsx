@@ -38,12 +38,9 @@ function Comment({
   useEffect(() => {
     const fetchLikedStatus = async () => {
       try {
-        const res = await fetch(
-          `/api/comments/postCommentUpvote/${commentId}`,
-          {
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`/api/comments/getCommentUpvote/${commentId}`, {
+          credentials: "include",
+        });
         const data = await res.json();
         if (res.ok && data.hasLiked !== undefined) {
           setHasLiked(data.hasLiked);

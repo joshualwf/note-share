@@ -17,7 +17,7 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
   useEffect(() => {
     const fetchLikedStatus = async () => {
       try {
-        const res = await fetch(`/api/posts/postUpvote/${postId}`, {
+        const res = await fetch(`/api/posts/getUpvote/${postId}`, {
           credentials: "include",
         });
         const data = await res.json();
