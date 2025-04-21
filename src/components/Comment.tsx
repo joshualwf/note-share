@@ -38,9 +38,12 @@ function Comment({
   useEffect(() => {
     const fetchLikedStatus = async () => {
       try {
-        const res = await fetch(`/api/comments/postCommentUpvote/${commentId}`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `/api/comments/postCommentUpvote/${commentId}`,
+          {
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         if (res.ok && data.hasLiked !== undefined) {
           setHasLiked(data.hasLiked);
@@ -102,7 +105,6 @@ function Comment({
       if (!res.ok) {
         throw new Error(data.message || "Something went wrong.");
       }
-
     } catch (err) {
       // Revert changes if error
       setHasLiked((prev) => !prev);
@@ -135,10 +137,12 @@ function Comment({
               <ThumbsUp
                 className="w-4 h-4"
                 strokeWidth={hasLiked ? 2.5 : 1.5}
-                color={hasLiked ? "#0b56d0" : "#000000"}
+                color={hasLiked ? "#0b57d0" : "#000000"}
               />
             </Button>
-            {upvoteCountUpdate > 0 && <span className="text-xs">{upvoteCountUpdate}</span>}
+            {upvoteCountUpdate > 0 && (
+              <span className="text-xs">{upvoteCountUpdate}</span>
+            )}
           </div>
           <Button
             variant="ghost"

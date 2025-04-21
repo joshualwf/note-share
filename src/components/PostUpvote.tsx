@@ -32,7 +32,7 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
 
     fetchLikedStatus();
   }, [postId]);
-  
+
   const handleToggleUpvote = async () => {
     const optimisticChange = hasLiked ? -1 : 1;
 
@@ -50,7 +50,6 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
       if (!res.ok) {
         throw new Error(data.message || "Something went wrong.");
       }
-
     } catch (err) {
       // Revert changes if error
       setHasLiked((prev) => !prev);
@@ -62,11 +61,11 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
   return (
     <div className="flex gap-1 items-center">
       <Button variant="outline" onClick={handleToggleUpvote}>
-      <ThumbsUp
-        className="w-4 h-4"
-        strokeWidth={hasLiked ? 2.5 : 1.5}
-        color={hasLiked ? "#0b56d0" : "#000000"}
-      />
+        <ThumbsUp
+          className="w-4 h-4"
+          strokeWidth={hasLiked ? 2.5 : 1.5}
+          color={hasLiked ? "#0b57d0" : "#000000"}
+        />
         {upvoteCount > 0 && <span className="text-xs">{upvoteCount}</span>}
       </Button>
     </div>
