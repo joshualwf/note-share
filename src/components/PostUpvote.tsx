@@ -62,11 +62,6 @@ function PostUpvote({ postId, initialUpvoteCount }: PostUpvoteProps) {
   return (
     <div className="flex gap-1 items-center">
       <Button variant="outline" onClick={handleToggleUpvote}>
-        {/* <ThumbsUp
-          className="w-4 h-4"
-          strokeWidth={hasLiked ? 2.5 : 1.5}
-          color={hasLiked ? "#0b57d0" : "#000000"}
-        /> */}
         <ThumbsUp
           className={cn("w-4 h-4", hasLiked && "text-primary")}
           strokeWidth={hasLiked ? 2.5 : 1.5}
