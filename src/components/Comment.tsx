@@ -24,6 +24,7 @@ function Comment({
   upvoteCount = 0,
   replies = [],
   isReply = false,
+  hasLiked,
   postId,
   topLevelCommentId,
   fetchComments,
@@ -32,28 +33,9 @@ function Comment({
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [replyText, setReplyText] = useState(`@${username} `);
   const [upvoteCountUpdate, setUpvoteCount] = useState(upvoteCount);
-  const [hasLiked, setHasLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(hasLiked ?? false);
 
   const { toast } = useToast();
-
-  useEffect(() => {
-    const fetchLikedStatus = async () => {
-      try {
-        const res = await fetch(`/api/comments/getCommentUpvote/${commentId}`, {
-          credentials: "include",
-        });
-        const data = await res.json();
-        if (res.ok && data.hasLiked !== undefined) {
-          setHasLiked(data.hasLiked);
-        }
-        console.log(res);
-      } catch (err) {
-        console.error("Failed to fetch like status:", err);
-      }
-    };
-
-    fetchLikedStatus();
-  }, [commentId]);
 
   const handleReplySubmit = async () => {
     if (!replyText.trim()) return;
@@ -87,9 +69,9 @@ function Comment({
   };
 
   const handleToggleUpvote = async () => {
-    const optimisticChange = hasLiked ? -1 : 1;
+    const optimisticChange = isLiked ? -1 : 1;
 
-    setHasLiked((prev) => !prev);
+    setIsLiked((prev) => !prev);
     setUpvoteCount((prev) => Math.max(0, prev + optimisticChange));
 
     try {
@@ -105,7 +87,7 @@ function Comment({
       }
     } catch (err: any) {
       // Revert changes if error
-      setHasLiked((prev) => !prev);
+      setIsLiked((prev) => !prev);
       setUpvoteCount((prev) => Math.max(0, prev - optimisticChange));
       toast({ title: err?.message || "Failed to update like. Try again." });
     }
@@ -133,8 +115,8 @@ function Comment({
               onClick={handleToggleUpvote}
             >
               <ThumbsUp
-                className={cn("w-4 h-4", hasLiked && "text-primary")}
-                strokeWidth={hasLiked ? 2.5 : 1.5}
+                className={cn("w-4 h-4", isLiked && "text-primary")}
+                strokeWidth={isLiked ? 2.5 : 1.5}
               />
             </Button>
             {upvoteCountUpdate > 0 && (

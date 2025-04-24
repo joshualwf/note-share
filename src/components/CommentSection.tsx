@@ -48,10 +48,11 @@ function CommentSection({ postId }: { postId: number }) {
       createdAt: new Date().toISOString(),
       text: commentText.trim(),
       upvoteCount: 0,
+      hasLiked: false,
       replies: [],
       isReply: false,
     };
-  
+    
     setComments((prev) => [tempComment, ...prev]);
     setCommentText("");
   

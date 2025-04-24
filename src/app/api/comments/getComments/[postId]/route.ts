@@ -1,5 +1,6 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getUserFromCookie } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
@@ -12,17 +13,33 @@ export async function GET(
     return new Response("Invalid post ID", { status: 400 });
   }
 
+  const user = await getUserFromCookie();
+  if (!user) {
+    return NextResponse.json(
+      { message: "Error fetching user information" },
+      { status: 401 }
+    );
+  }
+
+  const userId = Number(user.id);
+
   try {
     const topLevelComments = await prisma.comment.findMany({
       where: {
         postId: postIdNum,
-        parentCommentId: null, // Only top-level comments
+        parentCommentId: null,
       },
       include: {
         user: true,
+        upvotes: {
+          where: { userId }, 
+        },
         childComments: {
           include: {
             user: true,
+            upvotes: {
+              where: { userId },
+            },
           },
           orderBy: {
             createdAt: "asc",
@@ -33,7 +50,7 @@ export async function GET(
         createdAt: "desc",
       },
     });
-
+    
     const formatted = topLevelComments.map((comment) => ({
       commentId: comment.id,
       username: comment.user.username,
@@ -42,6 +59,7 @@ export async function GET(
       text: comment.commentText,
       upvoteCount: comment.upvoteCount,
       isReply: false,
+      hasLiked: comment.upvotes.length > 0, // upvote status
       replies: comment.childComments.map((reply) => ({
         commentId: reply.id,
         username: reply.user.username,
@@ -50,6 +68,7 @@ export async function GET(
         text: reply.commentText,
         upvoteCount: reply.upvoteCount,
         isReply: true,
+        hasLiked: reply.upvotes.length > 0, // upvote status
         replies: [], // For now, only supporting 1 level of nesting
       })),
     }));

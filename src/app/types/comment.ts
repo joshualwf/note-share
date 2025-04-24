@@ -7,4 +7,5 @@ export type CommentType = {
   upvoteCount?: number;
   replies?: Comment[];
   isReply?: boolean;
+  hasLiked: boolean;
 };
