@@ -114,7 +114,7 @@ function CommentSection({ postId }: { postId: number }) {
           ) : (
             comments.map((comment, index) => (
               <Comment
-                key={index}
+                key={comment.commentId}
                 {...comment}
                 topLevelCommentId={comment.commentId}
                 postId={postId}
