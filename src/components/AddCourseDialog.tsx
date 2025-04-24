@@ -44,6 +44,7 @@ function AddCourseDialog({
     setLoading(true);
     if (!addCourseSchool || !addCourseName) {
       setError("Please fill out all fields before submitting");
+      setLoading(false);
       return;
     }
 

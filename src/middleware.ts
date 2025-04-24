@@ -26,7 +26,14 @@ export default async function middleware(req: NextRequest) {
   // if (isProtectedRoute && !session?.userId) {
   //   return NextResponse.redirect(new URL("/login", baseUrl));
   // }
-
+  if (!session?.userId) {
+    // Prevent unauthenticated users from accessing /admin
+    if (path === "/admin") {
+      return NextResponse.redirect(new URL("/login", baseUrl));
+    }
+    return NextResponse.next();
+  }
+  
   // fetch onboarding completion status if session exists
   if (session?.userId) {
     const res = await fetch(`${baseUrl}/api/onboarding/completionStatus`, {
@@ -38,7 +45,7 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/login", baseUrl));
     }
 
-    const { isOnboardingCompleted } = await res.json();
+    const { isOnboardingCompleted, isAdmin } = await res.json();
 
     // If accessing /login or /signup while logged in, redirect to home
     if (path === "/login" || path === "/signup") {
@@ -47,6 +54,10 @@ export default async function middleware(req: NextRequest) {
 
     // If accessing /onboarding but already completed onboarding, redirect to home
     if (path === "/onboarding" && isOnboardingCompleted) {
+      return NextResponse.redirect(new URL("/", baseUrl));
+    }
+    
+    if (path === "/admin" && !isAdmin) {
       return NextResponse.redirect(new URL("/", baseUrl));
     }
     // If accessing any other page (not /onboarding or /api /authcomplete) but not yet onboarded -> redirect to onboarding
