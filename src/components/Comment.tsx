@@ -53,7 +53,7 @@ function Comment({
     };
 
     fetchLikedStatus();
-  }, [postId]);
+  }, [commentId]);
 
   const handleReplySubmit = async () => {
     if (!replyText.trim()) return;

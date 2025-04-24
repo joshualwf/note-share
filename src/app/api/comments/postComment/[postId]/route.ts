@@ -47,7 +47,7 @@ export async function POST(
     });
 
     return Response.json({
-      id: newComment.id,
+      commentId: newComment.id,
       username: newComment.user.username ?? "Anonymous",
       profilePicture:
         newComment.user.profilePicture ?? "https://github.com/shadcn.png",
