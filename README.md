@@ -4,7 +4,7 @@
 
 🔗 **Try it out:** [NoteShare](https://sharemynotes.vercel.app)
 
-If Reddit and Studocu had a baby, it would be **NoteShare** – a collaborative platform where students and professionals can easily share, discover, and discuss notes and study materials
+If Reddit and Studocu had a baby, it would be **NoteShare** – a collaborative platform where students and professionals can easily share, discover, and discuss notes and study materials.
 
 ## Getting Started for local development
 
