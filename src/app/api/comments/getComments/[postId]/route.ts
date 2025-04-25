@@ -14,14 +14,7 @@ export async function GET(
   }
 
   const user = await getUserFromCookie();
-  if (!user) {
-    return NextResponse.json(
-      { message: "Error fetching user information" },
-      { status: 401 }
-    );
-  }
-
-  const userId = Number(user.id);
+  const userId = user ? Number(user.id) : null;
 
   try {
     const topLevelComments = await prisma.comment.findMany({
@@ -31,15 +24,19 @@ export async function GET(
       },
       include: {
         user: true,
-        upvotes: {
-          where: { userId }, 
-        },
+        upvotes: userId
+          ? {
+              where: { userId },
+            }
+          : true, // fetch all upvotes if no filter
         childComments: {
           include: {
             user: true,
-            upvotes: {
-              where: { userId },
-            },
+            upvotes: userId
+              ? {
+                  where: { userId },
+                }
+              : true,
           },
           orderBy: {
             createdAt: "asc",
@@ -50,7 +47,7 @@ export async function GET(
         createdAt: "desc",
       },
     });
-    
+
     const formatted = topLevelComments.map((comment) => ({
       commentId: comment.id,
       username: comment.user.username,
@@ -59,7 +56,7 @@ export async function GET(
       text: comment.commentText,
       upvoteCount: comment.upvoteCount,
       isReply: false,
-      hasLiked: comment.upvotes.length > 0, // upvote status
+      hasLiked: userId ? comment.upvotes.length > 0 : false,
       replies: comment.childComments.map((reply) => ({
         commentId: reply.id,
         username: reply.user.username,
@@ -68,8 +65,8 @@ export async function GET(
         text: reply.commentText,
         upvoteCount: reply.upvoteCount,
         isReply: true,
-        hasLiked: reply.upvotes.length > 0, // upvote status
-        replies: [], // For now, only supporting 1 level of nesting
+        hasLiked: userId ? reply.upvotes.length > 0 : false,
+        replies: [],
       })),
     }));
 
