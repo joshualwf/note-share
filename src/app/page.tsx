@@ -117,6 +117,7 @@ export default function Home() {
     <>
       <Head>
         <title>Free Study materials</title>
+        <meta property="og:type" content="website" />
         <meta
           name="description"
           content="Access free exam papers, notes, cheatsheets, tutorials, exam solutions, practice papers and discussions for University, Junior College, Polytechnic, Secondary and Primary schools!"
@@ -131,6 +132,8 @@ export default function Home() {
           property="og:image"
           content={`${process.env.NEXT_PUBLIC_BASE_URL}/icon9.png`}
         />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
       </Head>
       <div className="w-full flex flex-col fade-in">
         <div className="w-full flex flex-col pt-8 pb-5 bg-accent px-4">

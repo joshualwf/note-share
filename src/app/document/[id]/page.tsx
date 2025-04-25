@@ -66,6 +66,12 @@ async function DocumentPage(props: {
           property="og:image"
           content={`${process.env.NEXT_PUBLIC_BASE_URL}/icon9.png`}
         />
+        <meta
+          property="og:image"
+          content={`${process.env.NEXT_PUBLIC_BASE_URL}/icon9.png`}
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
       </Head>
       <ContributePrompt />
       <ResizablePanelGroup direction="horizontal" className="h-full w-full">
