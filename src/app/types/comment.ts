@@ -8,4 +8,5 @@ export type CommentType = {
   replies?: Comment[];
   isReply?: boolean;
   hasLiked: boolean;
+  isOwnComment: boolean;
 };

@@ -54,6 +54,7 @@ export async function POST(
       createdAt: newComment.createdAt,
       text: newComment.commentText,
       upvoteCount: newComment.upvoteCount,
+      isOwnComment: true,
       isReply: !!parentCommentId,
       replies: [],
     });

@@ -57,6 +57,7 @@ export async function GET(
       upvoteCount: comment.upvoteCount,
       isReply: false,
       hasLiked: userId ? comment.upvotes.length > 0 : false,
+      isOwnComment: userId ? userId === comment.userId : false,
       replies: comment.childComments.map((reply) => ({
         commentId: reply.id,
         username: reply.user.username,
@@ -66,6 +67,7 @@ export async function GET(
         upvoteCount: reply.upvoteCount,
         isReply: true,
         hasLiked: userId ? reply.upvotes.length > 0 : false,
+        isOwnComment: userId ? userId === comment.userId : false,
         replies: [],
       })),
     }));

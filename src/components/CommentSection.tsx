@@ -49,6 +49,7 @@ function CommentSection({ postId }: { postId: number }) {
       text: commentText.trim(),
       upvoteCount: 0,
       hasLiked: false,
+      isOwnComment: true,
       replies: [],
       isReply: false,
     };
@@ -90,6 +91,27 @@ function CommentSection({ postId }: { postId: number }) {
     }
   };
 
+  const handleDeleteComment = async (commentId: number) => {
+    const prevComments = [...comments];
+    setComments((prev) => prev.filter((c) => c.commentId !== commentId));
+  
+    try {
+      const res = await fetch(`/api/comments/deleteComment/${commentId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+  
+      if (!res.ok) {
+        throw new Error((await res.json()).message || "Failed to delete comment");
+      }
+  
+      toast({ title: "Comment deleted." });
+    } catch (err: any) {
+      setComments(prevComments); // rollback if error
+      toast({ title: err.message || "Something went wrong. Try again." });
+    }
+  };  
+
   return (
     <>
       <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px]">
@@ -119,6 +141,7 @@ function CommentSection({ postId }: { postId: number }) {
                 topLevelCommentId={comment.commentId}
                 postId={postId}
                 fetchComments={fetchComments}
+                handleDeleteComment={handleDeleteComment}
               />
             ))
           )}

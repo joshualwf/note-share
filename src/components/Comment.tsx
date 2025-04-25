@@ -1,7 +1,8 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useUser } from "@/app/UserContext";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { ThumbsUp, ChevronDown, ChevronUp, SendHorizontal } from "lucide-react";
+import { ThumbsUp, ChevronDown, ChevronUp, SendHorizontal, EllipsisVertical } from "lucide-react";
 import { Button } from "./ui/button";
 import { getRelativeTime } from "@/app/utils/utils";
 import { CommentType } from "@/app/types/comment";
@@ -13,6 +14,7 @@ type Props = CommentType & {
   postId: number;
   topLevelCommentId: number;
   fetchComments: () => void;
+  handleDeleteComment: (commentId: number) => void;
 };
 
 function Comment({
@@ -25,10 +27,13 @@ function Comment({
   replies = [],
   isReply = false,
   hasLiked,
+  isOwnComment,
   postId,
   topLevelCommentId,
   fetchComments,
+  handleDeleteComment,
 }: Props) {
+  const { user } = useUser();
   const [showReplies, setShowReplies] = useState(false);
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [replyText, setReplyText] = useState(`@${username} `);
@@ -105,6 +110,11 @@ function Comment({
           <span className="text-xs font-light">
             {getRelativeTime(createdAt)}
           </span>
+          {(isOwnComment || user?.admin === 1) && (
+            <Button onClick={() => handleDeleteComment(commentId)}>
+              <EllipsisVertical />
+            </Button>
+          )}
         </div>
         <span className="text-sm mt-1 break-all">{text}</span>
         <div className="flex items-center gap-2">
@@ -177,6 +187,7 @@ function Comment({
                     postId={postId}
                     topLevelCommentId={topLevelCommentId}
                     fetchComments={fetchComments}
+                    handleDeleteComment={handleDeleteComment}
                   />
                 ))}
               </div>
