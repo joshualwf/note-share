@@ -2,7 +2,13 @@
 import React, { useState } from "react";
 import { useUser } from "@/app/UserContext";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { ThumbsUp, ChevronDown, ChevronUp, SendHorizontal, EllipsisVertical } from "lucide-react";
+import {
+  ThumbsUp,
+  ChevronDown,
+  ChevronUp,
+  SendHorizontal,
+  Trash2,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { getRelativeTime } from "@/app/utils/utils";
 import { CommentType } from "@/app/types/comment";
@@ -110,14 +116,9 @@ function Comment({
           <span className="text-xs font-light">
             {getRelativeTime(createdAt)}
           </span>
-          {(isOwnComment || user?.admin === 1) && (
-            <Button onClick={() => handleDeleteComment(commentId)}>
-              <EllipsisVertical />
-            </Button>
-          )}
         </div>
         <span className="text-sm mt-1 break-all">{text}</span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <div className="flex gap-1 items-center">
             <Button
               variant="ghost"
@@ -133,6 +134,15 @@ function Comment({
               <span className="text-xs">{upvoteCountUpdate}</span>
             )}
           </div>
+          {(isOwnComment || user?.admin === 1) && (
+            <Button
+              variant="ghost"
+              onClick={() => handleDeleteComment(commentId)}
+              className="px-1 py-0 border rounded-2xl border-transparent hover:bg-accent"
+            >
+              <Trash2 />
+            </Button>
+          )}
           <Button
             variant="ghost"
             className="px-1 py-0 border rounded-2xl border-transparent hover:bg-accent"
