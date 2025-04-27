@@ -11,6 +11,8 @@ import { Toaster } from "@/components/ui/toaster";
 import Image from "next/image";
 import { UserProvider } from "./UserContext";
 import { Suspense } from "react";
+import { Button } from "@/components/ui/button";
+import { ReceiptText } from "lucide-react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -54,6 +56,14 @@ export default async function RootLayout({
                   </Link>
                   <MainNav className="mx-6" />
                   <div className="ml-auto flex items-center space-x-2">
+                    <Link href="/terms">
+                      <Button variant="outline">
+                        <ReceiptText />
+                        <span className="hidden sm:block">
+                          Terms & Conditions
+                        </span>
+                      </Button>
+                    </Link>
                     <ModeToggle />
                     <UserNav />
                   </div>
