@@ -188,7 +188,13 @@ const SignupForm = ({
                 </Button>
               </div>
             </form>
-            <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
+            <span className="mx-auto mt-8 flex justify-center text-center text-sm text-muted-foreground">
+              By joining, you agree to our&nbsp;
+              <Link href="/terms" className="font-medium text-primary">
+                Terms & Conditions
+              </Link>
+            </span>
+            <div className="mx-auto mt-1 flex justify-center gap-1 text-sm text-muted-foreground">
               <p>{loginText}</p>
               {setDialogModeToLogin ? (
                 <button
