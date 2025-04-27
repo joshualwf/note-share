@@ -39,7 +39,7 @@ function CommentSection({ postId }: { postId: number }) {
 
   const handlePostComment = async () => {
     if (!commentText.trim()) return;
-  
+
     const tempId = Date.now();
     const tempComment: CommentType = {
       commentId: tempId,
@@ -53,10 +53,10 @@ function CommentSection({ postId }: { postId: number }) {
       replies: [],
       isReply: false,
     };
-    
+
     setComments((prev) => [tempComment, ...prev]);
     setCommentText("");
-  
+
     try {
       const res = await fetch(`/api/comments/postComment/${postId}`, {
         method: "POST",
@@ -65,23 +65,21 @@ function CommentSection({ postId }: { postId: number }) {
         },
         body: JSON.stringify({ text: tempComment.text }),
       });
-  
+
       if (!res.ok) {
         const errorData = await res.json();
         setComments((prev) => prev.filter((c) => c.commentId !== tempId));
         toast({ title: errorData.message });
         return;
       }
-      
+
       const savedComment: CommentType = await res.json();
-  
+
       // Replace optimistic comment with saved comment
       setComments((prev) =>
-        prev.map((c) =>
-          c.commentId === tempId ? savedComment : c
-        )
+        prev.map((c) => (c.commentId === tempId ? savedComment : c))
       );
-  
+
       toast({ title: "Comment added! 💬" });
     } catch (err) {
       // Remove optimistic comment on failure
@@ -94,23 +92,25 @@ function CommentSection({ postId }: { postId: number }) {
   const handleDeleteComment = async (commentId: number) => {
     const prevComments = [...comments];
     setComments((prev) => prev.filter((c) => c.commentId !== commentId));
-  
+
     try {
       const res = await fetch(`/api/comments/deleteComment/${commentId}`, {
         method: "DELETE",
         credentials: "include",
       });
-  
+
       if (!res.ok) {
-        throw new Error((await res.json()).message || "Failed to delete comment");
+        throw new Error(
+          (await res.json()).message || "Failed to delete comment"
+        );
       }
-  
-      toast({ title: "Comment deleted." });
+
+      toast({ title: "Comment deleted 🗑️" });
     } catch (err: any) {
       setComments(prevComments); // rollback if error
       toast({ title: err.message || "Something went wrong. Try again." });
     }
-  };  
+  };
 
   return (
     <>
