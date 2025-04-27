@@ -18,7 +18,7 @@ function page() {
                 />
                 <p className="mb-2 text-2xl font-bold">Terms & Conditions</p>
                 <p className="text-muted-foreground text-start">
-                  Welcome to NoteShare. This platform is a side project
+                  Welcome to NoteShare! This platform is a side project
                   developed to help students share academic materials more
                   easily. We are not a company, nor a formal educational
                   institution.
@@ -28,9 +28,9 @@ function page() {
                   Conditions:
                   <br />
                   <br />
-                  1. Disclaimer of Liability This platform is provided "as-is"
-                  with no guarantees of reliability, accuracy, uptime, or
-                  legality of content. <br />
+                  1. Disclaimer of Liability <br />
+                  This platform is provided "as-is" with no guarantees of
+                  reliability, accuracy, uptime, or legality of content.
                   <br />
                   We are not liable for any damages, losses, or consequences
                   resulting from your use of the platform. You use the platform
@@ -38,25 +38,29 @@ function page() {
                   help students. We do not moderate or verify uploaded content.{" "}
                   <br />
                   <br />
-                  2. User Responsibilities You agree: To only upload content you
-                  have the right to share. Not to post any content that
-                  infringes copyright, violates privacy laws, or breaks any
-                  applicable laws. To keep your login credentials secure.
+                  2. User Responsibilities <br />
+                  You agree: To only upload content you have the right to share.
+                  Not to post any content that infringes copyright, violates
+                  privacy laws, or breaks any applicable laws. To keep your
+                  login credentials secure.
                   <br />
                   <br />
-                  3. Content Ownership & Licensing You retain ownership of all
-                  materials you upload. By uploading, you grant us a
-                  non-exclusive, royalty-free license to store and display the
-                  materials on this platform for academic sharing purposes.
+                  3. Content Ownership & Licensing <br />
+                  You retain ownership of all materials you upload. By
+                  uploading, you grant us a non-exclusive, royalty-free license
+                  to store and display the materials on this platform for
+                  academic sharing purposes.
                   <br />
                   <br />
-                  4. Prohibited Use You must not: Upload copyrighted materials
-                  without permission Share offensive, illegal, or misleading
-                  content Attempt to exploit, disrupt, or attack the platform
+                  4. Prohibited Use <br />
+                  You must not: Upload copyrighted materials without permission
+                  Share offensive, illegal, or misleading content Attempt to
+                  exploit, disrupt, or attack the platform
                   <br />
                   <br />
-                  5. Intellectual Property & Takedown Policy If you believe your
-                  copyrighted material is being shared unlawfully, contact us at{" "}
+                  5. Intellectual Property & Takedown Policy <br />
+                  If you believe your copyrighted material is being shared
+                  unlawfully, contact us at{" "}
                   <a
                     href="mailto:notesharets@gmail.com"
                     className="text-primary underline"
@@ -67,12 +71,15 @@ function page() {
                   including removing the content if necessary.
                   <br />
                   <br />
-                  6. Changes and Termination We reserve the right to: Update
-                  these Terms from time to time Remove content at our discretion
-                  Suspend or terminate accounts that violate these Terms
+                  6. Changes and Termination <br />
+                  We reserve the right to: Update these Terms from time to time
+                  Remove content at our discretion Suspend or terminate accounts
+                  that violate these Terms
                   <br />
                   <br />
-                  7. This is a community-based platform, run by students for
+                  7. Final Notes
+                  <br />
+                  This is a community-based platform, run by students for
                   students. We are not responsible for how others use or
                   interpret the materials here. By signing up and using the
                   platform, you agree to these Terms & Conditions.
