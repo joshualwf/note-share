@@ -37,7 +37,7 @@ export function UserNav() {
     <>
       {!user ? (
         <>
-          <Link href="/login">
+          <Link href="/login" className="hidden sm:flex">
             <Button variant="outline">Login</Button>
           </Link>
           <Link href="/signup">
