@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   title: "NoteShare",
   description:
     "Access free solutions, past year exam papers (PYP), lecture notes, study guides, course summaries, practicals, practice materials and cheatsheets!",
+  icons: {
+    icon: "/icon9.png",
+  },
 };
 
 export default async function RootLayout({
