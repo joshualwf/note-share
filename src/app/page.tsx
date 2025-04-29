@@ -120,13 +120,13 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta
           name="description"
-          content="Access free exam papers, notes, cheatsheets, tutorials, exam solutions, practice papers and discussions for University, Junior College, Polytechnic, Secondary and Primary schools!"
+          content="Access free solutions, past year exam papers (PYP), lecture notes, study guides, course summaries, practicals, practice materials and cheatsheets for University, Junior College, Polytechnic, Secondary and Primary schools!"
           key="desc"
         />
         <meta property="og:title" content="Free Study materials" />
         <meta
           property="og:description"
-          content="Access free exam papers, notes, cheatsheets, tutorials, exam solutions, practice papers and discussions for University, Junior College, Polytechnic, Secondary and Primary schools!"
+          content="Access free solutions, past year exam papers (PYP), lecture notes, study guides, course summaries, practicals, practice materials and cheatsheets for University, Junior College, Polytechnic, Secondary and Primary schools!"
         />
         <meta
           property="og:image"
