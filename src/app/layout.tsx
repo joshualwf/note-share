@@ -23,7 +23,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "NoteShare",
   description:
-    "Access thousands of free exam papers, solutions, past year papers (PYP), lecture notes, study guides, course summaries, practicals, practice materials and cheatsheets!",
+    "Access free solutions, past year exam papers (PYP), lecture notes, study guides, course summaries, practicals, practice materials and cheatsheets!",
 };
 
 export default async function RootLayout({

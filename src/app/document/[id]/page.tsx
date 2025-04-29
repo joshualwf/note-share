@@ -54,13 +54,13 @@ async function DocumentPage(props: {
         <title>{description}</title>
         <meta
           name="description"
-          content={`Looking for ${description}, based on ${courseCode}, ${courseName} at ${schoolName}? Access free lecture notes, practical, summaries, past year papers (PYP), cheatsheets, solutions, exam papers, practice materials and much more for ${courseCode}, ${courseName}`}
+          content={`Looking for ${description}, based on ${courseCode}, ${courseName} at ${schoolName}? Access free lecture notes, practical, summaries, past year exam papers (PYP), cheatsheets, solutions, practice materials here!`}
           key="desc"
         />
         <meta property="og:title" content={description} />
         <meta
           property="og:description"
-          content={`Looking for ${description}, based on ${courseCode}, ${courseName} at ${schoolName}? Access free lecture notes, practical, summaries, past year papers (PYP), cheatsheets, solutions, exam papers, practice materials and much more for ${courseCode}, ${courseName}`}
+          content={`Looking for ${description}, based on ${courseCode}, ${courseName} at ${schoolName}? Access free lecture notes, practical, summaries, past year exam papers (PYP), cheatsheets, solutions, practice materials here!`}
         />
         <meta
           property="og:image"
