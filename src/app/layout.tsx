@@ -21,8 +21,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Note Share",
-  description: "A platform for students to share resources",
+  title: "NoteShare",
+  description:
+    "Access thousands of free exam papers, solutions, past year papers (PYP), lecture notes, study guides, course summaries, practicals, practice materials and cheatsheets!",
 };
 
 export default async function RootLayout({

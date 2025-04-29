@@ -54,17 +54,13 @@ async function DocumentPage(props: {
         <title>{description}</title>
         <meta
           name="description"
-          content={`${description}, ${schoolName}, ${courseName}, ${courseCode}`}
+          content={`Looking for ${description}, based on ${courseCode}, ${courseName} at ${schoolName}? Access free lecture notes, practical, summaries, past year papers (PYP), cheatsheets, solutions, exam papers, practice materials and much more for ${courseCode}, ${courseName}`}
           key="desc"
         />
         <meta property="og:title" content={description} />
         <meta
           property="og:description"
-          content={`${description}, ${schoolName}, ${courseName}, ${courseCode}`}
-        />
-        <meta
-          property="og:image"
-          content={`${process.env.NEXT_PUBLIC_BASE_URL}/icon9.png`}
+          content={`Looking for ${description}, based on ${courseCode}, ${courseName} at ${schoolName}? Access free lecture notes, practical, summaries, past year papers (PYP), cheatsheets, solutions, exam papers, practice materials and much more for ${courseCode}, ${courseName}`}
         />
         <meta
           property="og:image"
@@ -72,6 +68,7 @@ async function DocumentPage(props: {
         />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
       </Head>
       <ContributePrompt />
       <ResizablePanelGroup direction="horizontal" className="h-full w-full">
