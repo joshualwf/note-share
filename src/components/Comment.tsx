@@ -21,6 +21,7 @@ type Props = CommentType & {
   topLevelCommentId: number;
   fetchComments: () => void;
   handleDeleteComment: (commentId: number) => void;
+  handleDeleteReply?: (replyId: number, parentCommentId: number) => void;
 };
 
 function Comment({
@@ -38,6 +39,7 @@ function Comment({
   topLevelCommentId,
   fetchComments,
   handleDeleteComment,
+  handleDeleteReply,
 }: Props) {
   const { user } = useUser();
   const [showReplies, setShowReplies] = useState(false);
@@ -137,7 +139,12 @@ function Comment({
           {(isOwnComment || user?.admin === 1) && (
             <Button
               variant="ghost"
-              onClick={() => handleDeleteComment(commentId)}
+              onClick={async () => {
+                await handleDeleteComment(commentId);
+                if (isReply && handleDeleteReply) {
+                  handleDeleteReply(commentId, topLevelCommentId);
+                }
+              }}
               className="px-1 py-0 border rounded-2xl border-transparent hover:bg-accent"
             >
               <Trash2 />
@@ -198,6 +205,7 @@ function Comment({
                     topLevelCommentId={topLevelCommentId}
                     fetchComments={fetchComments}
                     handleDeleteComment={handleDeleteComment}
+                    handleDeleteReply={handleDeleteReply}
                   />
                 ))}
               </div>

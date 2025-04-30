@@ -112,6 +112,19 @@ function CommentSection({ postId }: { postId: number }) {
     }
   };
 
+  const handleDeleteReply = (replyId: number, parentCommentId: number) => {
+    setComments((prev) =>
+      prev.map((comment) => {
+        if (comment.commentId !== parentCommentId) return comment;
+        return {
+          ...comment,
+          replies: comment.replies?.filter((r) => r.commentId !== replyId),
+        };
+      })
+    );
+  };
+  
+
   return (
     <>
       <div className="flex flex-start p-3 border-b border-color-accent min-h-[50px]">
@@ -142,6 +155,7 @@ function CommentSection({ postId }: { postId: number }) {
                 postId={postId}
                 fetchComments={fetchComments}
                 handleDeleteComment={handleDeleteComment}
+                handleDeleteReply={handleDeleteReply}
               />
             ))
           )}

@@ -67,7 +67,7 @@ export async function GET(
         upvoteCount: reply.upvoteCount,
         isReply: true,
         hasLiked: userId ? reply.upvotes.length > 0 : false,
-        isOwnComment: userId ? userId === comment.userId : false,
+        isOwnComment: userId ? userId === reply.userId : false,
         replies: [],
       })),
     }));

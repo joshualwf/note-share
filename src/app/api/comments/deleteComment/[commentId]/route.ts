@@ -4,9 +4,9 @@ import { getUserFromCookie } from "@/lib/auth";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { commentId: string } }
+  { params }: { params: Promise<{ commentId: string }> }
 ): Promise<Response> {
-  const { commentId } = params;
+  const { commentId } = await params;
   const commentIdNum = Number(commentId);
 
   if (isNaN(commentIdNum)) {
