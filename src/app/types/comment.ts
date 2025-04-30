@@ -5,6 +5,8 @@ export type CommentType = {
   createdAt: string;
   text: string;
   upvoteCount?: number;
-  replies?: Comment[];
+  replies?: CommentType[];
   isReply?: boolean;
+  hasLiked: boolean;
+  isOwnComment: boolean;
 };

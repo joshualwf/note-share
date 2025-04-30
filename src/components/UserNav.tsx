@@ -74,6 +74,13 @@ export function UserNav() {
             <DropdownMenuGroup>
               {/* for development after mvp */}
               {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
+              {user.admin === 1 && (
+                <DropdownMenuItem asChild>
+                  <Link href="/admin">
+                    Admin Settings
+                  </Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem onClick={handleLogout}>
                 Log out
               </DropdownMenuItem>

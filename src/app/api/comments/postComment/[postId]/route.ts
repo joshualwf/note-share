@@ -17,7 +17,7 @@ export async function POST(
   const { text, parentCommentId } = body;
   if (!text || typeof text !== "string") {
     return NextResponse.json(
-      { message: "Invalid comment text" },
+      { message: "Invalid comment text." },
       { status: 400 }
     );
   }
@@ -26,7 +26,7 @@ export async function POST(
   const user = await getUserFromCookie();
   if (!user) {
     return NextResponse.json(
-      { message: "Please login/signup to comment" },
+      { message: "Please login to comment." },
       { status: 401 }
     );
   }
@@ -47,13 +47,14 @@ export async function POST(
     });
 
     return Response.json({
-      id: newComment.id,
+      commentId: newComment.id,
       username: newComment.user.username ?? "Anonymous",
       profilePicture:
         newComment.user.profilePicture ?? "https://github.com/shadcn.png",
       createdAt: newComment.createdAt,
       text: newComment.commentText,
       upvoteCount: newComment.upvoteCount,
+      isOwnComment: true,
       isReply: !!parentCommentId,
       replies: [],
     });

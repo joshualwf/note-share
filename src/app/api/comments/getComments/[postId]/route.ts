@@ -1,5 +1,6 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getUserFromCookie } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
@@ -12,17 +13,30 @@ export async function GET(
     return new Response("Invalid post ID", { status: 400 });
   }
 
+  const user = await getUserFromCookie();
+  const userId = user ? Number(user.id) : null;
+
   try {
     const topLevelComments = await prisma.comment.findMany({
       where: {
         postId: postIdNum,
-        parentCommentId: null, // Only top-level comments
+        parentCommentId: null,
       },
       include: {
         user: true,
+        upvotes: userId
+          ? {
+              where: { userId },
+            }
+          : true, // fetch all upvotes if no filter
         childComments: {
           include: {
             user: true,
+            upvotes: userId
+              ? {
+                  where: { userId },
+                }
+              : true,
           },
           orderBy: {
             createdAt: "asc",
@@ -30,7 +44,7 @@ export async function GET(
         },
       },
       orderBy: {
-        createdAt: "asc",
+        createdAt: "desc",
       },
     });
 
@@ -42,6 +56,8 @@ export async function GET(
       text: comment.commentText,
       upvoteCount: comment.upvoteCount,
       isReply: false,
+      hasLiked: userId ? comment.upvotes.length > 0 : false,
+      isOwnComment: userId ? userId === comment.userId : false,
       replies: comment.childComments.map((reply) => ({
         commentId: reply.id,
         username: reply.user.username,
@@ -50,7 +66,9 @@ export async function GET(
         text: reply.commentText,
         upvoteCount: reply.upvoteCount,
         isReply: true,
-        replies: [], // For now, only supporting 1 level of nesting
+        hasLiked: userId ? reply.upvotes.length > 0 : false,
+        isOwnComment: userId ? userId === reply.userId : false,
+        replies: [],
       })),
     }));
 

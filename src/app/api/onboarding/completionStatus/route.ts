@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
       id: true,
       email: true,
       onboardingCompleted: true,
+      admin: true,
     },
   });
 
@@ -28,5 +29,6 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     user,
     isOnboardingCompleted: user.onboardingCompleted,
+    isAdmin: user.admin,
   });
 }
