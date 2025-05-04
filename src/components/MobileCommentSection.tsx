@@ -24,6 +24,7 @@ function MobileCommentSection({ postId }: { postId: number }) {
       <SheetTrigger className="p-3">
         <Button variant="default" className="w-full ">
           <MessageSquareMore />
+          <span>Comments</span>
         </Button>
       </SheetTrigger>
       <SheetContent
