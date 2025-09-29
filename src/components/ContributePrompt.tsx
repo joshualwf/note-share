@@ -15,12 +15,12 @@ import { useUser } from "@/app/UserContext";
 function ContributePrompt() {
   const [open, setOpen] = useState(false);
   const { hasContributed } = useUser();
-  useEffect(() => {
-    if (hasContributed) return;
+  // useEffect(() => {
+  //   if (hasContributed) return;
 
-    const timeout = setTimeout(() => setOpen(true), 10000);
-    return () => clearTimeout(timeout);
-  }, [hasContributed]);
+  //   const timeout = setTimeout(() => setOpen(true), 10000);
+  //   return () => clearTimeout(timeout);
+  // }, [hasContributed]);
 
   if (!open) return null; // Don’t render anything unless open
 
