@@ -54,13 +54,13 @@ export function SortSelect({
         setSelectedValue(value as "Likes" | "Views" | "Latest")
       }
     >
-      <SelectTrigger className="w-[110px]">
+      <SelectTrigger className="w-[140px]">
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="Views">Views</SelectItem>
-        <SelectItem value="Likes">Likes</SelectItem>
-        <SelectItem value="Latest">Latest</SelectItem>
+        <SelectItem value="Views">Sort by Views</SelectItem>
+        <SelectItem value="Likes">Sort by Likes</SelectItem>
+        <SelectItem value="Latest">Sort by Latest</SelectItem>
       </SelectContent>
     </Select>
   );
