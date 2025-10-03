@@ -45,8 +45,10 @@ export async function GET(req: NextRequest) {
       ...(skip !== undefined && { skip }),
       ...(limit !== undefined && { take: limit }),
       orderBy:
-        sortBy === "Popularity"
+        sortBy === "Likes"
           ? { upvoteCount: "desc" }
+          : sortBy === "Views"
+          ? { viewCount: "desc" }
           : { createdAt: "desc" },
       select: {
         id: true,

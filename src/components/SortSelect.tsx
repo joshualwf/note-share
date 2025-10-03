@@ -39,8 +39,8 @@ import {
 } from "@/components/ui/select";
 
 interface SortSelectProps {
-  selectedValue: "Popularity" | "Latest";
-  setSelectedValue: (value: "Popularity" | "Latest") => void;
+  selectedValue: "Likes" | "Views" | "Latest";
+  setSelectedValue: (value: "Likes" | "Views" | "Latest") => void;
 }
 
 export function SortSelect({
@@ -51,14 +51,15 @@ export function SortSelect({
     <Select
       value={selectedValue}
       onValueChange={(value) =>
-        setSelectedValue(value as "Popularity" | "Latest")
+        setSelectedValue(value as "Likes" | "Views" | "Latest")
       }
     >
       <SelectTrigger className="w-[110px]">
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="Popularity">Popularity</SelectItem>
+        <SelectItem value="Views">Views</SelectItem>
+        <SelectItem value="Likes">Likes</SelectItem>
         <SelectItem value="Latest">Latest</SelectItem>
       </SelectContent>
     </Select>

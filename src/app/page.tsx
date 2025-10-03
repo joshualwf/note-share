@@ -41,7 +41,7 @@ const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 export default function Home() {
   const [documents, setDocuments] = useState<Post[]>([]);
   const [documentCount, setDocumentCount] = useState(0);
-  const [sortBy, setSortBy] = useState<"Popularity" | "Latest">("Popularity");
+  const [sortBy, setSortBy] = useState<"Likes" | "Views" | "Latest">("Views");
   const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
   const [schoolFilter, setSchoolFilter] = useState<string | null>(null);
   const [courseFilter, setCourseFilter] = useState<string | null>(null);
