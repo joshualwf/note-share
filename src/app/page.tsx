@@ -33,6 +33,7 @@ type Post = {
   fileKey: string;
   postType: string;
   upvoteCount: number;
+  viewCount: number;
   createdAt: Date;
 };
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
@@ -214,6 +215,7 @@ export default function Home() {
                   courseCode={doc.courseCode}
                   courseName={doc.courseName}
                   likes={doc.upvoteCount}
+                  views={doc.viewCount}
                   fileKey={doc.fileKey}
                   uploadTime={doc.createdAt}
                 />

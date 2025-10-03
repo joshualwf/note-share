@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import DocumentViewer from "@/components/DocumentViewer";
 import PostUpvote from "@/components/PostUpvote";
@@ -18,26 +19,59 @@ import ContributePrompt from "@/components/ContributePrompt";
 type Params = Promise<{ id: string }>;
 type SearchParams = Promise<{ title?: string; fileKey?: string }>;
 
-async function DocumentPage(props: {
-  params: Params;
-  searchParams: SearchParams;
-}) {
-  const { title } = await props.searchParams;
-  const { id } = await props.params;
-  const postIdNum = Number(id);
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/getPostDetails/${id}`,
-    {
-      method: "GET",
-      cache: "no-store", // ensures SSR freshness
-    }
-  );
+function DocumentPage(props: { params: Params; searchParams: SearchParams }) {
+  const [post, setPost] = useState<any>(null);
+  const [postId, setPostId] = useState<number | null>(null);
 
-  if (!res.ok) {
-    throw new Error("Failed to load post data");
+  useEffect(() => {
+    const fetchData = async () => {
+      const { id } = await props.params;
+      const postIdNum = Number(id);
+      setPostId(postIdNum);
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/getPostDetails/${id}`,
+        {
+          method: "GET",
+          cache: "no-store",
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to load post data");
+      }
+
+      const postData = await res.json();
+      setPost(postData);
+    };
+
+    fetchData();
+  }, [props.params]);
+
+  useEffect(() => {
+    if (!postId) return;
+
+    const incrementViewCount = async () => {
+      try {
+        await fetch("/api/posts/incrementViewCount", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ postId }),
+        });
+      } catch (error) {
+        console.error("Failed to increment view count:", error);
+      }
+    };
+
+    incrementViewCount();
+  }, [postId]);
+
+  if (!post || !postId) {
+    return null;
   }
 
-  const post = await res.json();
   const {
     description,
     schoolName,
@@ -48,6 +82,7 @@ async function DocumentPage(props: {
     user,
   } = post;
   const { username, profilePicture } = user;
+
   return (
     <>
       <Head>
@@ -103,16 +138,16 @@ async function DocumentPage(props: {
             </div> */}
 
               <PostUpvote
-                postId={postIdNum}
+                postId={postId}
                 initialUpvoteCount={Number(upvoteCount)}
               />
             </div>
           </div>
-          <DocumentViewer postId={id} />
+          <DocumentViewer postId={postId.toString()} />
         </ResizablePanel>
-        <DesktopCommentSection postId={postIdNum} />
+        <DesktopCommentSection postId={postId} />
       </ResizablePanelGroup>
-      <MobileCommentSection postId={postIdNum} />
+      <MobileCommentSection postId={postId} />
     </>
   );
 }

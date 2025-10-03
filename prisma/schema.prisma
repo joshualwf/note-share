@@ -35,6 +35,7 @@ model Post {
   fileKey     String       @map("file_key")
   postType    String       @map("post_type")
   upvoteCount Int          @default(0) @map("upvote_count")
+  viewCount   Int          @default(0) @map("view_count")
   createdAt   DateTime     @default(now()) @map("created_at")
   comments    Comment[]
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)

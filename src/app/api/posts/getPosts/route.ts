@@ -48,6 +48,19 @@ export async function GET(req: NextRequest) {
         sortBy === "Popularity"
           ? { upvoteCount: "desc" }
           : { createdAt: "desc" },
+      select: {
+        id: true,
+        userId: true,
+        description: true,
+        schoolName: true,
+        courseCode: true,
+        courseName: true,
+        fileKey: true,
+        postType: true,
+        upvoteCount: true,
+        viewCount: true,
+        createdAt: true,
+      },
     }),
     prisma.post.count({ where }),
   ]);
